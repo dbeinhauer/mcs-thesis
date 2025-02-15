@@ -8,26 +8,26 @@
 
 %%% Configuration of the title page %%%
 
-\def\ThesisTitleStyle{mff} % MFF style
+% \def\ThesisTitleStyle{mff} % MFF style
 %\def\ThesisTitleStyle{cuni} % uncomment for old-style with cuni.cz logo
-%\def\ThesisTitleStyle{natur} % uncomment for nature faculty logo
+\def\ThesisTitleStyle{natur} % uncomment for nature faculty logo
 
-\def\UKFaculty{Faculty of Mathematics and Physics}
-%\def\UKFaculty{Faculty of Science}
+% \def\UKFaculty{Faculty of Mathematics and Physics}
+\def\UKFaculty{Faculty of Science}
 
 \def\UKName{Charles University in Prague} % this is not used in the "mff" style
 
 % Thesis type names, as used in several places in the title
-\def\ThesisTypeTitle{\ifEN BACHELOR THESIS \else BAKALÁŘSKÁ PRÁCE \fi}
-%\def\ThesisTypeTitle{\ifEN MASTER THESIS \else DIPLOMOVÁ PRÁCE \fi}
+% \def\ThesisTypeTitle{\ifEN BACHELOR THESIS \else BAKALÁŘSKÁ PRÁCE \fi}
+\def\ThesisTypeTitle{\ifEN MASTER THESIS \else DIPLOMOVÁ PRÁCE \fi}
 %\def\ThesisTypeTitle{\ifEN RIGOROUS THESIS \else RIGORÓZNÍ PRÁCE \fi}
 %\def\ThesisTypeTitle{\ifEN DOCTORAL THESIS \else DISERTAČNÍ PRÁCE \fi}
-\def\ThesisGenitive{\ifEN bachelor \else bakalářské \fi}
-%\def\ThesisGenitive{\ifEN master \else diplomové \fi}
+% \def\ThesisGenitive{\ifEN bachelor \else bakalářské \fi}
+\def\ThesisGenitive{\ifEN master \else diplomové \fi}
 %\def\ThesisGenitive{\ifEN rigorous \else rigorózní \fi}
 %\def\ThesisGenitive{\ifEN doctoral \else disertační \fi}
-\def\ThesisAccusative{\ifEN bachelor \else bakalářskou \fi}
-%\def\ThesisAccusative{\ifEN master \else diplomovou \fi}
+% \def\ThesisAccusative{\ifEN bachelor \else bakalářskou \fi}
+\def\ThesisAccusative{\ifEN master \else diplomovou \fi}
 %\def\ThesisAccusative{\ifEN rigorous \else rigorózní \fi}
 %\def\ThesisAccusative{\ifEN doctoral \else disertační \fi}
 
@@ -36,39 +36,71 @@
 %%% Fill in your details %%%
 
 % (Note: \xxx is a "ToDo label" which makes the unfilled visible. Remove it.)
-\def\ThesisTitle{\xxx{Thesis title}}
-\def\ThesisAuthor{\xxx{Your Name Surname}}
-\def\YearSubmitted{\xxx{YEAR}}
+\def\ThesisTitle{Modeling spatio-temporal dynamics in primary visual cortex using deep neural network model}
+\def\ThesisAuthor{Bc. David Beinhauer}
+\def\YearSubmitted{2025}
 
 % department assigned to the thesis
-\def\Department{\xxx{Name of the department}}
+\def\Department{Department of Cell Biology}
 % Is it a department (katedra), or an institute (ústav)?
-\def\DeptType{\xxx{Department}}
+\def\DeptType{Department}
 
-\def\Supervisor{\xxx{Supername Supersurname}}
-\def\SupervisorsDepartment{\xxx{department}}
+\def\Supervisor{Mgr. Ján Antolík, Ph.D.}
+\def\SupervisorsDepartment{Department of Cell Biology}
 
 % Study programme and specialization
-\def\StudyProgramme{\xxx{study programme}}
-\def\StudyBranch{\xxx{study branch}}
+\def\StudyProgramme{Bioinformatics}
+\def\StudyBranch{N-BINF}
 
 \def\Dedication{%
-Dedication. \xxx{It is nice to say thanks to supervisors, friends, family, book authors and food providers.}
+I would like to express my sincere gratitude to my supervisor, 
+Mgr. Ján Antolík, Ph.D., for his unwavering guidance and support throughout 
+this project. Additionally, I am deeply thankful to Mgr. Luca Baroni for his valuable 
+insights and feedback. Finally, I would like to extend my heartfelt gratitude
+to my friends and family for their continuous support and encouragement throughout
+my studies.
 }
 
-\def\AbstractEN{%
-\xxx{Abstracts are an abstract form of art. Use the most precise, shortest sentences that state what problem the thesis addresses, how it is approached, pinpoint the exact result achieved, and describe the applications and significance of the results. Highlight anything novel that was discovered or improved by the thesis. Maximum length is 200 words, but try to fit into 120. Abstracts are often used for deciding if a reviewer will be suitable for the thesis; a well-written abstract thus increases the probability of getting a reviewer who will like the thesis.}
+\def\AbstractEN{
+    In this project, we develop a biologically inspired recurrent deep neural
+    network (DNN) model of the primary visual cortex (V1) to study the 
+    spatio-temporal dynamics of neuronal responses. The model incorporates key 
+    biological constraints, including cortical layering, excitatory-inhibitory
+    differentiation, and synaptic adaptation.
+    Additionally, we introduce shared DNN modules trained to capture
+    the complex non-linear activation functions of real-life neurons. Our
+    dataset conists of artificially generated data from a spiking model of 
+    the cat's V1. We train our model to replicate neuronal responses in
+    layer 4 (L4) and layer L2/3 (L2/3) of V1 based on inputs from the 
+    lateral geniculate nucleus (LGN). 
+    Our study demonstrates strong agreement between our model and the spiking 
+    model in terms of correlation and spatio-temporal dynamics. Furthermore, 
+    incorporating more complex activation functions via the DNN module improves 
+    model performance.
 % ABSTRACT IS NOT A COPY OF YOUR THESIS ASSIGNMENT!
 }
 
 \def\AbstractCS{%
-\xxx{You will need to submit both Czech and English abstract to the SIS, no matter what language you use in the thesis. If writing in English, translate the contents of \texttt{\textbackslash{}AbstractEN} into this field. In case you do not speak czech, your supervisor should be able to help you with the translation.}
+    Tato práce je zaměřena na vývoj biologicky inspirovaného modelu primární
+    zrakové kůry (V1) s využitím hlubokých rekurentních neuronových
+    sítí (DNN) pro analýzu časoprostorové dynamiky neuronálních odpovědí. 
+    Model zahrnuje klíčová biologická omezení, jako jsou dělení do vrstev,
+    diferenciace na excitační a inhibiční neurony a synaptická adaptace.
+    Dále představujeme sdílené DNN moduly trénované pro zachycení komplexních
+    nelineárních aktivačních funkcí skutečných neuronů. Naše data pocházejí z
+    uměle generovaných dat z tzv. "spiking" modelu kočičí V1. Při trénování 
+    našeho modelu cílíme na replikaci neuronálních odpovědí ve vrstvě 4 (L4) 
+    a vrstvě L2/3 (L2/3) V1 na základě vstupů z laterálního genikulárního jádra
+    (LGN). Výsledky naší studie ukazují na silnou shodu mezi oběma modely 
+    vzhledem k korelaci neuronových odpovědí a časoprostorové dynamice. 
+    Dále ukazujeme, že použití složitějších aktivačních funkcí neuronů s pomocí
+    sdílených DNN modulů zlepšuje výsledky modelu.
 }
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces.
 % Keywords are useful for indexing and searching for the theses by topic.
 \def\Keywords{%
-\xxx{{key} {words}}
+{visual cortex}, {recurrent networks}, {model deep neural networks}
 }
 
 % If your abstracts are long and do not fit in the infopage, you can make the

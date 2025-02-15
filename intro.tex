@@ -1,16 +1,94 @@
 
 \chapwithtoc{Introduction}
 
-Introduction should answer the following questions, ideally in this order:
-\begin{enumerate}
-\item What is the nature of the problem the thesis is addressing?
-\item What is the common approach for solving that problem now?
-\item How this thesis approaches the problem?
-\item What are the results? Did something improve?
-\item What can the reader expect in the individual chapters of the thesis?
-\end{enumerate}
+Significant advancements in neurobiology have been made over 
+the past few decades. The development of new technologies and 
+methods has provided researches with a diverse set of tools to
+study the brain. With the rise of highly parallelized computing, 
+computational neuroscience has become one of the most important 
+approaches to studying neuronal systems, offering a new perspective on
+brain research. It has enabled the simulation of large-scale neuronal 
+networks, allowing us to analyze their behavior without relying solely
+on vast amounts of real-world experimental data. As a result, we can 
+now study brain systems in greater detail and gain a more precise 
+understanding of their underlying principles.
 
-Expected length of the introduction is between 1--4 pages. Longer introductions may require sub-sectioning with appropriate headings --- use \texttt{\textbackslash{}section*} to avoid numbering (with section names like `Motivation' and `Related work'), but try to avoid lengthy discussion of anything specific. Any ``real science'' (definitions, theorems, methods, data) should go into other chapters.
-\todo{You may notice that this paragraph briefly shows different ``types'' of `quotes' in TeX, and the usage difference between a hyphen (-), en-dash (--) and em-dash (---).}
+Despide the rampant research in several neuroscience fields, our understanding
+of several complex regions still remain a mystery for us. One of the
+representatives of such partition is the visual cortex. Its functions
+remained for a long time the unveiled mystery and even nowadays, we
+understand only a small portion of its functionalities. However, with the 
+dawn of the machine learning techniques and especially with the current 
+ascend of deep neural network models, we have untackled several aspects of
+this system. Currently, the typical approach is to use convolution
+deep neural network models (CNN) that are proven to work brilliantly on 
+the image classification and object detection tasks. Indeed, these
+techniques helped us in unraveling some new aspects of the visual system
+and improved our modeling performance of this system. Though, there are still
+some drawbacks of this approach. Those models typically ignore the anatomical
+structures of the real-life network. For instance, they use only feed-forward
+neural networks (NN). In contrast, we know that neurons in the real-life
+systems are typically recurrent in connections and in most cases even self-recurrent.
+This results in poor explainability of parameters of these models and thus
+to lost of significant information about the system. Furthermore, since 
+the models are usually feed-forward, these models can typically capture only the
+mean steady state responses and perform poorly in predictions of spatio-temporal
+behavior of the systems.
 
-It is very advisable to skim through a book about scientific English writing before starting the thesis. I can recommend `\citetitle{glasman2010science}' by \citet{glasman2010science}.
+In our work, we try to unravel the drawbacks mentioned above by using 
+the biologically constrained recurrent deep neural network model (DNN) to
+study the selected region of the primary visual cortex (V1).
+The constraints are the following. We layer the architecture of the
+model using the known anatomical constraints. Building on that, the one 
+neuron in our network corresponds to some neuron in the real-life system. 
+This fact helps us in deciphering of the parameters of our model, and
+of our interest. This approach allows us to study the dynamics of the 
+visual cortex in a more realistic manner and provides us with 
+insights that are more aligned with the actual biological processes.
+The next constraint is differentiation between excitatory and inhibitory
+neurons. Alongside with this we try to address the importance in correct
+representation of the real-life neuron activation function. We do it 
+using small shared DNN modules across the defined anatomical layers. 
+These modules should mimic the complexity of the activation function 
+of the real-life neurons and stress the differences between them and 
+classical non-linearity functions used in DNNs, such as ReLU and tanh.
+They should also introduce some kind of memory of the neurons that might
+adapt to based on the previous stimuli. In addition, we present the 
+synaptic adaptation modules. These modules address the adaptability of the
+neuronal synapses to increased rates of the stimuli from given neuronal
+layers. By incorporating these anatomical constraints, we aim to improve 
+the predictive power and interpretability of our models, ultimately 
+contributing to a better understanding of the selected brain region.
+
+In our research we have obtained the following results. 
+\begin{itemize}
+    \item Usage of the recurrent DNN model with biologically constraint 
+    architecture without the DNN modules of the neurons captures the 
+    mean neuronal responses reasonably well. Although, there is still
+    room for improvement in terms of capturing the model dynamics.
+    \item Usage of shared DNN modules of neurons significantly improved the
+    model performance especially in terms of model dynamics.
+    \item Differentiation in inputs from excitatory and inhibitory
+    neurons to neuronal DNN module slightly improves the predictions in
+    comparison to propagating the input signal without differentiation
+    of the neuronal types.
+    \item Usage of RNN model with LSTM cells of shared neuronal module
+    slightly improved the performance of the model. This we address to
+    introduction of neuron memory to the model.
+    \item Usage of synaptic adaptation module does not improve the
+    spatio-temporal resolution of the model in spite of introduction of 
+    the synaptic memory. This might well be because of non-suitability of
+    the tested hyperparameters.
+\end{itemize}
+
+The thesis is structured into several sections. In the first section
+we introduce the reader to the theoretical background of the computational
+neuroscience with the main focus on the visual processing and especially
+to primary visual cortex (V1). Alongside with this, we introduce the reader
+with the classical model that is spiking models and to selected intrinsical
+aspects from the machine learning field. In the second section, we profoundly
+describe our approach in the modeling of the system. We describe the architecture
+of our model, dataset and evaluation metrics there. In the third section
+we provide the experimental results of our study.
+
+
