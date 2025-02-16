@@ -3,60 +3,76 @@
 
 Significant advancements in neurobiology have been made over 
 the past few decades. The development of new technologies and 
-methods has provided researches with a diverse set of tools to
+methods has provided researchers with a diverse set of tools to
 study the brain. With the rise of highly parallelized computing, 
 computational neuroscience has become one of the most important 
-approaches to studying neuronal systems, offering a new perspective on
-brain research. It has enabled the simulation of large-scale neuronal 
+approaches to studying neuronal systems (\citet{trappenberg2009fundamentals}), 
+offering new perspective on
+brain function. It has enabled the simulation of large-scale neuronal 
 networks, allowing us to analyze their behavior without relying solely
 on vast amounts of real-world experimental data. As a result, we can 
-now study brain systems in greater detail and gain a more precise 
+now investigate brain systems in greater detail and gain a more precise 
 understanding of their underlying principles.
 
-Despide the rampant research in several neuroscience fields, our understanding
-of several complex regions still remain a mystery for us. One of the
-representatives of such partition is the visual cortex. Its functions
-remained for a long time the unveiled mystery and even nowadays, we
-understand only a small portion of its functionalities. However, with the 
-dawn of the machine learning techniques and especially with the current 
-ascend of deep neural network models, we have untackled several aspects of
-this system. Currently, the typical approach is to use convolution
-deep neural network models (CNN) that are proven to work brilliantly on 
-the image classification and object detection tasks. Indeed, these
-techniques helped us in unraveling some new aspects of the visual system
-and improved our modeling performance of this system. Though, there are still
-some drawbacks of this approach. Those models typically ignore the anatomical
-structures of the real-life network. For instance, they use only feed-forward
-neural networks (NN). In contrast, we know that neurons in the real-life
-systems are typically recurrent in connections and in most cases even self-recurrent.
-This results in poor explainability of parameters of these models and thus
-to lost of significant information about the system. Furthermore, since 
-the models are usually feed-forward, these models can typically capture only the
-mean steady state responses and perform poorly in predictions of spatio-temporal
-behavior of the systems.
+With the rapid expansion of the machine learning, particularly deep neural 
+network (DNN) models, neuroscientists have sought to apply these techniques
+too. State-of-the-art convolutional DNN models have demonstrated outstanding
+performance in task such as image classification and object detection 
+(\citet{krizhevsky2012imagenet}, \citet{li2014medical}). 
+These methods have also been used to model certain brain regions, often
+yielding promising results. However, they come
+with significant limitations (\citet{celeghin2023convolutional}).
+Traditionally researchers using DNNs typically disregard the anatomical structure
+and constraints of real neuronal networks. For instance, they rely exclusively on 
+feed-forward architecture, whereas real brain networks are highly recurrent.
+The models then typically prioritize task performance over biological plausibility
+and interpretability.
 
-In our work, we try to unravel the drawbacks mentioned above by using 
-the biologically constrained recurrent deep neural network model (DNN) to
-study the selected region of the primary visual cortex (V1).
-The constraints are the following. We layer the architecture of the
-model using the known anatomical constraints. Building on that, the one 
-neuron in our network corresponds to some neuron in the real-life system. 
-This fact helps us in deciphering of the parameters of our model, and
-of our interest. This approach allows us to study the dynamics of the 
-visual cortex in a more realistic manner and provides us with 
-insights that are more aligned with the actual biological processes.
-The next constraint is differentiation between excitatory and inhibitory
-neurons. Alongside with this we try to address the importance in correct
-representation of the real-life neuron activation function. We do it 
-using small shared DNN modules across the defined anatomical layers. 
-These modules should mimic the complexity of the activation function 
-of the real-life neurons and stress the differences between them and 
-classical non-linearity functions used in DNNs, such as ReLU and tanh.
-They should also introduce some kind of memory of the neurons that might
-adapt to based on the previous stimuli. In addition, we present the 
-synaptic adaptation modules. These modules address the adaptability of the
-neuronal synapses to increased rates of the stimuli from given neuronal
-layers. By incorporating these anatomical constraints, we aim to improve 
+On the other hand, usage of biologically plausible models such as 
+spiking neural network (SNN) models have been a fundamental approach in computational
+neuroscience (\citet{ghosh2009spiking}, \citet{yamazaki2022spiking}). 
+These models attempt to bridge biological knowledge with computational
+methods by incorporating biologically relevant constraints, preventing overfitting to
+training datasets. However, SNNs face their own challenges, particularly the need 
+to precise mathematical formulations to define networks behaviors, which can
+limit their flexibility and scalability (\citet{izhikevich2004model}).
+
+One of the most widely studied yet complex brain regions is the visual cortex.
+Due to its intricate structure, studying it directly is almost impossible.
+It makes the computational approaches essential for understanding it. 
+Thanks to extensive experimental research the subregion called primary visual 
+cortex (V1) is the best understood (\citet{miikkulainen2006computational}). 
+Modern research on V1 typically employs 
+either CNNs or SNNs, but both approaches have notable 
+drawbacks (\citet{niell2021cortical}).
+
+In our work, we try to unravel these drawbacks and combine both DNN models
+with the biological constraints of the system to unravel the mystery of 
+the V1. We use biologically constrained recurrent DNN model to
+study the selected region of V1. We apply the following constraints:
+
+\begin{itemize}
+    \item We layer the architecture of the
+    model using the known anatomical constraints. Building on that, the one 
+    neuron in our network corresponds to some neuron in the real-life system. 
+    This fact helps us in deciphering of the parameters of our model, and
+    of our interest. This approach allows us to study the dynamics of the 
+    visual cortex in a more realistic manner and provides us with 
+    insights that are more aligned with the actual biological processes.
+    \item We differentiate between excitatory and inhibitory neurons.
+    \item We try to address the importance of the real-life neuron transfer
+    function using small shared DNN modules across the defined anatomical layers. 
+    These modules should mimic the complexity of the activation function 
+    of the real-life neurons and stress the differences between them and 
+    classical non-linearity functions used in DNNs, such as ReLU and tanh.
+    They should also introduce some kind of memory of the neurons that might
+    adapt to based on the previous stimuli.
+    \item We present the synaptic adaptation modules. These modules should address
+    the adaptability of the neuronal synapses to increased rates of the stimuli 
+    from given neuronal layers.
+\end{itemize}
+
+By incorporating these anatomical constraints, we aim to improve 
 the predictive power and interpretability of our models, ultimately 
 contributing to a better understanding of the selected brain region.
 
