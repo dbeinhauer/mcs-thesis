@@ -1,99 +1,97 @@
 
 \chapwithtoc{Introduction}
 
-Significant advancements in neurobiology have been made over 
-the past few decades. The development of new technologies and 
+Significant advances in neurobiology have been made in recent decades. 
+The development of new technologies and
 methods has provided researchers with a diverse set of tools to
 study the brain. With the rise of highly parallelized computing, 
-computational neuroscience has become one of the most important 
+computational neuroscience has become one of the most important
 approaches to studying neuronal systems (\citet{trappenberg2009fundamentals}), 
-offering new perspective on
-brain function. It has enabled the simulation of large-scale neuronal 
+offering a new perspective on
+brain function. It has enabled the simulation of large-scale neuronal
 networks, allowing us to analyze their behavior without relying solely
-on vast amounts of real-world experimental data. As a result, we can 
-now investigate brain systems in greater detail and gain a more precise 
+on vast amounts of real-world experimental data. As a result, we can
+now investigate brain systems in greater detail and gain a more precise
 understanding of their underlying principles.
 
-With the rapid expansion of the machine learning, particularly deep neural 
-network (DNN) models, neuroscientists have sought to apply these techniques
-too. State-of-the-art convolutional DNN models have demonstrated outstanding
-performance in task such as image classification and object detection 
+With the rapid expansion of machine learning, particularly deep neural
+network (DNN) models, neuroscientists have also sought to apply these techniques.
+State-of-the-art convolutional DNN models have demonstrated outstanding
+performance in tasks such as image classification and object detection
 (\citet{krizhevsky2012imagenet}, \citet{li2014medical}). 
-These methods have also been used to model certain brain regions, often
+These methods have also been used to model certain regions of the brain, often
 yielding promising results. However, they come
 with significant limitations (\citet{celeghin2023convolutional}).
-Traditionally researchers using DNNs typically disregard the anatomical structure
+Traditionally, researchers using DNNs typically disregard the anatomical structure
 and constraints of real neuronal networks. For instance, they rely exclusively on 
 feed-forward architecture, whereas real brain networks are highly recurrent.
 The models then typically prioritize task performance over biological plausibility
 and interpretability.
 
-On the other hand, usage of biologically plausible models such as 
-spiking neural network (SNN) models have been a fundamental approach in computational
+On the other hand, the usage of biologically plausible models such as
+spiking neural network (SNN) models has been a fundamental approach in computational
 neuroscience (\citet{ghosh2009spiking}, \citet{yamazaki2022spiking}). 
 These models attempt to bridge biological knowledge with computational
 methods by incorporating biologically relevant constraints, preventing overfitting to
-training datasets. However, SNNs face their own challenges, particularly the need 
-to precise mathematical formulations to define networks behaviors, which can
+training datasets. However, SNNs face their own challenges, particularly the need for precise mathematical formulations to define network behaviors, which can
 limit their flexibility and scalability (\citet{izhikevich2004model}).
 
-One of the most widely studied yet complex brain regions is the visual cortex.
+One of the most studied, yet complex brain regions is the visual cortex.
 Due to its intricate structure, studying it directly is almost impossible.
-It makes the computational approaches essential for understanding it. 
-Thanks to extensive experimental research the subregion called primary visual 
+It makes computational approaches essential for understanding it. 
+Thanks to extensive experimental research the subregion called primary visual
 cortex (V1) is the best understood (\citet{miikkulainen2006computational}). 
-Modern research on V1 typically employs 
-either CNNs or SNNs, but both approaches have notable 
-drawbacks (\citet{niell2021cortical}).
+Modern research on V1 typically employs CNNs or SNNs, but both approaches
+have notable drawbacks (\citet{niell2021cortical}).
 
-In this work, we aim to overcome the limitations of DNN models by 
-integrating biological constraints into their design to better 
-understand primary visual cortex (V1). We train our model
-to predict the neuronal responses based on SNN model of cat's V1,
+In this work, our objective is to overcome the limitations of DNN models by
+integrating biological constraints into their design to better understand the
+primary visual cortex (V1). We train our model
+to predict neuronal responses based on the SNN model of cat V1,
 developed by \citet{antolik2024comprehensive}. Specifically, we
 focus on predicting neuronal responses in layer IV (L4)
-and layer II/III (L2/3) of V1 using input from the 
+and layer II/III (L2/3) of V1 using input from
 lateral geniculate nucleus (LGN) neurons. 
 
-Although we train our model on synthetic data from the SNN, 
-our goal is to achieve strong predictive performance on real V1 
-neuronal recordings as well.To accomplish this, we utilize biologically
-constrained recurrent DNN model to study a selected region of V1, 
+Although we train our model on synthetic SNN data,
+our goal is to achieve strong predictive performance on real V1
+neuronal recordings as well. To accomplish this, we used the biologically
+constrained recurrent DNN model to study a selected region of V1,
 incorporating the following constraints.
 
 \begin{description}
-    \item[Anatomical structure alignment:] The architecture of our
-    model is layered according to known anatomical constraints. Each
-    neuron in the network corresponds to a specific neuron in the real
-    system. It significantly facilitates teh interpretability of model
-    parameters. This biologically grounded approach enables us to study
-    the dynamics of the visual cortex in a more realistic manner and 
-    gain insights that align with actual neural processes.
+\item[Anatomical structure alignment:] The architecture of our
+model is layered according to known anatomical constraints. Each
+neuron in the network corresponds to a specific neuron in the real
+system. It significantly facilitates the interpretability of model
+parameters. This biologically grounded approach enables us to study
+the dynamics of the visual cortex in a more realistic manner and
+gain insights that align with actual neural processes.
 
-    \item[Excitatory and inhibitory neuron differentiation:] We explicitly
-    distinguish between excitatory and inhibitory neurons, enforcing 
-    biologically plausible behavior within the architecture and ensuring 
-    that specific neuronal types function as expected.
-    
-    \item[Biologically inspired activation functions:] Instead of standard
-    activation functions such as ReLU or tanh, we introduce small shared
-    DNN modules across anatomically defined layers. These modules aim to
-    approximate the complexity of real neuronal transfer functions. They
-    pursue capturing nonlinearities and allowing neurons to retain a form
-    of memory that adapts to previous stimuli.
+\item[Excitatory and inhibitory neuron differentiation:] We explicitly
+distinguish between excitatory and inhibitory neurons, enforcing
+biologically plausible behavior within the architecture and ensuring
+that specific neuronal types function as expected.
 
-    \item[Synaptic adaptation modules:] To model the plasticity of neuronal
-    synapses, we incorporate modules that adjust synaptic responses based on
-    increased stimuli rates from specific neuronal layers. This mechanism aims
-    to reflect real-life synaptic adaptation processes observed in biological 
-    networks.
+\item[Biologically inspired activation functions:] Instead of standard
+activation functions such as ReLU or tanh, we introduce small shared
+DNN modules across anatomically defined layers. These modules aim to
+approximate the complexity of real neuronal transfer functions. They
+pursue capture of non-linearities and allowing neurons to retain a form
+of memory that adapts to previous stimuli.
+
+\item[Synaptic adaptation modules:] To model the plasticity of neuronal
+synapses, we incorporate modules that adjust synaptic responses based on
+increased stimuli rates from specific neuronal layers. This mechanism aims
+to reflect the synaptic adaptation processes observed in real-life biological
+networks.
 \end{description}
 
 By embedding these anatomical constraints into our model, we aim to
-enhance both the predictive power and interpretability of neural simulations,
+enhance both the predictive power and the interpretability of neural simulations,
 ultimately contributing to a better understanding of the selected brain region.
 
-In our research we have obtained the following results. 
+In our research, we have obtained the following results. 
 \begin{description}
     \item Usage of the recurrent DNN model with biologically constraint 
     architecture without the DNN modules of the neurons captures the 
