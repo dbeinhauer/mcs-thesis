@@ -46,38 +46,55 @@ Modern research on V1 typically employs
 either CNNs or SNNs, but both approaches have notable 
 drawbacks (\citet{niell2021cortical}).
 
-In our work, we try to unravel these drawbacks and combine both DNN models
-with the biological constraints of the system to unravel the mystery of 
-the V1. We use biologically constrained recurrent DNN model to
-study the selected region of V1. We apply the following constraints:
+In this work, we aim to overcome the limitations of DNN models by 
+integrating biological constraints into their design to better 
+understand primary visual cortex (V1). We train our model
+to predict the neuronal responses based on SNN model of cat's V1,
+developed by \citet{antolik2024comprehensive}. Specifically, we
+focus on predicting neuronal responses in layer IV (L4)
+and layer II/III (L2/3) of V1 using input from the 
+lateral geniculate nucleus (LGN) neurons. 
 
-\begin{itemize}
-    \item We layer the architecture of the
-    model using the known anatomical constraints. Building on that, the one 
-    neuron in our network corresponds to some neuron in the real-life system. 
-    This fact helps us in deciphering of the parameters of our model, and
-    of our interest. This approach allows us to study the dynamics of the 
-    visual cortex in a more realistic manner and provides us with 
-    insights that are more aligned with the actual biological processes.
-    \item We differentiate between excitatory and inhibitory neurons.
-    \item We try to address the importance of the real-life neuron transfer
-    function using small shared DNN modules across the defined anatomical layers. 
-    These modules should mimic the complexity of the activation function 
-    of the real-life neurons and stress the differences between them and 
-    classical non-linearity functions used in DNNs, such as ReLU and tanh.
-    They should also introduce some kind of memory of the neurons that might
-    adapt to based on the previous stimuli.
-    \item We present the synaptic adaptation modules. These modules should address
-    the adaptability of the neuronal synapses to increased rates of the stimuli 
-    from given neuronal layers.
-\end{itemize}
+Although we train our model on synthetic data from the SNN, 
+our goal is to achieve strong predictive performance on real V1 
+neuronal recordings as well.To accomplish this, we utilize biologically
+constrained recurrent DNN model to study a selected region of V1, 
+incorporating the following constraints.
 
-By incorporating these anatomical constraints, we aim to improve 
-the predictive power and interpretability of our models, ultimately 
-contributing to a better understanding of the selected brain region.
+\begin{description}
+    \item[Anatomical structure alignment:] The architecture of our
+    model is layered according to known anatomical constraints. Each
+    neuron in the network corresponds to a specific neuron in the real
+    system. It significantly facilitates teh interpretability of model
+    parameters. This biologically grounded approach enables us to study
+    the dynamics of the visual cortex in a more realistic manner and 
+    gain insights that align with actual neural processes.
+
+    \item[Excitatory and inhibitory neuron differentiation:] We explicitly
+    distinguish between excitatory and inhibitory neurons, enforcing 
+    biologically plausible behavior within the architecture and ensuring 
+    that specific neuronal types function as expected.
+    
+    \item[Biologically inspired activation functions:] Instead of standard
+    activation functions such as ReLU or tanh, we introduce small shared
+    DNN modules across anatomically defined layers. These modules aim to
+    approximate the complexity of real neuronal transfer functions. They
+    pursue capturing nonlinearities and allowing neurons to retain a form
+    of memory that adapts to previous stimuli.
+
+    \item[Synaptic adaptation modules:] To model the plasticity of neuronal
+    synapses, we incorporate modules that adjust synaptic responses based on
+    increased stimuli rates from specific neuronal layers. This mechanism aims
+    to reflect real-life synaptic adaptation processes observed in biological 
+    networks.
+\end{description}
+
+By embedding these anatomical constraints into our model, we aim to
+enhance both the predictive power and interpretability of neural simulations,
+ultimately contributing to a better understanding of the selected brain region.
 
 In our research we have obtained the following results. 
-\begin{itemize}
+\begin{description}
     \item Usage of the recurrent DNN model with biologically constraint 
     architecture without the DNN modules of the neurons captures the 
     mean neuronal responses reasonably well. Although, there is still
@@ -95,7 +112,7 @@ In our research we have obtained the following results.
     spatio-temporal resolution of the model in spite of introduction of 
     the synaptic memory. This might well be because of non-suitability of
     the tested hyperparameters.
-\end{itemize}
+\end{description}
 
 The thesis is structured into several sections. In the first section
 we introduce the reader to the theoretical background of the computational
