@@ -265,9 +265,85 @@
 - damage results in perceptual deficits (not overall loss of vision)
 
 
+## Neuron
+- neuron consist of the soma, dendrides and the axon
+    - the soma:
+        - typical cell body (nothing so special in comparison to other cells)
+            - there is a nucleus, ER and so on
+    - the axon:
+        - highly specialized part of the cell to transfer information over distances
+        - starts in `axon hillock` - there typically starts the signal
+        - there is special set of proteins in comparison to soma
+            - large number of microtubules to transport proteins from/to soma
+        - the most important part is `axon terminal` - it meets with other neuron in `synapse`
+            - `innervation` - contact with other cell (not neuronal)
+            - there are `synaptic vesicles` - with neurontransmiter
+            - high number of mitochondria - high energy demand
+    - the dendrites:
+        - specialized structure with receptor to detect signal from the axons (in synapse)
 
+### Neuronal Membrane
+- the important aspect of the signal transmission is the movement of ions and maintanation of 
+the specific concentration levels
+    - the levels are maintained by the ion pumps that create the concentration gradients
+- `membrane potential` - voltage across the membrane
+- `equilibrium potentials` - state where ionic concentration gradient and electrical potential eliminates
+    - they are the same
+    - no ions travel to either site
+- main point is that Na+, Ca2+ and Cl- are more concentrated outside the cell and K+ inside
+- majority of the brain energy is used to maintain the correct concentration gradients
 
+### Action Potential
+- neuronal membrane at rest has around -65mV
+- during action potential it becomes positive
+    - rising phase -> till 40mV - overshoot -> falling phase - more negative than resting -> undershoot - restoration
+- typically we detect some signal -> send response -> Na+ channels are open -> depolarization - `generator potential`
+    - if generator potential reaches threshold -> `action potential`
+    - it does not need to be Na+ only
+    - it is typically response to neurotransmitter
+        - might be also to other signal though
+- there is a limit in firing frequency - it is not true that high depolarization cause appropriately 
+that much fires (neurons need to regenerate)
+    - `refractory period`
+        - `absolute` - impossible to elicit spike
+        - `relative` - still very hard to elicit spike - neuron did not regenerate fully yet
+- key workflow:
+    - `threshold` - opening of the Na+ channels
+        - it reaches the threshold that the permeability favors Na+ over K+
+    - `rising phase` - negative membrane potential -> Na+ ions go inside
+        - rapid depolarization
+    - `overshoot` - above 0mV to positive
+    - `falling phase` - Na+ channels inactivate + K+ channels open
+        - K+ strongly outside -> negative potential again
+    - `undershoot` - reach the resting K+ potential - only K+ open
+    - `absolute refractory period` - K+ inactivate - need to fix the voltage to be available
+    - `relative refractory period` - still hyperpolarized membrane
+        - there needs to be stronger depolarizing current to bring membrane to action potential
 
+#### Conduction of the AP
+- the AP needs to travel only one-directionally from soma to axon terminate
+- axonal membrane is excitable - it can elicit AP all along its length
+- the propagation is done by inactivation of the ion channels (where the signal has been before) 
+- `myelination` - axons coathed in myelin sheath with the `nodes of Ranvier`
+    - electrical insulation - helps the electrical conduction
+    - farther and faster current spread
+- mainly in axons because of its high amount of the ion-channels
+
+#### Synaptic Transmission
+- `synapses` - places where the neurons (or other cell) communicate with each other
+    - from pre- to post-
+    - electrical and chemical synapses
+- `chemical synapses` - `synaptic cleft` - extracelulate space where the neurotransmitters efflux
+- typically to axon to either dendrite, soma or axon
+- `neurotransmitters` - small chemicals that propagate the signal in chemical synapses
+    - main: glutamate, gamma-aminobutyric acid (GABA), glycine and acetylcholine
+        - fast synaptic transmission (slow are also many others)
+    - different neurotransmitters have different selectivity to ion channels
+- the synapses that tent to bring the membrane potential towards the threshold for generation potential
+are called `excitatory` - `excitatory postsynaptic potential` (EPSP)
+- hyperpolarization of the postsynaptic cell (Cl- channels) - `inhibitory` - `inhibitory postsynaptic potential` (IPSP)
+- it needs to be swept out of the cleft
+- there are various ways how to modulate the signal
 
 
 
