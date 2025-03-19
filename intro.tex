@@ -39,7 +39,7 @@ limit their flexibility and scalability (\citet{izhikevich2004model}).
 One of the most studied, yet complex brain regions is the visual cortex.
 Due to its intricate structure, studying it directly is almost impossible.
 It makes computational approaches essential for understanding it. 
-Thanks to extensive experimental research the subregion called primary visual
+Thanks to extensive experimental research, the subregion called primary visual
 cortex (V1) is the best understood (\citet{miikkulainen2006computational}). 
 Modern research on V1 typically employs CNNs or SNNs, but both approaches
 have notable drawbacks (\citet{niell2021cortical}).
@@ -49,8 +49,8 @@ integrating biological constraints into their design to better understand the
 primary visual cortex (V1). We train our model
 to predict neuronal responses based on the SNN model of cat V1,
 developed by \citet{antolik2024comprehensive}. Specifically, we
-focus on predicting neuronal responses in layer IV (L4)
-and layer II/III (L2/3) of V1 using input from
+focus on predicting neuronal responses in layer IV (LIV)
+and layers II and III (LII/III) of V1 using input from
 lateral geniculate nucleus (LGN) neurons. 
 
 Although we train our model on synthetic SNN data,
@@ -93,33 +93,20 @@ ultimately contributing to a better understanding of the selected brain region.
 
 In our research, we have obtained the following results. 
 \begin{description}
-    \item Usage of the recurrent DNN model with biologically constraint 
-    architecture without the DNN modules of the neurons captures the 
-    mean neuronal responses reasonably well. Although, there is still
-    room for improvement in terms of capturing the model dynamics.
-    \item Usage of shared DNN modules of neurons significantly improved the
-    model performance especially in terms of model dynamics.
-    \item Differentiation in inputs from excitatory and inhibitory
-    neurons to neuronal DNN module slightly improves the predictions in
-    comparison to propagating the input signal without differentiation
-    of the neuronal types.
-    \item Usage of RNN model with LSTM cells of shared neuronal module
-    slightly improved the performance of the model. This we address to
-    introduction of neuron memory to the model.
-    \item Usage of synaptic adaptation module does not improve the
-    spatio-temporal resolution of the model in spite of introduction of 
-    the synaptic memory. This might well be because of non-suitability of
-    the tested hyperparameters.
+    \item The use of the recurrent DNN model with a biologically constraint architecture without the DNN modules of the neurons reasonably captures the mean neuronal responses. However, there is still room for improvement in terms of capturing the model dynamics.
+    \item The use of shared DNN modules of neurons significantly improved the performance of the model, especially in terms of the dynamics of the model.
+    \item Differentiation in inputs from excitatory and inhibitory neurons to the neuronal DNN module slightly improves the predictions compared to propagating the input signal without differentiation of the neuronal types.
+    \item The use of the RNN model with RNN cells of the shared neuronal module slightly improved the performance of the model. This we address to introduction of neuron memory to the model.
+    \item The use of the synaptic adaptation module does not slightly improve the spatio-temporal dynamics of our model.
 \end{description}
 
-The thesis is structured into several sections. In the first section
-we introduce the reader to the theoretical background of the computational
-neuroscience with the main focus on the visual processing and especially
-to primary visual cortex (V1). Alongside with this, we introduce the reader
-with the classical model that is spiking models and to selected intrinsical
-aspects from the machine learning field. In the second section, we profoundly
-describe our approach in the modeling of the system. We describe the architecture
-of our model, dataset and evaluation metrics there. In the third section
-we provide the experimental results of our study.
-
-
+The thesis is structured into several sections. In the first sections,
+we introduce the reader to the theoretical background of the field of neurobiology and computational
+neuroscience with the main focus on visual processing and especially
+the primary visual cortex (V1). Alongside this, we introduce the
+reader to the modeling approaches and machine learning aspects
+closely related to our study. In the following section, we
+describe in depth our approach in modeling the system. We
+describe the architecture of our model, dataset and evaluation
+metrics there. In the end, we provide the experimental
+results of our study and analysis of the results.
