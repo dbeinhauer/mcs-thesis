@@ -69,6 +69,39 @@ Overview:
     - filters
 
 
+# Model definition
+- define the dataset
+- define the task
+- define base model architecture
+    - outer RNN
+    - how it is connected
+    - mathematical description of the model
+- define model variants
+    - ideally also mathematically and mention the motivation behind each of the model (the biological motivation)
+
+
+
+
+# Experimental outline
+- some dataset analysis
+- maybe need to generate more model subsets - how many of them?
+- comparison of all models (`simple`, `dnn_joint`, `dnn_separate`, `rnn_joint`, `rnn_separate`, `syn_adaptation`, `syn_adaptation_lgn`)
+    - how to compare the results: using `CC_NORM`
+        - it is worth to do the comparison to use also `CC_ABS`
+            - maybe experiment on all variants of the model with same parameters to check the validity
+- model parameters check:
+    - different learning rates - probably test all on the `dnn_joint` model
+- for `rnn` models - it would be nice to also compare different `TBTT`
+- compare also the temporal behavior of the responses
+    - `at least population behavior`
+    - if there is a time also show the neurons itself or across all images
+- if possible then also `dnn_joint` plot of the neuron behavior to show what function it learned
+- comparison for `different model sizes`
+    - probably only for one setup
+- comparison for `different train set sizes`
+- comparison for `different time step size`
+
+
 
 
 

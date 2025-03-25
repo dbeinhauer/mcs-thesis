@@ -9,12 +9,83 @@ became more and more relevant. Especially, in the last
 years with the ascent of the DNNs. The models are great due for
 its replicability, stability. It does not contain any noise and so on.
 
-We divide the field to several different approaches of 
-how we model the system. We can model it exploiting the numerical
-results from the experiments to optimize the system to correspond 
-these data. On the other hand, we can also try to aim to design
-the model that tries to mimic the biological behavior as much as possible.
+In computational neuroscience we commonly define three categories of models
+\citet{dayan2005theoretical}. These models are \emph{descriptive} that summarize
+large number of experimental data and describe what the system does. There models
+might also be biologically plausible but its main goal is to describe the 
+system, not to explain it. The example of it might be some mathematical description
+of the behavior of the specific aspect of the brain like receptive field of a neuron 
+or spiking rate of the neuron.
+The second type is \emph{mechanistic} model, these 
+models aim to explain how the system works on the anatomical level. The last
+type is \emph{interpretive} model, these models use information and computational
+principles to explore the cognitive and behavioral functions of the system, and they 
+try to address why the system operates as it does. Overall,
+it is typically not clear which model suits the problem the best and often the models
+itself overlap the categories. This thesis might be a great example of the overlap of
+the categories, where we try to accurately
+describe the behavior, alongside with this we try to explain the behavior as we 
+focus on the model explainability. As a result, we can say our model kind of overlaps
+all of the categories.
 
-In this thesis, we try the second approach. We exploit the 
-RNN models and known biological constraints to develop reasonably explainable
-network where each of the neurons correspond to the real life neuron.
+In the following sections, we will describe the most common terms in the computational
+neuroscience fields, typical evaluation approaches and we will list the selected 
+modeling approaches that are used in the field.
+
+\section{Introduction to System Identification in Visual System}
+\label{sec:system_identification}
+Since our thesis is focused on the study of the visual system we will focus mainly on
+introducing the aspects closely related to the study of visual system. It is
+worth noting though that the primary visual cortex and visual system overall is one of
+the most studied ones in the computational neuroscience and thus a wide range of the
+terms has been introduced and defined on the example of the visual system (TODO: cite
+Abott paper). 
+
+Characterizing the relationship between stimulus and neuronal response is a complex
+task since it does not only depend on the stimulus itself but also on the other 
+factors such as temporal state of the neuron, temporal separation between the stimuli
+and many others. Because of that the neuronal responses might differ in trials on 
+the same stimuli.This makes accurate prediction of the single neuronal spike almost 
+impossible. Instead, we try to capture the probability distribution and perform well 
+across all the trials. Typically, many neurons respond to a given stimuli, so, 
+the properties of the stimulus are encoded in the large population of neurons and thus 
+it is arguable more important to understand and properly describe the whole 
+population of neurons rather than just perform well on the single neuron predictions.
+
+\subsection{Spike Trains}
+\label{subsec:spike_trains}
+Neurons propagate information through action potentials often called \emph{spikes}. 
+Although, it is typical that they differ in variety of properties like duration, 
+amplitude and shape, we typically 
+treat them as binary identical events. Furthermore since the spike duration
+is typically very short (around 1 ms), we treat them as instantenous events. We then
+typically treat action potentials as a sequence of binary events in time, so called
+\emph{spike trains}. As mentioned before, the spike trains typically differ quite 
+a lot between the trials, so we typically describe them using a statistical metric 
+called \emph{firing rate}. Based on \citet{dayan2005theoretical} is this term defined
+for various properties, so they call it \emph{spike-count rate}. In our thesis, we 
+will stick with the term firing rate, since we won't focus on other properties 
+that are marked as firing rates. The definition is basically the average number of 
+spikes during the trial:
+
+$$r = \frac{n}{T} = \int_{0}^{T}d\tau \rho(\tau)$$
+
+Where $r$ is the firing rate, the first equation represents the definition of 
+firing rate with given time step (typically 1 ms). In this equation $n$ is the 
+number of spikes during the trial, $T$ is the duration of the trial (number of 
+time steps), the second equation represents the same property but in the continuous
+time interval. It is worth noting that also \emph{time dependent firing rate} can 
+be defined, that is defined as firing rate in the given time interval. However, this
+metric is typically used as an average over multiple trials since with the compressing
+time the noisiness of the data cause by spiking variability grows. If we 
+select the time interval to be very small (e.g. 1 ms), we work with high temporal 
+resolution spiking rates and since we know the average duration of the single spike is 1ms, we 
+can treat their values in one trial as binary values. And if we compute their average
+over the trials, we get the probability of the spike in the given time step. In the 
+typical usage there is a trade-off between temporal resolution and the noisiness of the
+data that steeply grows with the resolution. Another aspect is the computational 
+complexity since the higher resolution requires more data to be processed to reduce 
+the noise. In the real-life examples, there is typically selected the time 
+resolution that it the best trade-off between those two aspects. For example in our
+thesis although we aim to have a good temporal resolution, we selected the discrete 
+time bin 20 ms.
