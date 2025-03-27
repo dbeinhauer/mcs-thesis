@@ -52,6 +52,60 @@ the properties of the stimulus are encoded in the large population of neurons an
 it is arguable more important to understand and properly describe the whole 
 population of neurons rather than just perform well on the single neuron predictions.
 
+The nice overview of the system identification can be seen in 
+\citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731} which served as
+a source of information for the following sections.
+
+\subsection{System Identification}
+\label{subsec:system_identification}
+The task of the system identification is to estimate and describe the unknown system 
+based on the measured data 
+\citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}. 
+In the context of the visual system, the system is the
+corresponding neuronal population and the measured data consists typically of the visual 
+stimuli and the corresponding neuronal responses. In the typical approach we 
+separate the data to input data and output data. Overall we can define the task of 
+system identification as the following:
+
+\begin{equation}
+    r = f(s)
+    \label{eq:system_identification}
+\end{equation}
+
+Where $s$ is the stimulus, $r$ is the response of the system typically in form of 
+spikes or spike trains on the stimulus and 
+$f$ is the unknown mapping function that describes the system. Our goal is to 
+estimate the function $f$.
+
+\subsection{Stimulus}
+\label{subsec:stimulus}
+The stimulus can be any input signal that can invoke the response. Typically it is 
+represented as a vector or a matrix or a sequence of them of the appropriate values. 
+In the context of the visual system, the stimulus is typically the image or the 
+sequence of images (or video) that are typically represented as a matrix.
+
+The general problem with the stimuli is what kind of the stimuli is appropriate 
+for the given task \citet{carandini2005we}. The typically used stimuli were the 
+simple arbitrary stimuli like bars or sinusoidal grating patterns for example in 
+\citet{hubel1965receptive}'s work. However, these
+stimuli are not very informative as they do not really occur in the real world.
+
+Another widely used method is the white-noise stimuli \citet{dayan2005theoretical},
+\citet{chichilnisky2001simple}. The idea under this stimuli is 
+that each pixel of the image stimulus should be independent to each other. This 
+if defined correctly should cover uniformly the whole space of the possible visual 
+stimuli. Although it has been proven that this stimuli is to some extend very 
+informative there are also several drawbacks related to it \citet{Talebi1560}. 
+Mainly the thing that since neurons evolved to primary process the natural stimuli, 
+the white-noise stimuli does not affect especially neurons highly specialized to 
+some aspect of the natural stimuli enough. 
+
+This is the reason why many of the recent 
+researches focus on the natural stimuli \citet{sonkusare2019naturalistic}, 
+\citet{lurz2020generalization}, \citet{antolik2024comprehensive}. Using this we can 
+encounter alongside with other properties of the neuronal receptive fields also the 
+selectivity of the neurons to typical properties of the natural stimuli.
+
 \subsection{Spike Trains}
 \label{subsec:spike_trains}
 Neurons propagate information through action potentials often called \emph{spikes}. 
@@ -89,3 +143,62 @@ the noise. In the real-life examples, there is typically selected the time
 resolution that it the best trade-off between those two aspects. For example in our
 thesis although we aim to have a good temporal resolution, we selected the discrete 
 time bin 20 ms.
+
+\subsection{Mapping function}
+\label{subsec:mapping_function}
+The last but not least part of the system identification problem is the mapping 
+function $f$. During the studies of the neural systems the most common 
+approach how to describe the behavior of the system is to use some mathematical 
+representation \citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}.
+There are many different approaches how to model the mapping function. Based on the 
+\citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731} there are 
+some main factors that needs to be considered when selecting the model. The 
+first factor is how easy it is to optimize the parameters, second one is how well does
+the model generalize to the unseen data and the third one is what insights of the
+system properties does the model provide.
+
+These aspects are highly affected be the selected experimental data. The researcher 
+needs to consider what the amount, quality and type of the stimulus data to suit 
+the best the selected model. The question that we have briefly described in the section 
+\ref{subsec:stimulus}.
+
+\paragraph{Maximum a Posteriori Estimation}
+\label{par:map_estimation}
+In the ideal case, statistical models would be designed simply based on the 
+experimental recordings. In the real life situation the task is typically connected
+to the estimation of the model parameters. The choice of the mathematical form of the 
+model and its parameters is often the most crucial part of the model design. 
+
+The most common approach in parameter selection optimization in neuroscience is the 
+\emph{maximum a posteriori estimation} (MAP) 
+(\citet{wu2006complete}, 
+\citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}). This approach
+in comparison to the kind of classical Maximum Likelihood Estimation (MLE) 
+\citet{alpaydin2020introduction} incorporates additional model constraints alongside
+with the likelihood of the data. The property that is useful in the neuroscience 
+field where the spiking neuronal data are often too noisy to only rely on them.
+On the other hand we can apply prior knowledge about the system to enhance our model
+parameters estimation. 
+
+Let us denote model parameters as $\Theta$, we assume we have pairs of input-output 
+observed data, in other words that we have pairs $(s, r)$, where $s \in S$ is the 
+stimulus and $r \in R$ is its appropriate response where both $S$ and $R$ consists of
+$N$ examples. These hold the relationship
+defined in the equation \ref{eq:system_identification}. The MAP framework tries 
+to maximize the posterior probability $p(\cdot|\cdot)$ of the model 
+parameters as follows:
+
+% \begin{align}
+%         \Theta_{MAP} &= \argmax_{\Theta} P(\Theta | S \cup R) \\
+%         &= \argmax_{\Theta}
+% \end{align}
+% \label{eq:map_estimation}
+\begin{align*}
+    \Theta_{MAP} &= \arg\max_{\Theta} p(\Theta | S, R) \\
+    &= \arg\max_{\Theta} p(R | \Theta, S) \cdot p(\Theta) \\
+    &= \arg\max_{\Theta} \left[\prod_{i=1}^{N} p(r_i | f_{\Theta}(s_i)) \cdot p(\Theta)\right] \\
+    &= \arg\min_{\Theta} 
+    \left[-\sum_{i=1}^{N} \log p(r_i | f_{\Theta}(s_i)) - \log p(\Theta)\right] \numberthis \\
+\end{align*}
+\label{eq:map_estimation}
+
