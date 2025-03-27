@@ -185,20 +185,51 @@ observed data, in other words that we have pairs $(s, r)$, where $s \in S$ is th
 stimulus and $r \in R$ is its appropriate response where both $S$ and $R$ consists of
 $N$ examples. These hold the relationship
 defined in the equation \ref{eq:system_identification}. The MAP framework tries 
-to maximize the posterior probability $p(\cdot|\cdot)$ of the model 
+to maximize the posterior probability distribution $p(\cdot|\cdot)$ of the model 
 parameters as follows:
 
-% \begin{align}
-%         \Theta_{MAP} &= \argmax_{\Theta} P(\Theta | S \cup R) \\
-%         &= \argmax_{\Theta}
-% \end{align}
-% \label{eq:map_estimation}
 \begin{align*}
     \Theta_{MAP} &= \arg\max_{\Theta} p(\Theta | S, R) \\
     &= \arg\max_{\Theta} p(R | \Theta, S) \cdot p(\Theta) \\
     &= \arg\max_{\Theta} \left[\prod_{i=1}^{N} p(r_i | f_{\Theta}(s_i)) \cdot p(\Theta)\right] \\
     &= \arg\min_{\Theta} 
-    \left[-\sum_{i=1}^{N} \log p(r_i | f_{\Theta}(s_i)) - \log p(\Theta)\right] \numberthis \\
+    \left[
+    \underbrace{-\sum_{i=1}^{N} 
+        \overbrace{\log p(r_i | f_{\Theta}(s_i))}^{\text{Likelihood}}
+    }_{\substack{\text{Negative Log Likelihood} \\ \text{(Loss function)}}}
+    - \underbrace{
+        \overbrace{\log p(\Theta)}^{\text{Prior}}
+    }_{\substack{\text{Negative-log prior} \\ \text{(Regulatizer)}}}
+    \right] \numberthis \\
 \end{align*}
 \label{eq:map_estimation}
+
+The derivation of the equation \ref{eq:map_estimation} is based on the basic probability
+rules. For comprehensive explanation please refer to \citet{alpaydin2020introduction}, 
+\citet{wu2006complete}, \citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}.
+It is work noting that in the terms of our task, the probability term $p$ refers to 
+noise distribution of our data, the term $f_{\Theta}$ is mapping function (our model) 
+with the parameters $\Theta$ and finally the term $p(\Theta)$ refers to prior knowledge 
+that we have about the system we want to model. The prior term is the one distinguishing
+the MAP from teh MLE. The reason why we use typically prioritize this approach is that in
+case we do not have any prior knowledge about the system, the noisiness of our data 
+might easily led our model to overfitting as the number of experimental data is typically
+quite low and the likelihoods of different models is then rather similar. In other words,
+the first term of the resulting equation is the loss function that tells us how well 
+does our model fit the data and the second term is the regularization term that tells 
+us how complex is our model. The MAP frameworks then tries to find the optimal 
+balance between the two terms.
+
+
+\section{Modeling Approaches}
+\label{sec:modeling_approaches}
+In the following section we will describe the most common and most relevant modeling
+approaches in visual system identification task. We will focus on the three variants. 
+First approach is using the kernel-based methods, the classical approach utilizing 
+the convolution filters to process the data. The second approach is the deep learning
+approach, where we exploit the power of DNNs to model the system. The last approach is 
+the spiking neural networks (SNN) that are inspired by the biological neural networks.
+
+\subsection{Kernel-based Methods}
+\label{subsec:kernel_based_methods}
 

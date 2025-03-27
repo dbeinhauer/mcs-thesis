@@ -2,7 +2,8 @@
 \label{chap:visual_system}
 This thesis focuses on modeling the \emph{primary visual cortex} (V1), a
 critical structure in the early stages of visual processing in the mammalian
-brain. V1 has been extensively studied for decades and has served as a central subject
+brain. V1 has been extensively studied for decades (\citet{hubel1965receptive}) 
+and has served as a central subject
 in both experimental and computational neuroscience. In this chapter, we
 provide an overview of the components most relevant to our work, while
 omitting a comprehensive review of the entire system. For a more detailed
@@ -19,13 +20,36 @@ unique morphology and functional properties, which allow for rapid and complex i
 processing. The basic structure of a neuron comprises three principal components:
 
 \begin{description}
-    \item[Soma (Cell Body):] The \emph{soma} contains the nucleus and the essential organelles required for protein synthesis, metabolic regulation, and general neuronal maintenance. It plays a crucial role in the integration of synaptic inputs received by the dendrites.
+    \item[Soma (Cell Body):] The \emph{soma} contains the nucleus and the essential 
+    organelles required for protein synthesis, metabolic regulation, and general 
+    neuronal maintenance. It plays a crucial role in the integration of synaptic 
+    inputs received by the dendrites.
 
-    \item[Dendrites:] The \emph{dendrites} emerge from the soma and serve as the primary sites to receive synaptic input from other neurons.
-    Their extensive arborization increases the surface area for synaptic connections, allowing the integration of thousands of excitatory and inhibitory signals.
+    \item[Dendrites:] The \emph{dendrites} emerge from the soma and serve as the 
+    primary sites to receive synaptic input from other neurons.
+    Their extensive arborization increases the surface area for synaptic connections, 
+    allowing the integration of thousands of excitatory and inhibitory signals.
 
-    \item[Axon:] The \emph{axon} is a specialized elongated projection responsible for transmitting electrical impulses over long distances to target neurons. It originates at \emph{axon hillock}, a critical site for the initiation of the action potential, and ends at \emph{axon terminals}, where synaptic communication occurs.
+    \item[Axon:] The \emph{axon} is a specialized elongated part responsible 
+    for transmitting electrical impulses over long distances to target neurons. 
+    It originates at \emph{axon hillock}, a critical site for the initiation of the 
+    action potential, and ends at \emph{axon terminals}, where synaptic communication 
+    occurs.
 \end{description}
+
+The detailed anatomy of a neuron is illustrated in Figure \ref{fig:neuron}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/neuron_anatomy.pdf}
+    \caption{\textbf{Neuron Anatomy:} Illustration of a neuron anatomy. 
+    "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/m351rlh "}
+    \label{fig:neuron}
+\end{figure}
+
+
+\subsection{Axon Overview}
+\label{subsec:axon}
 
 The axon is uniquely adapted for efficient signal propagation, facilitated by specialized
 ion channels and a range of structural proteins. At its terminal, the axon contains
