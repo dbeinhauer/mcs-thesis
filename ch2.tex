@@ -85,7 +85,7 @@ In the context of the visual system, the stimulus is typically the image or the
 sequence of images (or video) that are typically represented as a matrix.
 
 The general problem with the stimuli is what kind of the stimuli is appropriate 
-for the given task \citet{carandini2005we}. The typically used stimuli were the 
+for the given task \citet{Carandini10577}. The typically used stimuli were the 
 simple arbitrary stimuli like bars or sinusoidal grating patterns for example in 
 \citet{hubel1965receptive}'s work. However, these
 stimuli are not very informative as they do not really occur in the real world.
@@ -223,13 +223,39 @@ balance between the two terms.
 
 \section{Modeling Approaches}
 \label{sec:modeling_approaches}
-In the following section we will describe the most common and most relevant modeling
-approaches in visual system identification task. We will focus on the three variants. 
-First approach is using the kernel-based methods, the classical approach utilizing 
-the convolution filters to process the data. The second approach is the deep learning
-approach, where we exploit the power of DNNs to model the system. The last approach is 
-the spiking neural networks (SNN) that are inspired by the biological neural networks.
+One of the most important aspects of the computational neuroscience is the selection
+of the appropriate model. More complex models might capture the behavior of the system
+better but they are also more prone to overfitting (as briefly mentioned in 
+\ref{subsec:mapping_function}). In this section we will focus on the three bearing 
+modeling approaches that has been used in the computational neuroscience field. We 
+will start with the most simplistic models that use simple mathematical methods to easily fit the model. We will call them as \emph{classical approach models},
+then we will focus on the models using DNNs and finally we will describe the 
+models that tries to reflect the biological properties of the neurons called 
+spiking neural networks (SNNs). The main source of information for this section was the paper from \citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731} that outlines the course of the data driven approaches in study of the visual neural system. We thus encourage the reader to study the mentioned paper in necessity for deeper explanation of the techniques mentioned below.
 
-\subsection{Kernel-based Methods}
-\label{subsec:kernel_based_methods}
+\subsection{The Classical Approach Models}
+\label{subsec:classical_approach}
+At the beginning of the field, the models were usually
+simplistic and the main goal was to describe the behavior of the system using the models
+that are easy to fit. The simplest approach is the so-called \emph{linear model}. In these we simply define the response of a neuron on a multiple stimuli using the weighted sum:
 
+$$r_{\text{L}} = f_{\text{linear}}(\boldsymbol{s}) = \boldsymbol{w}\boldsymbol{s} = \sum_{i} w_i s_i$$
+
+Where $r_{\text{L}}$ is the neuron response, $f_{\text{linear}}$ is the mapping function, 
+$\boldsymbol{s}$ is the vector of all relevant stimuli and $\boldsymbol{w}$ is the
+vector of their corresponding weights (also named as \emph{filter}).
+
+This model can be easily extended using a non-linearity function to the 
+so-called \emph{linear-nonlinear model} (LN). The model definition is then:
+
+$$r_{\text{LN}} = g_{\text{LN}}(r_{\text{L}}) = g_{\text{LN}}(f_{\text{linear}}(\boldsymbol{s}))$$
+
+Where $g_{\text{LN}}$ is the nonlinear function and $r_{\text{LN}}$ is the result response of linear-nonlinear model.
+
+Until recent years the LN filter usage prevailed in the sensory neuroscience. There are several results for this. First, they offer straightforward interpretation of the neuronal responses in both computational (\citet{hubel1965receptive}, \citet{movshon1978receptive}) and biological aspect (\citet{mohanty2012membrane}, \citet{SHAPLEY2009907}, \citet{poirazi2003pyramidal}). To our concern the this approach showed a good prediction for a heavily studied neurons of the early visual system (\citet{SHAPLEY2009907}, \citet{baccus2002fast}, \citet{Carandini10577}). However, these techniques has been replaced by the more complex models in the recent years that available studies of the visual pathway in more profound manner and in larger scale (\citet{Maheswaranathan340943}, \citet{Butts11313}, \citet{keat2001predicting}).
+
+\subsection{Deep Neural Network Approach}
+\label{subsec:deep_learning_approach}
+While it has been proven that multiple cascades of the LN units \ref{subsec:classical_approach} can in principle capture quite complex behavior (\citet{cybenko1989approximation}, \citet{HORNIK1991251}), it has been shown that DNN techniques outperform the classical techniques (\citet{MAL-006}, \citet{Kriegeskorte2015dnn}). Though these techniques are mathematically more complex and computationally more intensive, the rampant ascend of the computational power and new automated tools such as TensorFlow (\citet{TensorFlow}) and Pytorch (\citet{paszke2017automatic}) made this techniques suitable for a wide variety of data (\citet{lecun2015deep}). As a result these techniques have proven to outperform classical approach models in various visual system identification tasks such as retina (\citet{Maheswaranathan340943}), V1 (\citet{cadena2019conv}, \citet{kindel2017usingdeeplearningreveal}) and even the extrastriate visual cortex regions (\citet{zareh2024deep}). 
+
+On the other hand, there are also limitations of this approach. The clearly problematic limitation is the amount of data DNN models require to properly fit the model to a single neurons as the amount of biological experimental data that we can obtain such neuronal recordings is still a limitating factor in the field (\citet{zhang2019convolutional}), some of the models has partially solved this problem while utilizing the local constraints of the receptive fields and thus fitting multiple neurons simultaneously (\citet{antolik2016local}). Apart from this it should be noted that all the mentioned approaches work with feed-forward DNN structures mainly using the \emph{convolutional neural networks} (CNNs) (\citet{NIPS2012_c399862d}) that utilizes their property to perform greatly in image classification tasks and also outperformed all classical approaches (\citet{zhang2019convolutional}, \citet{cadena2019conv}) meaning that the signal is processed in the sequential way and does not allow any 
