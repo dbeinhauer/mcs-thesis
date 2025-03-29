@@ -48,25 +48,13 @@
 
 
 # Chapter 2 - Computational neuroscience
-- interdisciplinary field that combines principles of mathematics, 
-computer science, biology and inner brain mechanics
-- models are critical to understand the system
-    - replicable, reliable, highly controlled
-    - simplification of the system
-    - we can design the system to mimic real-life system - to obtain large amount of data
-
-- computation neuroscience combines mathematics and computer science techniques to understand brain (Abbot).
-- typical strategy is modeling:
-
-Overview:
-- what is computational neuroscience?
-    - we are interested in models.
-- typical approaches, most common terms (spikes, spiketrains, trials)
-- typical metrics for evaluation
-    - Pearsons CC
-    - normalized cross-correlation
-- modeling approaches (its definitions, drawbacks, advantages)
-    - filters
+- mention RNNs
+- mention synaptic adaptation and biological plausibility
+- SNNs
+- metrics:
+    - Pearson's, Normalized CC
+- mention blank stimuli
+- 
 
 
 # Model definition
@@ -85,6 +73,7 @@ Overview:
 # Experimental outline
 - some dataset analysis
 - maybe need to generate more model subsets - how many of them?
+    - ideally around 20
 - comparison of all models (`simple`, `dnn_joint`, `dnn_separate`, `rnn_joint`, `rnn_separate`, `syn_adaptation`, `syn_adaptation_lgn`)
     - how to compare the results: using `CC_NORM`
         - it is worth to do the comparison to use also `CC_ABS`
@@ -95,6 +84,9 @@ Overview:
 - compare also the temporal behavior of the responses
     - `at least population behavior`
     - if there is a time also show the neurons itself or across all images
+    - good to have some measure of temporal dynamic capture
+        - difference of the spike
+        - somehow measure the difference between the steady state and the blank state
 - if possible then also `dnn_joint` plot of the neuron behavior to show what function it learned
 - comparison for `different model sizes`
     - probably only for one setup
