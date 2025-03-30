@@ -281,5 +281,41 @@ With these points we might now look at the question of analogy between the DNNs 
 \label{subsec:spiking_neural_nets}
 Until now we have focused mainly on the predictive power in the visual system recognition task and does not really focus on the biological relevance of the model with a few exceptions where we mentioned this phenomenon mainly in part focusing on the RNNs in subsection \ref{subsubsec:rnns}. Now we will introduce different modeling approach the \emph{spiking neural networks} (SNNs) that incorporates the focuses on the biological relevance and tries to create the model that corresponds to our knowledge of the system. The SNNs are alongside with CNNs (\ref{subsec:deep_learning_approach}) the state-of-the-art methods in visual system recognition.
 
-In the subsequent text we will introduce one of the base approach in SNNs called \emph{Integrate-and-Fire Models} that is one of the most used SNN models including the model from \citet{antolik2024comprehensive} that serves as our source of artificial dataset and whole behavior we aim to mirror in our study. Since these model We have described the key biological aspects for understanding the methods in the chapter \ref{chap:visual_system}, the most relevant for the SNN part is the part focused on the function of the single neuron that is described in the section \ref{sec:neuron}. 
+In the subsequent text we will introduce one of the base approaches in SNNs called \emph{Integrate-and-Fire Models} that is one of the most used SNN models of the neural networks including the model from \citet{antolik2024comprehensive} that serves as our source of artificial dataset and whole behavior we aim to mirror in our study. Since these models aims to reflect the biological concepts it is worth to have an insight to those too, we have described the key biological aspects in the chapter \ref{chap:visual_system}. Especially the section on neuron \ref{sec:neuron} is the most relevant in our case. It is also worth knowing the key aspects of modeling in computational neuroscience that can be found \ref{sec:system_identification}. For the further understanding reader can refer to one fo the classical neuroscience books \citet{bear2020neuroscience} or for computational neuroscience basics to \citet{dayan2005theoretical}. For further understanding of the SNN models reader can refer to a book from \citet{gerstner2002spiking}.
 
+\subsubsection{Integrate-and-Fire Models}
+\label{subsubsec:integrate_and_fire}
+There is a wide variety of the models that try to capture the biological aspects of the neural network. Apart from Integrate-and-Fire models it might be the Hodgin-Huxley model (\citet{hodgkin1952quantitative}). This model is tries to capture the system properties in depth and provides high level of accuracy in terms of reproducing the electrophysiological properties. However, because of its high complexity those are often hard to analyze and model. To deal with this problem there has been introduced SNN models. These typically focus on the modeling binary spikes (\ref{subsec:spike_trains}) while the membrane potential (\ref{fig:action_potential}) reached the given threshold.
+
+The example of such models can be family of integrate-and-fire models. In such a model the action potential is described binary as either no spike or a spike, no additional information about the spike shape, duration etc. The only focus is on prediction of the exact time when the spike happens. In these models we focus on the modeling of the membrane potential. We define $U_{\text{threshold}}$ the capacity needed to elicit the action potential and $U_{\text{rest}}$ the capacity to which the membrane capacity resets after the spike (resting membrane potential \ref{subsec:action_potential}). The model of a neuron is then simplified to an electric circuit representation with capacitor and resistor are in parallel. In the following text we will briefly describe the model for deeper description please refer to \citet{dayan2005theoretical} and \citet{gerstner2002spiking} that served as a source of information for the following text.
+
+The idea is based on analogy between the neuron and electric circuit and basic physical properties of the circuit. When we inject the electric current $i(t)$ in time $t$ to the neuron (either experimentally or the neuron elicit the action potential \ref{subsec:action_potential}) the charge needs to go somewhere and thus it will charge the neuron membrane. This membrane then represent the role of a capacitor with capacity $C$. The membrane thus is not perfectly isolated and some of the charge leak outside, this can be represented as a constant leakage membrane resistance $R_m$. We then can simplify the membrane as an electric circuit with capacitor and resistor connected in parallel (TODO: maybe picture). With using the basic physics properties and mathematical simplifications we get the differential equation describing the standard mathematical form of the model as:
+
+\begin{equation}
+    \tau_{m} \odv{u}{t} = -u(t) + R_{m}i(t)
+\end{equation}
+\label{eq:integrate_and_fire}
+
+Where $\tau_{m}$ is the membrane time constant, $u(t)$ is the membrane potential in time $t$.
+
+In the integrate-and-fire models the spikes are not defined explicitly. They are represented as discrete events that happen while the threshold potential $U_{\text{threshold}}$ is reached. The firing time $t^{(f)}$ is defined as:
+
+\begin{equation}
+    t^{(f)}: \quad u(t^{(f)}) = U_{\text{threshold}}
+\end{equation}
+\label{eq:firing_time}
+
+In our model we do not describe the spike explicitly, rather we reset its potential immediately after the threshold potential is reached to resting membrane potential as:
+
+\begin{equation}
+    \lim_{\delta \to 0; \delta > 0} u\left( t^{(f)} + \delta \right) = U_{\text{rest}}
+\end{equation}
+\label{eq:resting_potential}
+
+For $t > t^{(f)}$ the dynamics is defined by the same equations from the start. The result of the model is then sequence of firing times for each neuron $i$ as $t^{(f)}_i$ where $f = 1, 2, \dots$ is the count of the spike.
+
+This concept describes the model called \emph{leaky integrate-and-fire model} that is the basic variant of integrate-and-fire model. Apart from this there is a wide variety of the model variant. If the reader is interested he can refer to the classical books concerning SNN from \citet{dayan2005theoretical} and \citet{gerstner2002spiking}.
+
+\section{Evaluation Methods}
+\label{sec:evaluation_methods}
+Until now we have described the basic concepts of the computational neuroscience and listed a few of the commonly used techniques. However, we have not mentioned how we evaluate the performance of the models.
