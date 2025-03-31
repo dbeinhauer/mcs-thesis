@@ -122,15 +122,26 @@ will stick with the term firing rate, since we won't focus on other properties
 that are marked as firing rates. The definition is basically the average number of 
 spikes during the trial:
 
-$$r = \frac{n}{T} = \int_{0}^{T}d\tau \rho(\tau)$$
+\begin{equation}
+    r = \frac{n}{T} = \int_{0}^{T} \rho(\tau) \,\mathrm{d}\tau    
+\end{equation}
+\label{eq:firing_rate}
 
 Where $r$ is the firing rate, the first equation represents the definition of 
 firing rate with given time step (typically 1 ms). In this equation $n$ is the 
 number of spikes during the trial, $T$ is the duration of the trial (number of 
 time steps), the second equation represents the same property but in the continuous
-time interval. It is worth noting that also \emph{time dependent firing rate} can 
-be defined, that is defined as firing rate in the given time interval. However, this
-metric is typically used as an average over multiple trials since with the compressing
+time interval. 
+
+It is worth noting that also \emph{time dependent firing rate} can be defined as firing rate in the given time interval. Assume we have and experiment of duration $T$ and we split it into the $N$ time bins of a same duration $T_{\text{int}} = \frac{T}{N}$, the value $t$ then lies in interval $t \in [1, 2, \dots, N] \subset \N$. The definition of the time dependent firing rate in the time bin $k$ is:
+
+\begin{equation}
+    r(k) = \frac{n(k)}{T_{\text{int}}} = \int_{(k-1)T_{\text{int}}}^{(k)T_{\text{int}}} \rho(\tau) \,\mathrm{d}\tau  
+\end{equation}
+\label{eq:firing_rate_time}
+
+
+However, this metric is typically used as an average over multiple trials since with the compressing
 time the noisiness of the data cause by spiking variability grows. If we 
 select the time interval to be very small (e.g. 1 ms), we work with high temporal 
 resolution spiking rates and since we know the average duration of the single spike is 1ms, we 
@@ -318,4 +329,103 @@ This concept describes the model called \emph{leaky integrate-and-fire model} th
 
 \section{Evaluation Methods}
 \label{sec:evaluation_methods}
-Until now we have described the basic concepts of the computational neuroscience and listed a few of the commonly used techniques. However, we have not mentioned how we evaluate the performance of the models.
+Until now we have described the basic concepts of the computational neuroscience and listed a few of the commonly used techniques. However, we have not mentioned how we evaluate the performance of the models. Currently, there is no consensus on what evaluation metric should be used for the visual system identification task and there thus exists wide range of diverse evaluation metrics. This question is studied deeper in \citet{pospisil2021eval} or \citet{Carandini10577}. In this section we will focus mainly on \emph{Pearson's correlation coefficient} and \emph{normalized cross correlation} as those are the two used in our work.
+
+Neural responses are often measured as a membrane potential or a time-dependent firing rate \ref{eq:firing_rate_time}. Thus, a performance measure should quantify the similarity between the predicted firing rate $\hat{r}(t)$ and recorded firing rate $r(t)$ in time $t$ across all measured time intervals. Also due the trial-to-trial variance of the neuronal responses \ref{subsec:spike_trains} especially in the sensory stimuli we want to measure the quality of responses for average through the trials. There needs to be said that since the trial-to-trial variance can be omitted only asymptotically with number of trials $N \to \infty$ and as a result we need to find the ballance between the noisiness of our data and amount of data that we get, as these are typically complicated expensive to aggregate. It is also worth noting that accuracy of the response predictions does not strictly imply that the model performance is good. In order to check the overall model performance, we should focus on multiple aspects to properly check the model performance.
+
+\subsection{Pearson's Correlation Coefficient}
+\label{subsec:pearson_cc}
+One of the measures widely used in statistics is called Pearson's Correlation Coefficient (PCC) is often also used to measure the similarity of two varying signals. The definition of the PCC for two random variables $X$ and $Y$ is the following:
+
+\begin{equation}
+    CC_{abs}(X, Y) = \frac{Cov(X,Y)}{\sqrt{Var(X)Var(Y)}}
+\end{equation}
+\label{eq:pearson_general}
+
+We note PCC as $CC_{abs}$ because in the following section we will focus on the normalized cross-correlation where we typically mark PCC as this. In case we work with finite sets $\hat{X}$ and $\hat{Y}$ of $M \in \N$ samples of the random variable we get sampled $CC_{abs}$ as:
+
+\begin{equation}
+    CC_{abs}(\hat{X}, \hat{Y}) 
+    = \frac{\sum_{i=1}^{M}(\hat{x_i} - \mu_{\hat{X}})(\hat{y_i} - \mu_{\hat{Y}})}
+    {\sqrt{\sum_{i=1}^{M}(\hat{x_i} - \mu_{\hat{X}})^{2}}
+    \sqrt{\sum_{i=1}^{M}(\hat{y_i} - \mu_{\hat{Y}})^{2}}}
+\end{equation}
+\label{eq:pearson_sampled}
+
+Where $\mu_{\hat{X}}$ respectively $\mu_{\hat{Y}}$ are sample means across $\hat{X}$ respectively $\hat{Y}$.
+
+In the problem of measuring similarity of neuronal responses we want to compute sample PCC between predicted and recorded mean firing rates over the trials in time for some subset of neurons. Let us then denote $\overline{\hat{r}(t)}$ and $\overline{r(t)}$ as mean predicted and recorded firing rates in time across all trials. Furthermore, let $M \in \N$ be a number of neurons and $T \in \N$ be a total number of time bins in which is one experiment split. In our data we assume that all spike recordings has been done for a same duration of time thus the $T$ is for each recording the same. We then have 2 matrices of size $M \times T$ one for mean predicted firing rates for each neuron in time that we denote as $\hat{R} \in \R^{M \times T}$ and one for recorded firing rates $R \in \R^{M \times T}$. Let's also mark $\hat{R}(t)$ and $R(t)$ as responses in time step $t$. Then PCC as a measure of similarity between $\hat{R}$ and $R$ recorded firing rates in time $t$ is defined as:
+
+\begin{equation}
+    CC_{abs}(\hat{R}(t),R(t)) = 
+    \frac{
+        \frac{1}{M} \sum_{i=1}^{M} 
+        \left(\overline{\hat{r}_{i}(t)}
+        - \mu_{\overline{\hat{R}_t}}
+        \right)
+    \left(\overline{r_{i}(t)} 
+        - \mu_{\overline{R_t}}
+    \right)}
+    {\sqrt{\left( 
+        \frac{1}{M} \sum_{i=1}^{M} \left( \overline{\hat{r}_{i}(t)}
+        - \mu_{\overline{\hat{R}_t}} \right)^2 
+        \right)} 
+        \sqrt{ \left( \frac{1}{M} \sum_{i=1}^{M} \left( \overline{r_{i}(t)}  
+        - \mu_{\overline{R_t}} \right)^2 \right)}}
+\end{equation}
+\label{eq:pearson_neurons}
+
+Where $\mu_{\overline{\hat{R}_t}}$ and $\mu_{\overline{R_t}}$ represent mean across all neuron firing rates in time $t$. We can also write it in an analogical simplified notation is in \citet{Wang2023towards}:
+
+\begin{equation}
+    CC_{abs} = \frac{Cov(\overline{\hat{R}}; \overline{R})}
+    {\sqrt{Var(\overline{\hat{R}})Var(\overline{R})}}
+\end{equation}
+\label{eq:cc_abs}
+
+Note that normally is $CC_{abs}$ computed across multiple trials but only with one time bin as we usually evaluate mean spiking rates across all trials and across whole duration of experiment as mentioned briefly in \ref{subsec:spike_trains}. In our case we sometimes need to evaluate the metric for multiple time steps. We do so by summing these values for all selected time steps.
+
+The $CC_{abs}$ satisfies many criteria that might be considered as a good measure of a model performance. It quantifies the similarity measured observations and predictions of the model, its value is bounded in interval $[-1, 1]$ and these values are easily interpretable. Alongside with this its value is relatively insensitible to amount of data and bias (\citet{Wang2023towards}). However, it does not count with trial-to-trial variance \ref{sec:evaluation_methods} which limits its usage in neuronal predictions. In other words, if we obtain poor $CC_{abs}$ value we cannot account whether it is caused by the poor quality of the predictions or by the noisiness of our data and it is fundamentally impossible to reach a large value of $CC_{abs}$ representing strong correlation.
+
+\subsection{Normalized Cross Correlation}
+\label{subsec:normalized_cross_correlation}
+The issue of Pearson's correlation coefficient as an evaluation metric of neural data have been addressed by \citet{hsu_quantifying_2004} who also proposed a new metric normalizing the $CC_{abs}$ to the neural variability which has been applied as a performance study in a several studies (\citet{touryan_spatial_2005}, \citet{gill_sound_2006}, \citet{Wang2023towards}). The metric is usually called Normalized Cross Correlation (NCC). We will denote it as:
+
+\begin{equation}
+    CC_{norm} = \frac{CC_{abs}}{CC_{max}}
+\end{equation}
+\label{eq:normalized_cc}
+
+In the equation we define a new variable $CC_{max}$ that symbolizes the maximum Pearson's correlation coefficient between the measured and predicted firing rate that can be achieved using perfect model. This solves the problem with the poor $CC_{abs}$ value mentioned in subsection \ref{subsec:pearson_cc} and maintains the prospective properties of $CC_{abs}$. However, the $CC_{max}$ from the original definition \citet{hsu_quantifying_2004} can be only properly computed from infinite number of trials and thus needs to be computed via approximations. This means that all the properties mentioned before are met only asymptotically with the error dependent on the number of provided trials. However, in comparison to other state-of-the-art metrics $CC_{norm}$ shows reasonable results and in some aspects outperformed the others (\citet{schoppe_measuring_2016}). In this paper \citet{schoppe_measuring_2016} also provides a novel way how to efficiency approximate the $CC_{max}$ value for instance applied in \citet{Wang2023towards}. Using $\overline{.}$ to denote average over all $N$ trials we compute the upper correlation bound for $\hat{R} \in \R^{M \times T}$ and $R \in \R^{M \times T}$, predictions and measurements of the spiking rates in time $t$ defined in \ref{subsec:pearson_cc}, as:
+
+\begin{equation}
+    CC_{max} = \sqrt{
+        \frac{NVar(\overline{R}) - \overline{Var(R)}}{(N-1)Var(\overline{R})}
+    }
+\end{equation}
+\label{eq:cc_max_general}
+
+To apply this approach to exact neuronal measurements we get:
+
+\begin{equation}
+    CC_{max} 
+    = \sqrt{
+        \frac{
+        N \left( \frac{1}{M} \sum_{i=1}^{M} 
+        \left( \overline{r_{i}(t)}  - \mu_{\overline{R_t}} \right)^2 
+            \right) 
+            - \frac{1}{N} \sum_{i=1}^{N} 
+                \left( \frac{1}{M} 
+                \sum_{j=1}^{M} \left( r_{ij} - \bar{r}_i \right)^2 \right)
+        }
+        {
+            (N - 1) 
+            \left( 
+                \frac{1}{M} \sum_{i=1}^{M} \left( \overline{r_{i}(t)}  
+                - \mu_{\overline{R_t}} \right)^2 
+            \right)
+        }}
+\end{equation}
+\label{eq:cc_max_neurons}
+
+Thus this measurement technique is not ideal it has proven to be comparable with other state-of-the-art metrics (\citet{schoppe_measuring_2016}, \citet{pospisil2021eval}) and we apply it also in our study.
