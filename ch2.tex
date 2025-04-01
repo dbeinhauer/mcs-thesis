@@ -1,13 +1,13 @@
 \chapter{Computational Neuroscience}
 \label{chap:computation_neuroscience}
 
-Computational neuroscience is an interdisciplinary field that integrates mathematics, computer science, and neuroscience to enhance our understanding of the nervous system and the brain. With the rapid advancements in computational power and technological improvements in data acquisition, this field has gained increasing relevance. In particular, the recent rise of deep neural networks (DNNs) has significantly influenced computational neuroscience, offering powerful tools for modeling neural processes (\citet{Kietzmann133504}). These models are valued for their replicability and stability, as they are not subject to biological noise and variability.
+Computational neuroscience is an interdisciplinary field that integrates mathematics, computer science, and neuroscience to enhance our understanding of the nervous system and the brain. With rapid advances in computational power and technological improvements in data acquisition, this field has gained increasing relevance. In particular, the recent rise of deep neural networks (DNNs) has significantly influenced computational neuroscience, offering powerful tools for modeling neural processes (\citet{Kietzmann133504}). These models are valued for their replicability and stability as they are not subject to biological noise and variability.
 
-In computational neuroscience, models are typically categorized into three main types (\citet{dayan2005theoretical}). The first category consists of \emph{descriptive} models, which summarize large sets of experimental data and characterize what the system does. While these models may be biologically plausible, their primary aim is to describe rather than explain the system. An example of a descriptive model could be a mathematical representation of specific brain functions, such as the receptive field properties of neurons or neuronal spiking rates.
+In computational neuroscience, models are typically categorized into three main types (\citet{dayan2005theoretical}). The first category consists of \emph{descriptive} models, which summarize large sets of experimental data and characterize what the system does. Although these models may be biologically plausible, their primary aim is to describe rather than explain the system. An example of a descriptive model could be a mathematical representation of specific brain functions, such as the receptive field properties of neurons or neuronal spiking rates.
 
-The second category includes \emph{mechanistic} models, which seek to explain how a system functions at an anatomical and physiological level. These models incorporate biological structures and mechanisms to provide insights into neural dynamics and interactions.
+The second category includes \emph{mechanistic} models, which seek to explain how a system functions at an anatomical and physiological level. These models incorporate biological structures and mechanisms to provide insight into neural dynamics and interactions.
 
-The third category comprises \emph{interpretive} models, which employ computational principles to explore cognitive and behavioral functions of the brain. These models address questions related to why the nervous system operates in a particular way, providing theoretical frameworks for understanding neural computation and cognition.
+The third category comprises \emph{interpretive} models that employ computational principles to explore the cognitive and behavioral functions of the brain. These models address questions related to why the nervous system operates in a particular way, providing theoretical frameworks for understanding neural computation and cognition.
 
 It is often challenging to assign a given model to a single category, as many models exhibit characteristics that span multiple types. This thesis serves as an example of such an overlap, as it aims not only to describe neural behavior but also to enhance its interpretability and provide insights into underlying mechanisms. Consequently, the proposed model integrates aspects of all three categories to some extent.
 
@@ -16,9 +16,9 @@ In the following sections, we will introduce key concepts in computational neuro
 \section{Introduction to System Identification in the Visual System}
 \label{sec:system_identification}
 
-Since this thesis focuses on the study of the visual system, we will primarily introduce concepts closely related to its analysis. Notably, the primary visual cortex and the broader visual system are among the most extensively studied areas in computational neuroscience. As a result, many foundational terms and methodologies in the field have been defined using the visual system as a reference (\citet{dayan2005theoretical}).
+Since this thesis focuses on the study of the visual system, we will primarily introduce concepts closely related to its analysis. In particular, the primary visual cortex and the broader visual system are among the most extensively studied areas in computational neuroscience. As a result, many foundational terms and methodologies in the field have been defined using the visual system as a reference (\citet{dayan2005theoretical}).
 
-Characterizing the relationship between stimulus and neuronal response is a complex task, as it depends not only on the stimulus itself but also on various factors such as the temporal state of the neuron, the interval between stimuli, and other contextual influences. Due to these factors, neuronal responses can vary across trials even when the same stimulus is presented. This variability makes the precise prediction of individual neuronal spikes highly challenging. Instead, a more practical approach is to model the probability distribution of responses across trials and assess overall performance.
+Characterizing the relationship between stimulus and neuronal response is a complex task, as it depends not only on the stimulus itself but also on various factors such as the temporal state of the neuron, the interval between stimuli, and other contextual influences. Due to these factors, neuronal responses can vary between trials, even when the same stimulus is presented. This variability makes the precise prediction of individual neuronal spikes highly challenging. Instead, a more practical approach is to model the probability distribution of responses across trials and evaluate overall performance.
 
 Typically, multiple neurons respond to a given stimulus, meaning that stimulus properties are encoded across a population of neurons rather than by individual units. Consequently, it is often more informative to analyze and accurately model the activity of neuronal populations rather than focusing solely on single-neuron predictions.
 
@@ -27,7 +27,7 @@ A comprehensive overview of system identification in neuroscience can be found i
 \subsection{System Identification}
 \label{subsec:system_identification}
 
-System identification aims to estimate and describe an unknown system based on measured data \citep{annurev:/content/journals/10.1146/annurev-vision-091718-014731}. In the context of the visual system, the system of interest is the corresponding neuronal population, and the measured data typically consist of visual stimuli and their corresponding neuronal responses. A common approach in system identification is to separate the data into input and output components, where the input represents the stimuli and the output represents the neural responses.
+System identification aims to estimate and describe an unknown system based on measured data \citep{annurev:/content/journals/10.1146/annurev-vision-091718-014731}. In the context of the visual system, the system of interest is the corresponding neuronal population, and the measured data typically consist of visual stimuli and their corresponding neuronal responses. A common approach in system identification is to separate the data into input and output components, where the input represents the stimuli, and the output represents the neural responses.
 
 Formally, system identification in this context can be expressed as follows:
 
@@ -41,20 +41,20 @@ where $s$ denotes the stimulus, $r$ represents the neuronal response typically i
 \subsection{Stimulus}
 \label{subsec:stimulus}
 
-A stimulus is any input signal capable of eliciting a response. It is typically represented as a vector, matrix, or sequence of such structures, depending on the context. In the visual system, the stimulus often takes the form of an image or a sequence of images (i.e., a video), represented as a matrix.
+A stimulus is any input signal capable of eliciting a response. It is typically represented as a vector, matrix, or sequence of such structures, depending on the context. In the visual system, the stimulus often takes the form of an image or a sequence of images (i.e., a video) represented as a matrix.
 
-A fundamental challenge in neuroscience is determining the most appropriate stimuli for a given task \citep{Carandini10577}. Early research predominantly used simple artificial stimuli, such as bars or sinusoidal grating patterns, as demonstrated in \citet{hubel1965receptive}. However, these artificial stimuli lack ecological validity, as they do not naturally occur in real-world environments.
+A fundamental challenge in neuroscience is determining the most appropriate stimuli for a given task \citep{Carandini10577}. Early research predominantly used simple artificial stimuli, such as bars or sinusoidal grating patterns, as demonstrated in \citet{hubel1965receptive}. However, these artificial stimuli lack ecological validity as they do not naturally occur in real-world environments.
 
-A widely used alternative is \emph{white-noise stimuli} (\citet{dayan2005theoretical, chichilnisky2001simple}), in which each pixel of an image stimulus is independently randomized. Properly designed, this approach ensures a uniform coverage of the entire space of possible visual stimuli. While white-noise stimuli have been shown to be informative, they also present drawbacks (\citet{Talebi1560}). Specifically, since neurons evolved to primarily process natural stimuli, white-noise stimuli may not effectively activate neurons that are highly specialized for certain aspects of natural vision.
+A widely used alternative is \emph{white-noise stimuli} (\citet{dayan2005theoretical, chichilnisky2001simple}), in which each pixel of an image stimulus is independently randomized. Properly designed, this approach ensures a uniform coverage of the entire space of possible visual stimuli. While white-noise stimuli have been shown to be informative, they also present drawbacks (\citet{Talebi1560}). Specifically, since neurons evolved to primarily process natural stimuli, white-noise stimuli may not effectively activate highly specialized neurons for certain aspects of natural vision.
 
-As a result, many recent studies have shifted towards the use of \emph{natural stimuli} (\citet{sonkusare2019naturalistic, lurz2020generalization, antolik2024comprehensive}). Natural stimuli allow researchers to investigate not only general neuronal response properties but also specific neuronal selectivity to features inherent in real-world visual environments.
+As a result, many recent studies have shifted towards the use of \emph{natural stimuli} (\citet{sonkusare2019naturalistic, lurz2020generalization, antolik2024comprehensive}). Natural stimuli allow researchers to investigate not only the general properties of the neuronal response but also the specific neuronal selectivity to features inherent in real-world visual environments.
 
 \subsection{Spike Trains}
 \label{subsec:spike_trains}
 
-Neurons transmit information through action potentials \ref{subsec:action_potential}, commonly referred to as \emph{spikes}. Although spikes can vary in duration, amplitude, and shape, they are typically treated as binary events. Given their brief duration (approximately 1 ms), spikes are often modeled as instantaneous occurrences. A sequence of spikes over time is termed a \emph{spike train}.
+Neurons transmit information through action potentials \ref{subsec:action_potential}, commonly referred to as \emph{spikes}. Although spikes can vary in duration, amplitude, and shape, they are typically treated as binary events. Given their brief duration (approximately 1 ms), spikes are often modeled as instantaneous occurrences. A sequence of spikes over time is termed \emph{spike train}.
 
-Since spike trains exhibit variability across trials, they are commonly analyzed using a statistical measure known as the \emph{firing rate}. Following \citet{dayan2005theoretical}, we define the firing rate as:
+Since spike trains exhibit variability between trials, they are commonly analyzed using a statistical measure known as the \emph{firing rate}. Following \citet{dayan2005theoretical}, we define the firing rate as follows:
 
 \begin{equation}
     r = \frac{n}{T} = \int_{0}^{T} \rho(\tau) \,\mathrm{d}\tau
@@ -63,7 +63,7 @@ Since spike trains exhibit variability across trials, they are commonly analyzed
 
 where $r$ represents the firing rate, $n$ is the number of spikes during the trial, $T$ is the trial duration, and $\rho(\tau)$ is the spike density function in continuous time.
 
-Additionally, a \emph{time-dependent firing rate} can be defined over discrete time intervals. If an experiment of duration $T$ is divided into $N$ equal time bins of duration $T_{\text{int}} = \frac{T}{N}$, the firing rate in time bin $t$ is given by:
+Furthermore, a \emph{time-dependent firing rate} can be defined over discrete time intervals. If an experiment of duration $T$ is divided into $N$ equal time bins of duration $T_{\text{int}} = \frac{T}{N}$, the firing rate in the time bin $t$ is given by the following.
 
 \begin{equation}
     r(t) = \frac{n(t)}{T_{\text{int}}} 
@@ -72,25 +72,25 @@ Additionally, a \emph{time-dependent firing rate} can be defined over discrete t
 \label{eq:firing_rate_time}
 
 
-However, this metric is typically averaged over multiple trials, as increasing temporal resolution also increases noise due to spiking variability. If the time bins are very small (e.g., 1 ms), the firing rate becomes a high-resolution measure of spiking activity. Given that an individual spike lasts approximately 1 ms (\citet{dayan2005theoretical}), spike counts in such fine-grained bins can be treated as binary values within a single trial. Averaging these values across trials then yields the probability of a spike occurring at each time step. In practice, there is a trade-off between temporal resolution and noise: higher resolution captures finer temporal details but introduces more variability, requiring more data for reliable estimates. Computational complexity is another factor, as finer resolutions demand increased processing power to mitigate noise. In this thesis, we prioritize a balance between these factors and use a 20 ms time bin for discretizing spike trains.
+However, this metric is typically averaged over multiple trials, as increasing temporal resolution also increases noise as a result of spiking variability. If the time bins are very small (e.g., 1 ms), the firing rate becomes a high-resolution measure of the spiking activity. Given that an individual spike lasts approximately 1 ms (\citet{dayan2005theoretical}), spike counts in such fine-grained bins can be treated as binary values within a single trial. Averaging these values across trials then yields the probability of a spike occurring at each time step. In practice, there is a trade-off between temporal resolution and noise: higher resolution captures finer temporal details, but introduces more variability, requiring more data for reliable estimates. Computational complexity is another factor, as finer resolutions demand increased processing power to mitigate noise. In this thesis, we prioritize a balance between these factors and use a 20 ms time bin for discretizing spike trains.
 
 \subsection{Mapping Function}
 \label{subsec:mapping_function}
 
-The final component of the system identification problem is the mapping function $f$. In the study of neural systems, the most common approach to describing system behavior is to use a mathematical representation (\citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}).
+The final component of the system identification problem is the mapping function $f$. In the study of neural systems, the most common approach to describe the behavior of the system is to use a mathematical representation (\citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}).
 
-There are various approaches to modeling the mapping function. According to \citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}, several key factors must be considered when selecting an appropriate model. These include: (1) the ease of parameter optimization, (2) the model's ability to generalize to unseen data, and (3) the insights it can provide into the system's underlying properties.
+There are various approaches to modeling the mapping function. According to \citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}, several key factors must be taken into account when selecting an appropriate model. These include: (1) the ease of parameter optimization, (2) the model's ability to generalize to unseen data, and (3) the insights it can provide into the system's underlying properties.
 
-These factors are heavily influenced by the experimental data used. Researchers must carefully consider the quantity, quality, and type of stimulus data to best suit the chosen model, as briefly discussed in Subsection \ref{subsec:stimulus}.
+These factors are heavily influenced by the experimental data used. Researchers must carefully consider the quantity, quality and type of stimulus data to best suit the chosen model, as briefly discussed in Section \ref{subsec:stimulus}.
 
 \subsubsection{Maximum a Posteriori Estimation}
 \label{subsubsec:map_estimation}
 
-In an ideal scenario, statistical models would be derived solely from experimental recordings. However, in practice, the task typically involves estimating model parameters. Choosing the model's mathematical form and its parameters is often the most critical step in model design.
+In an ideal scenario, statistical models would be derived solely from experimental recordings. However, in practice, the task typically involves estimating the model parameters. Choosing the model's mathematical form and its parameters is often the most critical step in model design.
 
-One of the most common approaches to parameter optimization in neuroscience is \emph{maximum a posteriori estimation} (MAP) (\citet{wu2006complete, annurev:/content/journals/10.1146/annurev-vision-091718-014731}). Unlike the classical maximum likelihood estimation (MLE) (\citet{alpaydin2020introduction}), MAP incorporates additional model constraints via prior distributions, which is especially valuable in neuroscience, where spiking neuronal data is often noisy. The use of prior knowledge about the system helps to improve the robustness of parameter estimation.
+One of the most common approaches to parameter optimization in neuroscience is \emph{maximum a posteriori estimation} (MAP) (\citet{wu2006complete, annurev:/content/journals/10.1146/annurev-vision-091718-014731}). Unlike classical maximum likelihood estimation (MLE) (\citet{alpaydin2020introduction}), MAP incorporates additional model constraints via prior distributions, which is especially valuable in neuroscience, where spiking neuronal data are often noisy. The use of prior knowledge about the system helps to improve the robustness of parameter estimation.
 
-Let us denote the model parameters as $\Theta$, and assume we have $M$ pairs of observed input-output data $(s_i, r_i)$, where $s \in S$ represents the stimulus \ref{subsec:stimulus} and $r \in R$ is the corresponding neural response \ref{subsec:spike_trains}. These pairs are assumed to follow the system relationship defined in Equation \ref{eq:system_identification}. The MAP framework aims to maximize the posterior distribution of the model parameters:
+Let us denote the model parameters as $\Theta$, and assume that we have $M$ pairs of observed input-output data $(s_i, r_i)$, where $s \in S$ represents the stimulus \ref{subsec:stimulus} and $r \in R$ is the corresponding neural response \ref{subsec:spike_trains}. These pairs are assumed to follow the relationship of the system defined in Equation \ref{eq:system_identification}. The MAP framework aims to maximize the posterior distribution of the model parameters:
 
 \begin{align*}
     \Theta_{MAP} &= \arg\max_{\Theta} p(\Theta | S, R) \\
@@ -108,9 +108,9 @@ Let us denote the model parameters as $\Theta$, and assume we have $M$ pairs of 
 \end{align*}
 \label{eq:map_estimation}
 
-This formulation is derived from basic probability rules. For a comprehensive explanation, please refer to \citet{alpaydin2020introduction}, \citet{wu2006complete}, and \citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}.
+This formulation is derived from basic probability rules. For a complete explanation, refer to \citet{alpaydin2020introduction}, \citet{wu2006complete}, and \citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}.
 
-In the context of our task, $p$ represents the noise distribution in the data, $f_{\Theta}$ is the mapping function (i.e., the model) with parameters $\Theta$, and $p(\Theta)$ encodes our prior knowledge about the system. The inclusion of this prior term is what distinguishes MAP from MLE.
+In the context of our task, $p$ represents the noise distribution in the data, $f_{\Theta}$ is the mapping function (i.e., the model) with parameters $\Theta$, and $p(\Theta)$ encodes our prior knowledge of the system. The inclusion of this prior term is what distinguishes MAP from MLE.
 
 The primary reason for favoring MAP in neuroscience is that, in the absence of strong prior knowledge, the noise in the data can easily lead to overfitting, especially given the typically limited size of experimental datasets. Moreover, the likelihoods of different models may be very similar. In this formulation, the first term represents a loss function quantifying how well the model fits the data, while the second term acts as a regularizer penalizing model complexity. The MAP framework thus aims to find an optimal balance between data fitting and model simplicity.
 
@@ -118,37 +118,37 @@ The primary reason for favoring MAP in neuroscience is that, in the absence of s
 \section{Modeling Approaches}
 \label{sec:modeling_approaches}
 
-One of the most important aspects of computational neuroscience is selecting an appropriate model. Model choice directly influences not only how accurately we can predict neural responses but also the extent to which we can extract meaningful insights about the underlying biological mechanisms. More complex models may better capture the system's behavior, but they are also more prone to overfitting (as briefly discussed in Section \ref{subsec:mapping_function}).
+One of the most important aspects of computational neuroscience is the selection of an appropriate model. The choice of the model directly influences not only how accurately we can predict neural responses but also the extent to which we can extract meaningful insights into the underlying biological mechanisms. More complex models may better capture the behavior of the system, but they are also more prone to overfitting (as briefly discussed in Section \ref{subsec:mapping_function}).
 
-In this section, we explore three major modeling approaches commonly used in computational neuroscience. We begin with the simplest models, which rely on straightforward mathematical methods and are easy to fit, referred to as \emph{classical models}. Next, we consider models based on deep neural networks (DNNs), and finally, we describe spiking neural networks (SNNs), which aim to reflect the biological properties of neurons.
+In this section, we explore three major modeling approaches commonly used in computational neuroscience. We begin with the simplest models, which rely on straightforward mathematical methods and are easy to fit, referred to as \emph{classical models}. Next, we consider models based on deep neural networks (DNNs) and, finally, we describe spiking neural networks (SNNs) which aim to reflect the biological properties of neurons.
 
 The primary source for this section is \citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}, which outlines the development of data-driven approaches in the study of the visual neural system. For readers seeking a deeper understanding of the methods described here, we recommend consulting the cited work.
 
 \subsection{Classical Models}
 \label{subsec:classical_approach}
 
-In the early stages of computational neuroscience, models were typically simple and aimed at describing neural behavior using formulations that were easy to optimize. The most basic example is the \emph{linear model}, where a neuron's response to multiple stimuli is represented as a weighted sum:
+In the early stages of computational neuroscience, the models were typically simple and aimed to describe neural behavior using formulations that were easy to optimize. The most basic example is \emph{linear model}, where a neuron's response to multiple stimuli is represented as a weighted sum:
 
 $$r_{\text{L}} = f_{\text{linear}}(\boldsymbol{s}) = \boldsymbol{w}\boldsymbol{s} = \sum_{i} w_i s_i$$
 
 Here, $r_{\text{L}}$ is the neuronal response, $f_{\text{linear}}$ denotes the mapping function, $\boldsymbol{s}$ is the stimulus vector, and $\boldsymbol{w}$ is the vector of weights (often called a \emph{filter}).
 
-This model can be extended with a nonlinearity, resulting in the \emph{linear-nonlinear model} (LN):
+This model can be extended with non-linearity, resulting in the \emph{linear-nonlinear model} (LN):
 
 $$r_{\text{LN}} = g_{\text{LN}}(r_{\text{L}}) = g_{\text{LN}}(f_{\text{linear}}(\boldsymbol{s}))$$
 
-In this case, $g_{\text{LN}}$ is a nonlinear function, such as a sigmoid or exponential, which introduces thresholding or saturation effects, and $r_{\text{LN}}$ is the neuron's final predicted response.
+In this case, $g_{\text{LN}}$ is a non-linear function, such as a sigmoid or exponential, which introduces thresholding or saturation effects, and $r_{\text{LN}}$ is the neuron's final predicted response.
 
-For many years, LN models were a cornerstone of sensory neuroscience. They provided intuitive interpretations of neuronal responses from both a computational perspective (\citet{hubel1965receptive, movshon1978receptive}) and a biological one (\citet{mohanty2012membrane, SHAPLEY2009907, poirazi2003pyramidal}). Notably, they performed well when modeling neurons in the early visual system (\citet{SHAPLEY2009907, baccus2002fast, Carandini10577}).
+For many years, LN models were a cornerstone of sensory neuroscience. They provided intuitive interpretations of neuronal responses from both a computational perspective (\citet{hubel1965receptive, movshon1978receptive}) and a biological one (\citet{mohanty2012membrane, SHAPLEY2009907, poirazi2003pyramidal}). In particular, they performed well when modeling neurons in the early visual system (\citet{SHAPLEY2009907, baccus2002fast, Carandini10577}).
 
-Despite these advantages, classical models have limitations. They often fail to capture the complex nonlinearities and temporal dynamics observed in real neural systems. As a result, more advanced models have increasingly been adopted, offering deeper insights into the visual pathway and enabling analysis at a larger scale (\citet{Maheswaranathan340943, Butts11313, keat2001predicting}).
+Despite these advantages, classical models have limitations. They often fail to capture the complex nonlinearities and temporal dynamics observed in real neural systems. As a result, more advanced models have increasingly been adopted, offering deeper insight into the visual pathway and allowing for analysis at a larger scale (\citet{Maheswaranathan340943, Butts11313, keat2001predicting}).
 
 \subsection{Deep Neural Network Approach}
 \label{subsec:deep_learning_approach}
 
 While it has been proven that cascades of linear-nonlinear (LN) units \ref{subsec:classical_approach} can approximate complex functions (\citet{cybenko1989approximation, HORNIK1991251}), deep neural networks (DNNs) have been shown to outperform classical approaches \citep{MAL-006, Kriegeskorte2015dnn}. Although DNNs are mathematically and computationally more complex, their rise has been facilitated by advances in computational power and the availability of deep learning frameworks such as TensorFlow \citep{TensorFlow} and PyTorch \citep{paszke2017automatic}. Consequently, DNNs have become suitable for a wide range of neuroscience applications \citep{lecun2015deep}.
 
-DNN-based models have been successfully applied to system identification tasks \ref{subsec:system_identification} across various stages of the visual pathway \ref{sec:general_structure}, including the retina (\cite{Maheswaranathan340943}), primary visual cortex (V1) (\citet{cadena2019conv, kindel2017usingdeeplearningreveal}), and extrastriate regions (\citet{zareh2024deep}). Many of the current state-of-the-art methods use \emph{convolutional neural networks} (CNNs) (\citet{NIPS2012_c399862d}), which are particularly effective for visual tasks and have consistently outperformed classical models (\citet{zhang2019convolutional, cadena2019conv}).
+DNN-based models have been successfully applied to system identification tasks \ref{subsec:system_identification} in various stages of the visual pathway \ref{sec:general_structure}, including the retina (\cite{Maheswaranathan340943}), primary visual cortex (V1) (\citet{cadena2019conv, kindel2017usingdeeplearningreveal}), and extrastriate regions (\citet{zareh2024deep}). Many of the current state-of-the-art methods use \emph{convolutional neural networks} (CNNs) (\citet{NIPS2012_c399862d}), which are particularly effective for visual tasks and have consistently outperformed classical models (\citet{zhang2019convolutional, cadena2019conv}).
 
 However, DNNs also have notable limitations. Chief among them is the large amount of data required to train these models effectively. In neuroscience, the quantity of experimental recordings from single neurons is often limited (\citet{zhang2019convolutional}). Some studies have addressed this by incorporating local receptive field constraints and jointly modeling multiple neurons (\citet{antolik2016local}).
 
@@ -157,43 +157,43 @@ However, DNNs also have notable limitations. Chief among them is the large amoun
 
 Another limitation of many state-of-the-art DNNs is their reliance on \emph{feedforward} architectures, where information flows in a single direction. This contrasts with biological neural systems, which include recurrent (feedback) connections. Although feedforward models can perform well, enhancing biological plausibility and modeling temporal dependencies requires incorporating recurrent connections (\citet{Kafaligonul2015rnn, shou2010functional, kar2019evidence}).
 
-\emph{Recurrent neural networks} (RNNs) (\citet{medsker2001recurrent}) address this need by allowing connections that loop back to earlier layers, making them well-suited for capturing temporal dynamics. RNNs have shown strong performance in modeling time-dependent processes in various brain systems (\citet{mante2013context, song2016excinhrec}), and they offer the flexibility to encode biologically inspired constraints at the single-neuron level (\citet{mante2013context, masse2019circuit, kim2019rnnframework}).
+\emph{Recurrent neural networks} (RNNs) (\citet{medsker2001recurrent}) address this need by allowing connections that loop back to earlier layers, making them well suited for capturing temporal dynamics. RNNs have shown strong performance in modeling time-dependent processes in various brain systems (\citet{mante2013context, song2016excinhrec}), and offer the flexibility to encode biologically inspired constraints at the single-neuron level (\citet{mante2013context, masse2019circuit, kim2019rnnframework}).
 
-Thanks to advances in deep learning frameworks \ref{subsec:deep_learning_approach}, RNNs have been employed in a variety of tasks, from motor control (\citet{sussillo2015neural, saxena2022motor}) to cognitive modeling (\citet{masse2019circuit, goudar2023schema}). However, RNN applications in visual system modeling remain relatively rare, and CNNs continue to dominate the field. Only a few recent studies have introduced RNN architectures that rival CNN performance in visual tasks (\citet{NEURIPS2024_f536d569}).
+Thanks to advances in deep learning frameworks \ref{subsec:deep_learning_approach}, RNNs have been used in a variety of tasks, from motor control (\citet{sussillo2015neural, saxena2022motor}) to cognitive modeling (\citet{masse2019circuit, goudar2023schema}). However, RNN applications in visual system modeling remain relatively rare and CNNs continue to dominate the field. Only a few recent studies have introduced RNN architectures that rival CNN performance in visual tasks (\citet{NEURIPS2024_f536d569}).
 
 \subsubsection{Interpretability of DNNs}
 \label{subsubsec:interpretability_dnn}
 
-As highlighted in Subsection \ref{subsec:deep_learning_approach}, one of the major concerns with DNNs is their limited interpretability. Critics argue that DNNs merely replace simple black-box models with more complex ones, without providing new insights into neural computation. For a deeper discussion on this issue, we refer the reader to \citet{Kriegeskorte2015dnn}, which serves as a primary reference for this section.
+As highlighted in Section \ref{subsec:deep_learning_approach}, one of the major concerns with DNNs is their limited interpretability. Critics argue that DNNs merely replace simple black-box models with more complex ones, without providing new insights into neural computation. For a deeper discussion on this issue, we refer the reader to \citet{Kriegeskorte2015dnn}, which serves as a primary reference for this section.
 
-It is indeed true that accurate prediction of neuronal responses does not automatically equate to a mechanistic understanding of neural processing. However, by capturing low-level dynamics, DNNs provide a platform for in silico experimentation that can complement in vivo data, especially when experimental recordings are sparse or noisy.
+In fact, accurate prediction of neuronal responses does not automatically equal a mechanistic understanding of neural processing. However, by capturing low-level dynamics, DNNs provide a platform for in silico experimentation that can complement in vivo data, especially when experimental recordings are sparse or noisy.
 
-Another concern lies in the complexity of DNNs. Their sheer number of parameters and lack of transparency can make it difficult to interpret their internal workings. Still, one could argue that since neural processing is inherently complex, it may be unrealistic to expect fully intuitive, low-dimensional descriptions. Instead, our goal should be to build models that are as simple as possible, but still rich enough to capture the relevant biological dynamics.
+Another concern lies in the complexity of DNNs. Their sheer number of parameters and lack of transparency can make it difficult to interpret their internal workings. Still, one could argue that, since neural processing is inherently complex, it may be unrealistic to expect fully intuitive, low-dimensional descriptions. Instead, our goal should be to build models that are as simple as possible but still rich enough to capture the relevant biological dynamics.
 
-Furthermore, DNNs need not perfectly replicate biological circuits to be useful. A certain level of abstraction is both expected and desirable in modeling. The key is to define which aspects of the biological system the model aims to capture and to evaluate model quality accordingly. Increasing the biological plausibility of models such as by using RNNs for recurrent dynamics \ref{subsubsec:rnns} can improve both interpretability and predictive power.
+Furthermore, DNNs do not need to perfectly replicate biological circuits to be useful. A certain level of abstraction is expected and desirable in modeling. The key is to define which aspects of the biological system the model aims to capture and to evaluate the quality of the model accordingly. Increasing the biological plausibility of models, such as using RNNs for recurrent dynamics \ref{subsubsec:rnns} can improve both interpretability and predictive power.
 
 In summary, while DNNs come with challenges, especially regarding interpretability, they offer a powerful framework for computational neuroscience. With thoughtful application and biologically motivated design, DNNs can contribute meaningfully to our understanding of visual, motor, and cognitive functions.
 
 \subsection{Spiking Neural Networks}
 \label{subsec:spiking_neural_nets}
-Thus far, our focus has primarily been on the predictive performance of models in visual system identification tasks \ref{subsec:system_identification}, with limited emphasis on their biological plausibility apart from a brief discussion of recurrent connections in Subsection \ref{subsubsec:rnns}. In this section, we turn our attention to a modeling approach that prioritizes biological realism: \emph{spiking neural networks} (SNNs). These models aim to replicate the known biological mechanisms of neural processing and, along with CNNs \ref{subsec:deep_learning_approach}, represent the state-of-the-art in visual system modeling.
+Thus far, our focus has primarily been on the predictive performance of models in visual system identification tasks \ref{subsec:system_identification}, with limited emphasis on their biological plausibility, apart from a brief discussion of recurrent connections in Subsection \ref{subsubsec:rnns}. In this section, we turn our attention to a modeling approach that prioritizes biological realism: \emph{spiking neural networks} (SNNs). These models aim to replicate the known biological mechanisms of neural processing and, along with CNNs \ref{subsec:deep_learning_approach}, represent the state-of-the-art in visual system modeling.
 
-We will introduce a foundational class of SNNs known as \emph{integrate-and-fire models}, which are among the most widely used biologically inspired models of neural activity. Notably, the model proposed by \citet{antolik2024comprehensive}, which serves as the source of our artificial dataset and reference behavior in this study, is based on this family.
+We will introduce a foundational class of SNNs known as \emph{integrate-and-fire models}, which are among the most widely used biologically inspired models of neural activity. Notably, the model proposed by \citet{antolik2024comprehensive}, which serves as the source of our artificial dataset and the reference behavior in this study, is based on this family.
 
-Because these models seek to reflect biological processes, it is useful to revisit relevant neurobiological concepts discussed in Chapter \ref{chap:visual_system}, particularly Section \ref{sec:neuron} on neuron physiology. Additionally, modeling principles in computational neuroscience—reviewed in Section \ref{sec:system_identification} form the theoretical foundation for this approach. For a general overview of neuroscience and computational modeling, the reader may consult classical texts such as \citet{bear2020neuroscience}, \citet{dayan2005theoretical}, and \citet{gerstner2002spiking}.
+Because these models seek to reflect biological processes, it is useful to revisit the relevant neurobiological concepts discussed in Chapter \ref{chap:visual_system}, particularly Section \ref{sec:neuron} on neuronal physiology. Furthermore, the modeling principles in computational neuroscience, reviewed in Section \ref{sec:system_identification}, form the theoretical foundation for this approach. For a general overview of neuroscience and computational modeling, the reader may consult classic texts such as \citet{bear2020neuroscience}, \citet{dayan2005theoretical}, and \citet{gerstner2002spiking}.
 
 Recent developments in SNN research have also explored training methodologies adapted for their non-differentiable nature. Unlike traditional deep learning models trained via backpropagation, SNNs often rely on surrogate gradient methods, biologically inspired learning rules such as Spike-Timing Dependent Plasticity (\citet{Bi1998synaptic, caporale2008hebbian}), or approximations to handle discrete spike events (\citet{haslinger2010discrete}). These approaches aim to reconcile the gap between biological plausibility and computational tractability, opening the door to more robust learning in spiking models. Moreover, hybrid models that integrate DNN structures with spiking neuron dynamics are beginning to emerge as promising solutions that balance interpretability, performance, and biological fidelity (\citet{Eshraghian2023trainsnn, lee_training_2016}).
 
-Compared to conventional DNNs, SNNs provide a more direct link to the temporal and event-driven nature of biological neural processing. While DNNs typically rely on continuous-valued activations and dense matrix operations, SNNs communicate through sparse, temporally precise spikes. This sparsity offers potential computational advantages, such as lower energy consumption and greater robustness to noise—features especially desirable in neuromorphic computing. However, DNNs currently maintain a performance advantage in many large-scale learning tasks, partly due to their compatibility with modern hardware and well-established training pipelines. Bridging this gap between biological plausibility and computational performance remains an active area of research (\citet{Eshraghian2023trainsnn}).
+Compared to conventional DNNs, SNNs provide a more direct link to the temporal and event-driven nature of biological neural processing. Although DNNs typically rely on continuous-valued activations and dense matrix operations, SNNs communicate through sparse, temporally precise spikes. This sparsity offers potential computational advantages, such as lower energy consumption and greater robustness to noise—features especially desirable in neuromorphic computing. However, DNNs currently maintain a performance advantage in many large-scale learning tasks, partly due to their compatibility with modern hardware and well-established training pipelines. Bridging this gap between biological plausibility and computational performance remains an active area of research (\citet{Eshraghian2023trainsnn}).
 
 \subsubsection{Integrate-and-Fire Models}
 \label{subsubsec:integrate_and_fire}
 
-A wide range of models have been developed to incorporate biological realism into neural simulations. For instance, the Hodgkin-Huxley model \citep{hodgkin1952quantitative} offers a highly detailed description of ionic mechanisms underlying action potentials \ref{subsec:action_potential}. While this model is biologically accurate, its complexity often makes it analytically and computationally intractable.
+A wide range of models have been developed to incorporate biological realism into neural simulations. For instance, the Hodgkin-Huxley model \citep{hodgkin1952quantitative} offers a highly detailed description of the ionic mechanisms that underlie action potentials \ref{subsec:action_potential}. While this model is biologically accurate, its complexity often makes it analytically and computationally intractable.
 
-To address this, simplified models such as the \emph{integrate-and-fire} family have been introduced. These models abstract away spike shape and biophysical detail, representing action potentials as binary events—spikes occur when the neuron's membrane potential exceeds a threshold. The dynamics between spikes are governed by the evolution of the membrane potential, modeled using electrical circuit analogies.
+To address this, simplified models such as the \emph{integrate-and-fire} family have been introduced. These models abstract away spike shape and biophysical detail, representing action potentials as binary events: spikes occur when the neuron's membrane potential exceeds a threshold. The dynamics between spikes are governed by the evolution of the membrane potential, modeled using electrical circuit analogies.
 
-In a basic integrate-and-fire model, the neuron's membrane is conceptualized as a capacitor with capacity $C$ in parallel with a resistor of resistance $R_m$. When a current $i(t)$ is injected (e.g., by synaptic input), the capacitor charges, and the potential $u(t)$ across the membrane increases. Some of the current leaks through the resistor, mimicking the leaky nature of biological membranes.
+In a basic integrate-and-fire model, the neuron membrane is conceptualized as a capacitor with capacity $C$ in parallel with a resistor of resistance $R_m$. When a current $i(t)$ is injected (e.g., by synaptic input), the capacitor charges and the potential $u(t)$ across the membrane increases. Some of the current leaks through the resistor, mimicking the leaky nature of biological membranes.
 
 This setup leads to a first-order differential equation:
 
@@ -203,9 +203,9 @@ This setup leads to a first-order differential equation:
 \end{equation}
 \label{eq:integrate_and_fire}
 
-where $\tau_m = R_m C$ is the membrane time constant, and $u(t)$ is the membrane potential at time $t$.
+where $\tau_m = R_m C$ is the membrane time constant and $u(t)$ is the membrane potential at time $t$.
 
-Spikes are not explicitly modeled but occur as threshold-crossing events when $u(t)$ reaches the threshold value $U_{\text{threshold}}$:
+Spikes are not explicitly modeled, but occur as threshold-crossing events when $u(t)$ reaches the threshold value $U_{\text{threshold}}$:
 
 \begin{equation}
     t^{(f)}: \quad u(t^{(f)}) = U_{\text{threshold}}
@@ -219,11 +219,11 @@ Upon firing, the membrane potential is instantaneously reset to the resting pote
 \end{equation}
 \label{eq:resting_potential}
 
-After this reset, the same membrane dynamics resume. The model's output is a sequence of firing times $t^{(f)}_i$ for each neuron $i$, where $f = 1, 2, \dots$ denotes the spike index.
+After this reset, the same membrane dynamics resume. The model output is a sequence of firing times $t^{(f)}_i$ for each neuron $i$, where $f = 1, 2, \dots$ denotes the spike index.
 
-This formulation is known as the \emph{leaky integrate-and-fire model}, one of the simplest and most commonly used SNN models. While it omits details such as spike shape, refractory periods, and adaptation, it retains the essential temporal dynamics and threshold-based spiking behavior.
+This formulation is known as \emph{leaky integrate-and-fire model}, one of the simplest and most commonly used SNN models. Although it omits details such as spike shape, refractory periods, and adaptation, it retains the essential temporal dynamics and threshold-based spiking behavior.
 
-For readers interested in further exploring this class of models and their biological underpinnings, we recommend the foundational texts by \citet{dayan2005theoretical} and \citet{gerstner2002spiking} that served as major source of information for this section..
+For readers interested in further exploring this class of models and their biological underpinnings, we recommend the foundational texts by \citet{dayan2005theoretical} and \citet{gerstner2002spiking} that served as major source of information for this section.
 
 \section{Evaluation Methods}
 \label{sec:evaluation_methods}
@@ -232,7 +232,7 @@ Up to this point, we have discussed key concepts and modeling strategies in comp
 
 In this section, we focus on two evaluation metrics that are central to our study: \emph{Pearson's correlation coefficient} and \emph{normalized cross-correlation}.
 
-Neural responses are typically recorded as membrane potentials or time-varying firing rates (see Equation~\ref{eq:firing_rate_time}). Accordingly, a performance metric should quantify the similarity between the predicted firing rate $\hat{r}(t)$ and the recorded rate $r(t)$ over time. Due to the trial-to-trial variability in neural responses—particularly in sensory systems it is standard to compute average responses across trials. Since trial-to-trial variability can only be averaged out asymptotically as the number of trials $N \to \infty$, practical evaluations must balance noise and data availability, which are often limited by the cost and complexity of experiments. It is also important to note that predictive accuracy alone does not guarantee meaningful model performance; multiple evaluation dimensions should be considered.
+Neural responses are typically recorded as membrane potentials or time-varying firing rates (see Equation~\ref{eq:firing_rate_time}). Consequently, a performance metric should quantify the similarity between the predicted firing rate $\hat{r}(t)$ and the recorded rate $r(t)$ over time. Due to the trial-to-trial variability in neural responses, particularly in sensory systems, it is standard to compute average responses across trials. Since trial-to-trial variability can only be averaged asymptotically as the number of trials $N \to \infty$, practical evaluations must balance noise and data availability, which are often limited by the cost and complexity of experiments. It is also important to note that predictive accuracy alone does not guarantee meaningful model performance; multiple evaluation dimensions should be considered.
 
 \subsection{Pearson's Correlation Coefficient}
 \label{subsec:pearson_cc}
@@ -243,7 +243,7 @@ One commonly used similarity measure in statistics is Pearson's Correlation Coef
 \end{equation}
 \label{eq:pearson_general}
 
-We denote the coefficient as $CC_{abs}$ to distinguish it from the normalized version described later. For finite sample sets $\hat{X}$ and $\hat{Y}$ with $M \in \mathbb{N}$ samples, the sampled PCC is given by:
+We denote the coefficient as $CC_{abs}$ to distinguish it from the normalized version described later. For finite set of samples $\hat{X}$ and $\hat{Y}$ with $M \in \mathbb{N}$ samples, the sampled PCC is given by the following:
 
 \begin{equation}
     CC_{abs}(\hat{X}, \hat{Y}) 
@@ -255,7 +255,7 @@ We denote the coefficient as $CC_{abs}$ to distinguish it from the normalized ve
 
 where $\mu_{\hat{X}}$ and $\mu_{\hat{Y}}$ are the sample means.
 
-For neuronal responses, we evaluate PCC between predicted and recorded average firing rates across trials for a given subset of neurons. Let $\hat{R}, R \in \mathbb{R}^{M \times T}$ be matrices of mean predicted and recorded responses, respectively, where $M$ is the number of neurons and $T$ is the number of time bins. We denote $\hat{R}(t)$ and $R(t)$ as the responses at time step $t$. Then, the time-resolved PCC is:
+For neuronal responses, we evaluate PCC between predicted and recorded average firing rates across trials for a given subset of neurons. Let $\hat{R}, R \in \mathbb{R}^{M \times T}$ be the matrices of the mean predicted and recorded responses, respectively, where $M$ is the number of neurons and $T$ is the number of time bins. We denote $\hat{R}(t)$ and $R(t)$ as the responses at time step $t$. Then, the time-resolved PCC is:
 
 \begin{equation}
     CC_{abs}(\hat{R}(t), R(t)) = 
@@ -275,21 +275,21 @@ A more compact representation, analogous to \citet{Wang2023towards}, is:
 \end{equation}
 \label{eq:cc_abs}
 
-Although PCC is generally computed across trials for a single time bin, we sometimes evaluate it over multiple time steps \ref{subsec:spike_trains} by aggregating results across selected intervals.
+Although PCC is generally computed between trials for a single time interval, we sometimes evaluate it over multiple time steps \ref{subsec:spike_trains} by aggregating results across selected intervals.
 
-PCC satisfies many desirable properties: it is bounded in $[-1, 1]$, easy to interpret, and relatively insensitive to sample size or bias \citep{Wang2023towards}. However, it does not account for trial-to-trial variability. Consequently, a low PCC may arise from noisy data rather than poor model performance. This limitation motivates the use of alternative measures like the normalized cross-correlation.
+PCC satisfies many desirable properties: it is bounded in $[-1, 1]$, easy to interpret, and relatively insensitive to sample size or bias \citep{Wang2023towards}. However, it does not account for trial-to-trial variability. Consequently, a low PCC may arise from noisy data rather than poor model performance. This limitation motivates the use of alternative measures such as normalized cross-correlation.
 
 \subsection{Normalized Cross Correlation}
 \label{subsec:normalized_cross_correlation}
 
-To address the limitations of PCC, \citet{hsu_quantifying_2004} proposed the \emph{normalized cross-correlation} (NCC), which adjusts for the inherent variability of neural data. This metric has since been used in several performance studies \citet{touryan_spatial_2005, gill_sound_2006, Wang2023towards} and is defined as:
+To address the limitations of PCC, \citet{hsu_quantifying_2004} proposed the \emph{normalized cross-correlation} (NCC), which adjusts for the inherent variability of the neural data. This metric has since been used in several performance studies \citet{touryan_spatial_2005, gill_sound_2006, Wang2023towards} and is defined as:
 
 \begin{equation}
     CC_{norm} = \frac{CC_{abs}}{CC_{max}}
 \end{equation}
 \label{eq:normalized_cc}
 
-Here, $CC_{max}$ represents the theoretical upper bound of PCC given perfect predictions, adjusted for neural variability. While $CC_{max}$ requires infinite trials for an exact computation, it can be approximated using finite data. The original formulation by \citet{hsu_quantifying_2004} was improved by \citet{schoppe_measuring_2016}, who introduced an efficient approximation applied in \citet{Wang2023towards}.
+Here, $CC_{max}$ represents the theoretical upper bound of PCC given perfect predictions, adjusted for neural variability. Although $CC_{max}$ requires infinite trials for an exact computation, it can be approximated using finite data. The original formulation by \citet{hsu_quantifying_2004} was improved by \citet{schoppe_measuring_2016}, who introduced an efficient approximation applied in \citet{Wang2023towards}.
 
 Using trial averages $\overline{\cdot}$ and neural response matrices $\hat{R}, R \in \mathbb{R}^{M \times T}$ as defined earlier, the generalized $CC_{max}$ is:
 
