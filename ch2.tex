@@ -16,7 +16,7 @@ In the following sections, we will introduce key concepts in computational neuro
 \section{Introduction to System Identification in the Visual System}
 \label{sec:system_identification}
 
-Since this thesis focuses on the study of the visual system, we will primarily introduce concepts closely related to its analysis. In particular, the primary visual cortex and the broader visual system are among the most extensively studied areas in computational neuroscience. As a result, many foundational terms and methodologies in the field have been defined using the visual system as a reference (\citet{dayan2005theoretical}).
+Since this thesis focuses on the study of the visual system, we will primarily introduce concepts closely related to its analysis. In particular, the primary visual cortex \ref{sec:v1} and the broader visual system are among the most extensively studied areas in computational neuroscience. As a result, many foundational terms and methodologies in the field have been defined using the visual system as a reference (\citet{dayan2005theoretical}).
 
 Characterizing the relationship between stimulus and neuronal response is a complex task, as it depends not only on the stimulus itself but also on various factors such as the temporal state of the neuron, the interval between stimuli, and other contextual influences. Due to these factors, neuronal responses can vary between trials, even when the same stimulus is presented. This variability makes the precise prediction of individual neuronal spikes highly challenging. Instead, a more practical approach is to model the probability distribution of responses across trials and evaluate overall performance.
 
@@ -27,7 +27,7 @@ A comprehensive overview of system identification in neuroscience can be found i
 \subsection{System Identification}
 \label{subsec:system_identification}
 
-System identification aims to estimate and describe an unknown system based on measured data \citep{annurev:/content/journals/10.1146/annurev-vision-091718-014731}. In the context of the visual system, the system of interest is the corresponding neuronal population, and the measured data typically consist of visual stimuli and their corresponding neuronal responses. A common approach in system identification is to separate the data into input and output components, where the input represents the stimuli, and the output represents the neural responses.
+System identification aims to estimate and describe an unknown system based on measured data (\citet{annurev:/content/journals/10.1146/annurev-vision-091718-014731}). In the context of the visual system, the system of interest is the corresponding neuronal population, and the measured data typically consist of visual stimuli and their corresponding neuronal responses. A common approach in system identification is to separate the data into input and output components, where the input represents the stimuli, and the output represents the neural responses.
 
 Formally, system identification in this context can be expressed as follows:
 
@@ -43,7 +43,7 @@ where $s$ denotes the stimulus, $r$ represents the neuronal response typically i
 
 A stimulus is any input signal capable of eliciting a response. It is typically represented as a vector, matrix, or sequence of such structures, depending on the context. In the visual system, the stimulus often takes the form of an image or a sequence of images (i.e., a video) represented as a matrix.
 
-A fundamental challenge in neuroscience is determining the most appropriate stimuli for a given task \citep{Carandini10577}. Early research predominantly used simple artificial stimuli, such as bars or sinusoidal grating patterns, as demonstrated in \citet{hubel1965receptive}. However, these artificial stimuli lack ecological validity as they do not naturally occur in real-world environments.
+A fundamental challenge in neuroscience is determining the most appropriate stimuli for a given task (\citet{Carandini10577}). Early research predominantly used simple artificial stimuli, such as bars or sinusoidal grating patterns, as demonstrated in \citet{hubel1965receptive}. However, these artificial stimuli lack ecological validity as they do not naturally occur in real-world environments.
 
 A widely used alternative is \emph{white-noise stimuli} (\citet{dayan2005theoretical, chichilnisky2001simple}), in which each pixel of an image stimulus is independently randomized. Properly designed, this approach ensures a uniform coverage of the entire space of possible visual stimuli. While white-noise stimuli have been shown to be informative, they also present drawbacks (\citet{Talebi1560}). Specifically, since neurons evolved to primarily process natural stimuli, white-noise stimuli may not effectively activate highly specialized neurons for certain aspects of natural vision.
 
@@ -146,9 +146,9 @@ Despite these advantages, classical models have limitations. They often fail to 
 \subsection{Deep Neural Network Approach}
 \label{subsec:deep_learning_approach}
 
-While it has been proven that cascades of linear-nonlinear (LN) units \ref{subsec:classical_approach} can approximate complex functions (\citet{cybenko1989approximation, HORNIK1991251}), deep neural networks (DNNs) have been shown to outperform classical approaches \citep{MAL-006, Kriegeskorte2015dnn}. Although DNNs are mathematically and computationally more complex, their rise has been facilitated by advances in computational power and the availability of deep learning frameworks such as TensorFlow \citep{TensorFlow} and PyTorch \citep{paszke2017automatic}. Consequently, DNNs have become suitable for a wide range of neuroscience applications \citep{lecun2015deep}.
+While it has been proven that cascades of linear-nonlinear (LN) units \ref{subsec:classical_approach} can approximate complex functions (\citet{cybenko1989approximation, HORNIK1991251}), deep neural networks (DNNs) have been shown to outperform classical approaches (\citet{MAL-006, Kriegeskorte2015dnn}). Although DNNs are mathematically and computationally more complex, their rise has been facilitated by advances in computational power and the availability of deep learning frameworks such as TensorFlow (\citet{TensorFlow}) and PyTorch (\citet{paszke2017automatic}). Consequently, DNNs have become suitable for a wide range of neuroscience applications (\citet{lecun2015deep}).
 
-DNN-based models have been successfully applied to system identification tasks \ref{subsec:system_identification} in various stages of the visual pathway \ref{sec:general_structure}, including the retina (\cite{Maheswaranathan340943}), primary visual cortex (V1) (\citet{cadena2019conv, kindel2017usingdeeplearningreveal}), and extrastriate regions (\citet{zareh2024deep}). Many of the current state-of-the-art methods use \emph{convolutional neural networks} (CNNs) (\citet{NIPS2012_c399862d}), which are particularly effective for visual tasks and have consistently outperformed classical models (\citet{zhang2019convolutional, cadena2019conv}).
+DNN-based models have been successfully applied to system identification tasks \ref{subsec:system_identification} in various stages of the visual pathway \ref{sec:general_structure}, including the retina (\citet{Maheswaranathan340943}), primary visual cortex (V1) (\citet{cadena2019conv, kindel2017usingdeeplearningreveal}), and extrastriate regions (\citet{zareh2024deep}). Many of the current state-of-the-art methods use \emph{convolutional neural networks} (CNNs) (\citet{NIPS2012_c399862d}), which are particularly effective for visual tasks and have consistently outperformed classical models (\citet{zhang2019convolutional, cadena2019conv}).
 
 However, DNNs also have notable limitations. Chief among them is the large amount of data required to train these models effectively. In neuroscience, the quantity of experimental recordings from single neurons is often limited (\citet{zhang2019convolutional}). Some studies have addressed this by incorporating local receptive field constraints and jointly modeling multiple neurons (\citet{antolik2016local}).
 
@@ -176,7 +176,7 @@ In summary, while DNNs come with challenges, especially regarding interpretabili
 
 \subsection{Spiking Neural Networks}
 \label{subsec:spiking_neural_nets}
-Thus far, our focus has primarily been on the predictive performance of models in visual system identification tasks \ref{subsec:system_identification}, with limited emphasis on their biological plausibility, apart from a brief discussion of recurrent connections in Subsection \ref{subsubsec:rnns}. In this section, we turn our attention to a modeling approach that prioritizes biological realism: \emph{spiking neural networks} (SNNs). These models aim to replicate the known biological mechanisms of neural processing and, along with CNNs \ref{subsec:deep_learning_approach}, represent the state-of-the-art in visual system modeling.
+Thus far, our focus has primarily been on the predictive performance of models in visual system identification tasks \ref{subsec:system_identification}, with limited emphasis on their biological plausibility, apart from a brief discussion of recurrent connections in Section \ref{subsubsec:rnns}. In this section, we turn our attention to a modeling approach that prioritizes biological realism: \emph{spiking neural networks} (SNNs). These models aim to replicate the known biological mechanisms of neural processing and, along with CNNs \ref{subsec:deep_learning_approach}, represent the state-of-the-art approach in visual system modeling.
 
 We will introduce a foundational class of SNNs known as \emph{integrate-and-fire models}, which are among the most widely used biologically inspired models of neural activity. Notably, the model proposed by \citet{antolik2024comprehensive}, which serves as the source of our artificial dataset and the reference behavior in this study, is based on this family.
 
@@ -189,7 +189,7 @@ Compared to conventional DNNs, SNNs provide a more direct link to the temporal a
 \subsubsection{Integrate-and-Fire Models}
 \label{subsubsec:integrate_and_fire}
 
-A wide range of models have been developed to incorporate biological realism into neural simulations. For instance, the Hodgkin-Huxley model \citep{hodgkin1952quantitative} offers a highly detailed description of the ionic mechanisms that underlie action potentials \ref{subsec:action_potential}. While this model is biologically accurate, its complexity often makes it analytically and computationally intractable.
+A wide range of models have been developed to incorporate biological realism into neural simulations. For instance, the Hodgkin-Huxley model (\citet{hodgkin1952quantitative}) offers a highly detailed description of the ionic mechanisms that underlie action potentials \ref{subsec:action_potential}. While this model is biologically accurate, its complexity often makes it analytically and computationally intractable.
 
 To address this, simplified models such as the \emph{integrate-and-fire} family have been introduced. These models abstract away spike shape and biophysical detail, representing action potentials as binary events: spikes occur when the neuron's membrane potential exceeds a threshold. The dynamics between spikes are governed by the evolution of the membrane potential, modeled using electrical circuit analogies.
 
@@ -277,12 +277,12 @@ A more compact representation, analogous to \citet{Wang2023towards}, is:
 
 Although PCC is generally computed between trials for a single time interval, we sometimes evaluate it over multiple time steps \ref{subsec:spike_trains} by aggregating results across selected intervals.
 
-PCC satisfies many desirable properties: it is bounded in $[-1, 1]$, easy to interpret, and relatively insensitive to sample size or bias \citep{Wang2023towards}. However, it does not account for trial-to-trial variability. Consequently, a low PCC may arise from noisy data rather than poor model performance. This limitation motivates the use of alternative measures such as normalized cross-correlation.
+PCC satisfies many desirable properties: it is bounded in $[-1, 1]$, easy to interpret, and relatively insensitive to sample size or bias (\citet{Wang2023towards}). However, it does not account for trial-to-trial variability. Consequently, a low PCC may arise from noisy data rather than poor model performance. This limitation motivates the use of alternative measures such as normalized cross-correlation.
 
 \subsection{Normalized Cross Correlation}
 \label{subsec:normalized_cross_correlation}
 
-To address the limitations of PCC, \citet{hsu_quantifying_2004} proposed the \emph{normalized cross-correlation} (NCC), which adjusts for the inherent variability of the neural data. This metric has since been used in several performance studies \citet{touryan_spatial_2005, gill_sound_2006, Wang2023towards} and is defined as:
+To address the limitations of PCC, \citet{hsu_quantifying_2004} proposed the \emph{normalized cross-correlation} (NCC), which adjusts for the inherent variability of the neural data. This metric has since been used in several performance studies (\citet{touryan_spatial_2005, gill_sound_2006, Wang2023towards}) and is defined as:
 
 \begin{equation}
     CC_{norm} = \frac{CC_{abs}}{CC_{max}}

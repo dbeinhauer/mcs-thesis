@@ -101,5 +101,3 @@
 https://nba.uth.tmc.edu/neuroscience/m/s2/chapter15.html
 https://dspace.cuni.cz/handle/20.500.11956/176078
 https://dspace.cuni.cz/handle/20.500.11956/183997
-
-
