@@ -5,73 +5,41 @@
 - refine the results part
 - refine the thesis structure part
 
-# CH1
+# Chapter 1
 - add pictures:
-    - neuron description
-    - action potential
-        - the diagram in time
-        - maybe diagram of the potential propagation and some ion channels
-    - myelination and saltatory conduction
     - synaptic transition diagram
         - maybe also inhibitory and excitatory
         - maybe combination of the signals
-    - early visual system
-        - general structure
-    - eye - description
-    - retina - diagram of different cells
-        - maybe also fovea, blind spot etc.
     - LGN - diagram of the structure and path to V1
     - V1 - layers
         - other paths to different regions
         - location in head
     - retinoscopy - visual field
     - orientation selectivity
-        - simple and complex cells
         - orientation map
-    - maybe binocularity and direction specificity (not needed imho)
-    - diagram of pathways to higher regions
 
-- modeling approaches
-    - classical approaches
-    - SNNs
-    - DNNs
-- ML
-    - RNNs, LSTMs
-    - some techniques
-    - Pearson's CC
-    - Normalized CC (maybe in results)
-# CH2
-- problem and solution description
-
-# CH3
-- analysis and results
+# Chapter 2
+- picture of leaky-integrate-and-fire as electric circuit
 
 
-# Chapter 2 - Computational neuroscience
-- mention RNNs
-- mention synaptic adaptation and biological plausibility
-- SNNs
-- metrics:
-    - Pearson's, Normalized CC
-- mention blank stimuli
-- 
-
-
-# Model definition
-- define the dataset
-- define the task
+# Chapter 3 - Methods
+- picture of dataset sequence of stimuli
+- picture of single experiment
 - define base model architecture
     - outer RNN
     - how it is connected
     - mathematical description of the model
+    - picture of the model architecture
 - define model variants
     - ideally also mathematically and mention the motivation behind each of the model (the biological motivation)
 
 
 
 
-# Experimental outline
+# Chapter 4: Results
 - some dataset analysis
+    - how many spikes in each time bins
+        - histogram -> good approximation with the time step 20
 - maybe need to generate more model subsets - how many of them?
     - ideally around 20
 - comparison of all models (`simple`, `dnn_joint`, `dnn_separate`, `rnn_joint`, `rnn_separate`, `syn_adaptation`, `syn_adaptation_lgn`)
@@ -87,6 +55,7 @@
     - good to have some measure of temporal dynamic capture
         - difference of the spike
         - somehow measure the difference between the steady state and the blank state
+        - it would be nice to select the highly spiking neurons and not spiking neurons on the stimulus and compare their predictions with the real measure
 - if possible then also `dnn_joint` plot of the neuron behavior to show what function it learned
 - comparison for `different model sizes`
     - probably only for one setup

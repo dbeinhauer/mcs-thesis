@@ -96,3 +96,6 @@ The validation and test datasets comprise 18 stimulus sequences, each with 50 st
 To build a biologically plausible RNN model that mirrors the structure in \citet{antolik2024comprehensive}, one would ideally create a one-to-one mapping between model neurons and biological neurons. However, given the lack of structural constraints (e.g., known synaptic weights) and the impracticality of modeling over 100,000 neurons, we adopt an all-to-all connectivity scheme with neuron subsampling.
 
 We randomly select 10\% of neurons from each population to reduce model complexity and memory consumption, making the model more tractable during training and fine-tuning. To mitigate sampling bias, we run experiments using 20 different random neuron subsets. Empirical testing has shown that using this 10\% subset produces performance metrics similar to those obtained with larger neuron subsets. Further evaluation of this design choice is presented in the next chapter.
+
+\section{Task Description}
+\label{sec:task_description}
