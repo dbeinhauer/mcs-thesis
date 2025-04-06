@@ -68,7 +68,7 @@ To streamline this process, we have developed a dedicated data processing pipeli
 \subsection{Dataset Description}
 \label{subsec:dataset_description}
 
-After the raw dataset generated from the model by \citet{antolik2024comprehensive} undergoes the preprocessing steps described in Section \ref{subsec:dataset_preprocess}, we obtain the final dataset used in our model. The basic unit of this dataset is the experiment (Section \ref{subsec:experiment}). Each experiment is represented by six matrices corresponding to different neuronal populations. Two matrices represent the spike trains of ON and OFF LGN neurons (denoted as X\_ON and X\_OFF), while the remaining four correspond to layer IV and layer II/III neurons, further divided into excitatory and inhibitory types: V1\_Exc\_L4, V1\_Inh\_L4, V1\_Exc\_L23, and V1\_Inh\_L23. The number of neurons in each population is defined in Section \ref{subsubsec:spiking_cat_architecture}, matching the configuration in \citet{antolik2024comprehensive}.
+After the raw dataset generated from the model by \citet{antolik2024comprehensive} undergoes the preprocessing steps described in Section \ref{subsec:dataset_preprocess}, we obtain the final dataset used in our model. The basic unit of this dataset is the experiment (Section \ref{subsec:experiment}). Each experiment is represented by six matrices corresponding to different neuronal populations. Two matrices represent the spike trains of ON and OFF LGN neurons (denoted as $s_{ON}$ and $s_{OFF}$), while the remaining four correspond to layer IV and layer II/III neurons, further divided into excitatory and inhibitory types: $r_{E_{4}}$, $r_{I_{4}}$, $r_{E_{2/3}}$, and $r_{I_{2/3}}$. The number of neurons in each population is defined in Section \ref{subsubsec:spiking_cat_architecture}, matching the configuration in \citet{antolik2024comprehensive}.
 
 Each matrix has the format $\mathbb{R}^{N \times M \times T}$, where $N$ is the number of experiments, $M$ is the number of neurons in the given population, and $T$ is the number of time steps in each experiment (see Section \ref{subsec:experiment} for experiment definition).
 
@@ -97,5 +97,51 @@ To build a biologically plausible RNN model that mirrors the structure in \citet
 
 We randomly select 10\% of neurons from each population to reduce model complexity and memory consumption, making the model more tractable during training and fine-tuning. To mitigate sampling bias, we run experiments using 20 different random neuron subsets. Empirical testing has shown that using this 10\% subset produces performance metrics similar to those obtained with larger neuron subsets. Further evaluation of this design choice is presented in the next chapter.
 
-\section{Task Description}
-\label{sec:task_description}
+\section{Model Description}
+\label{sec:model_description}
+
+In this section we will focus on the definition of the ground model and then on the biologically inspired extensions that we consequently applied to improve the model performance.
+
+The task of the model is the visual system identification as described in Section \ref{sec:system_identification}. More profoundly our aim is design the RNN model that based on the input sequence that consists of the LGN neurons (\ref{sec:lgn}) responses from our artificial dataset described in the previous Section \ref{sec:artificial_dataset} predicts the appropriate responses of the selected V1 neurons whose responses we have in our dataset as mentioned in Section \ref{sec:artificial_dataset}. In terms of the visual system identification we have in each time step $t$ of the input experiment sequence \ref{subsec:experiment} a vector of neuronal responses from the LGN ON and OFF cells that serves as an input stimuli. Let's denote $s(t)$ as our vector of input stimuli (using notation of appropriate neuronal responses used in the Section \ref{sec:artificial_dataset}) in time step $t$: 
+
+\begin{equation*}
+    s(t)=\left(s_{ON}(t); s_{OFF}(t)\right)
+\end{equation*}
+
+Our task is to find the model $f$ that is a biologically plausible RNN that predicts the neuronal responses from the V1 neuronal responses on the stimulus in time $t$ from $s(t)$. Let's denote this as:
+
+\begin{equation*}
+    \hat{r}(t) = f(s(t))
+\end{equation*}
+
+Where $\hat{r}(t)$ consists of:
+
+\begin{equation*}
+    \hat{r}(t) = \left(\hat{r}_{E_4}(t); \hat{r}_{I_4}(t); \hat{r}_{E_{2/3}}(t); \hat{r}_{I_{2/3}}(t)\right)
+\end{equation*}
+
+Also note that we will mark the predictions using the hat $\hat{.}$ symbol and without this symbol we will mark the targets from our artificial dataset.
+
+The aim of the task is to to minimize the difference between predictions $\hat{r}(t)$ and targets $r(t)$ and to accurately capture the spatiotemporal dynamics of the single neuronal responses. As mentioned in Section \ref{sec:evaluation_methods}, there is currently no consensus in the ideal evaluation metrics, thus we will use Pearson's correlation coefficient \ref{subsec:pearson_cc} and normalized cross correlation \ref{subsec:normalized_cross_correlation} for evaluation on the test dataset \ref{subsubsec:test_dataset}. For the training loss we have selected the mean square error (MSE) function (\citet{alpaydin2020introduction}). We during training and backpropagation steps we then aim to minimize the function:
+
+$$L(\hat{R}, R) = \sum_{i=1}^{N}\sum_{t=1}^{T}\left(\hat{R}_i(t) - R_i(t)\right)^2$$
+
+Where $\hat{R}, R \in \R^{N \times M_{out} \times T}$ are the matrices of predicted respectively target neuronal responses where $N$ is number of training experiments, $M_{out}$ is the total number of output neurons and $T$ is time duration of the experiment.
+
+It is worth noting that same as in the case of the evaluation in visual system identification task there is no strict consensus on the selection of the proper loss function. We have selected MSE as one of the loss functions. The reasons for selection of such a loss function are that it is one of the most used, well-interpreted and easy to implement loss functions in the machine learning and even in the signal identification tasks as more profoundly studied for example in work from \citet{wang2009mse, soderstrom2018errors}. Such loss function was for example also partially used in the similar problem study by \citet{antolik2016local}. On the other hand it is also work noting that in for a wide range of the similar studies there is for example Poisson loss function (\citet{terven2024lossfunctionsmetricsdeep}) applied instead for example in studies by \citet{Wang2023towards, sinz2018stimulus}. The Poisson loss might be a better option as it is designed for the count discrete data which in the spiking counts are. As stated before we have empirically selected the MSE as it is one of the safe error function choices and at the beginning of our study it has been the metric that generally performed well without strenuous fine tuning and tackling with the model parameters. We are aware of this possible limitations and it would be appropriate to test the model training using other loss function variants such as Poisson loss in the future study. However, due the time constrains that we have to finish our thesis we decided to omit this ideal loss function selection in this study as we do not expect it would have massive impact on the study results.
+
+As an optimizer function we have selected Adam optimization method (\citet{kingma2017adammethodstochasticoptimization}) as one of the state-of-the-art optimizations in the DNN model application. 
+
+\subsection{Base Model Architecture}
+\label{subsec:base_model_architecture}
+Now, we will focus on the description of the base architecture of our model. The base model is an RNN that should reflect the biological architecture of the selected layers IV and II/III of the V1. Basically the architecture is the same as the one from our base SNN model from \citet{antolik2024comprehensive} that also serve as our artificial dataset source. However, there has been some simplifications of the model as application of such a high amount of the biological plausibility is very demanding and would require much more research out of the bounds of this thesis. The idea of the whole project is to integrate the original SNN from \citet{antolik2024comprehensive} with our model to improve the whole simulation.
+
+The input of our model is a sequence of LGN neuronal spiking responses. These sequences we note as $s_{ON}$ and $s_{OFF}$ distinguishing neuronal populations of ON and OFF LGN cells (\ref{fig:on_off_cells}, \ref{sec:lgn}). These are passed to the 2 RNN layers representing layer IV of V1. We separate the layer IV to inhibitory (noted as $I_4$) and excitatory (noted as $E_4$) sublayer. These layers consists of artificial neurons where each should correspond to exactly one neuron from the original SNN of the appropriate layer. As mentioned in Section \ref{subsubsec:subset_selection} we select only subset of these neurons from original SNN as it is computationally unsuitable to create the 1:1 model architecture of the original SNN. These sublayers are interconnected with all-to-all connections within each other. There are also an all-to-all connections within each sublayer. The output of $E_4$ is passed in all-to-all manner to other 2 sublayers representing both excitatory and inhibitory populations of the layer II/III. These layers we will denote as $E_{2/3}$ and $I_{2/3}$. There is the same interconnectivity and self-connectivity in all-to-all manner as in the layer IV. In addition there is a recurrent connection from $E_{2/3}$ to both sublayers of layer IV ($E_4$ and $I_4$) also in the all-to-all manner. This recurrent connection is a simplification of the biological architecture introduced in the model \citet{antolik2024comprehensive}. The idea is in omitting the feedback connections from the layers V and VI and replacing them with direct layer II/III connection. The overall structure is inspired by the real V1 cortical architecture that is briefly described in the Section \ref{sec:v1} with the simplifications applied in the SNN model by \citet{antolik2024comprehensive}. In addition there are simplifications applied in our model. These simplifications are as mentioned before the selection of only a random subset of the neurons from the model by \citet{antolik2024comprehensive} that are modeled. Alongside with this there are no spatial constraints applied on the connections. This means that the neurons are connected all-in-all manner. This is not valid neither biologically nor in the SNN model where the connections are defined stochastically with the distribution where the probability of the connection decreases with the spatial distance and orientation selectivity. This limitation are planned to be replaced in the future studies building on our ground model as they will allow us apart from the improving the biological plausibility also scale up our model as the number of connections are directly linked with the number of parameters that the model needs.
+
+The output of the model are all the outputs of the layers as these should represent the appropriate neuronal responses in the given time step of each modeled neuronal population. The output in time $t$ is then thus in the format:
+
+$$ (E_4(t); I_4(t); E_{2/3}(t); I_{2/3}(t)) $$
+
+In this ground RNN model we use classical RNN neurons with the activation function tanh. We have selected the tanh function as the layer output should correspond to the neuronal responses that should be non-negative as they should represent number of spikes that the neuron elicited in the given time bin.
+
+Alongside with this we differentiate between the inhibitory and excitatory neurons \ref{subsec:synaptic_transmission}. The artificial neurons of RNN in excitatory layers $E_4$ and $E_{2/3}$ are weights constrained to be non-negative throughout all training that should represent the excitatory (empowering) signal from these neurons. On the other hand, the inhibitory neurons in layers $I_4$ and $I_{2/3}$ have weights strictly constrained to be non-positive, representing the inhibitory effect of these cells. This should lead to even higher biological plausibility. These constraints are forced during each optimizer step. In case the threshold is passed during the optimizer step the weights are resetet to the threshold value ensuring this constraint is fulfilled during the whole training procedure.
