@@ -100,115 +100,140 @@ We randomly select 10\% of neurons from each population to reduce model complexi
 \section{Model Description}
 \label{sec:model_description}
 
-In this section we will focus on the definition of the ground model and then on the biologically inspired extensions that we consequently applied to improve the model performance.
+This section describes the core model used in our study, followed by the biologically inspired enhancements we applied to improve its performance.
 
-The task of the model is the visual system identification as described in Section \ref{sec:system_identification}. More profoundly our aim is design the RNN model that based on the input sequence that consists of the LGN neurons (\ref{sec:lgn}) responses from our artificial dataset described in the previous Section \ref{sec:artificial_dataset} predicts the appropriate responses of the selected V1 neurons whose responses we have in our dataset as mentioned in Section \ref{sec:artificial_dataset}. In terms of the visual system identification we have in each time step $t$ of the input experiment sequence \ref{subsec:experiment} a vector of neuronal responses from the LGN ON and OFF cells that serves as an input stimuli. Let's denote $s(t)$ as our vector of input stimuli (using notation of appropriate neuronal responses used in the Section \ref{sec:artificial_dataset}) in time step $t$: 
+Our goal is to develop a model for visual system identification task, as introduced in Section~\ref{sec:system_identification}. Specifically, we develop a recurrent neural network (RNN) that takes in time-series data from LGN neurons (detailed in Section~\ref{sec:lgn}) and predicts the activity of selected V1 neurons. Both input and target output data come from the artificial dataset described in Section~\ref{sec:artificial_dataset}.
+
+At every time step $t$ in the experimental sequence (Section~\ref{subsec:experiment}), the model receives a vector of inputs representing responses from LGN ON and OFF cells. We denote this vector as $s(t)$:
 
 \begin{equation*}
-    s(t)=\left(s_{ON}(t); s_{OFF}(t)\right)
+    s(t) = \left(s_{ON}(t); s_{OFF}(t)\right)
 \end{equation*}
 
-Our task is to find the model $f$ that is a biologically plausible RNN that predicts the neuronal responses from the V1 neuronal responses on the stimulus in time $t$ from $s(t)$. Let's denote this as:
+Our objective is to learn a biologically plausible function $f$ implemented via an RNN, which maps the LGN input to predicted V1 responses:
 
 \begin{equation*}
     \hat{r}(t) = f(s(t))
 \end{equation*}
 
-Where $\hat{r}(t)$ consists of:
+The output vector $\hat{r}(t)$ includes predictions for four types of V1 neuron populations:
 
 \begin{equation*}
     \hat{r}(t) = \left(\hat{r}_{E_4}(t); \hat{r}_{I_4}(t); \hat{r}_{E_{2/3}}(t); \hat{r}_{I_{2/3}}(t)\right)
 \end{equation*}
 
-Also note that we will mark the predictions using the hat $\hat{.}$ symbol and without this symbol we will mark the targets from our artificial dataset.
+In this text, we use a hat symbol $(\hat{.})$ to indicate predicted values, while unmarked variables refer to the ground truth values from our dataset.
 
-The aim of the task is to to minimize the difference between predictions $\hat{r}(t)$ and targets $r(t)$ and to accurately capture the spatiotemporal dynamics of the single neuronal responses. As mentioned in Section \ref{sec:evaluation_methods}, there is currently no consensus in the ideal evaluation metrics, thus we will use Pearson's correlation coefficient \ref{subsec:pearson_cc} and normalized cross correlation \ref{subsec:normalized_cross_correlation} for evaluation on the test dataset \ref{subsubsec:test_dataset}. For the training loss we have selected the mean square error (MSE) function (\citet{alpaydin2020introduction}). We during training and backpropagation steps we then aim to minimize the function:
+The main learning goal is to minimize the difference between predicted responses $\hat{r}(t)$ and actual responses $r(t)$, while accurately modeling the temporal and spatial dynamics of each neuron. As noted in Section~\ref{sec:evaluation_methods}, there is no universally accepted evaluation metric for this problem. For our analysis on the test dataset (Section~\ref{subsubsec:test_dataset}), we use Pearson's correlation coefficient (Section~\ref{subsec:pearson_cc}) and normalized cross-correlation (Section~\ref{subsec:normalized_cross_correlation}) to evaluate model performance.
 
-$$L(\hat{R}, R) = \sum_{i=1}^{N}\sum_{t=1}^{T}\left(\hat{R}_i(t) - R_i(t)\right)^2$$
+For training, we use the mean squared error (MSE) loss function (\citet{alpaydin2020introduction}). The model is trained by minimizing the following objective function during backpropagation:
 
-Where $\hat{R}, R \in \R^{N \times M_{out} \times T}$ are the matrices of predicted respectively target neuronal responses where $N$ is number of training experiments, $M_{out}$ is the total number of output neurons and $T$ is time duration of the experiment.
+\begin{equation*}
+    L(\hat{R}, R) = \sum_{i=1}^{N}\sum_{t=1}^{T}\left(\hat{R}_i(t) - R_i(t)\right)^2
+\end{equation*}
 
-It is worth noting that same as in the case of the evaluation in visual system identification task there is no strict consensus on the selection of the proper loss function. We have selected MSE as one of the loss functions. The reasons for selection of such a loss function are that it is one of the most used, well-interpreted and easy to implement loss functions in the machine learning and even in the signal identification tasks as more profoundly studied for example in work from \citet{wang2009mse, soderstrom2018errors}. Such loss function was for example also partially used in the similar problem study by \citet{antolik2016local}. On the other hand it is also work noting that in for a wide range of the similar studies there is for example Poisson loss function (\citet{terven2024lossfunctionsmetricsdeep}) applied instead for example in studies by \citet{Wang2023towards, sinz2018stimulus}. The Poisson loss might be a better option as it is designed for the count discrete data which in the spiking counts are. As stated before we have empirically selected the MSE as it is one of the safe error function choices and at the beginning of our study it has been the metric that generally performed well without strenuous fine tuning and tackling with the model parameters. We are aware of this possible limitations and it would be appropriate to test the model training using other loss function variants such as Poisson loss in the future study. However, due the time constrains that we have to finish our thesis we decided to omit this ideal loss function selection in this study as we do not expect it would have massive impact on the study results.
+Here, $\hat{R}, R \in \mathbb{R}^{N \times M_{out} \times T}$ represent the predicted and actual response matrices, where $N$ is the number of training experiments, $M_{out}$ is the number of output neurons, and $T$ is the total number of time steps.
 
-As an optimizer function we have selected Adam optimization method (\citet{kingma2017adammethodstochasticoptimization}) as one of the state-of-the-art optimizations in the DNN model application. 
+Choosing an appropriate loss function for visual system identification is still an open question in the field. We chose MSE because it is widely used, easy to interpret, and simple to implement. It has also been effective in many machine learning and signal processing applications (\citet{wang2009mse, soderstrom2018errors}), including prior neuroscience modeling studies (\citet{antolik2016local}).
+
+That said, other loss functions such as the Poisson loss are often more suitable for modeling neural spike data, since these outputs represent discrete counts. Several recent studies (\citet{terven2024lossfunctionsmetricsdeep, Wang2023towards, sinz2018stimulus}) have used Poisson loss for this reason. Although Poisson loss may provide more biologically accurate modeling, we chose MSE due to its strong performance in our early trials and the practical advantages it offers. We recognize that this choice may have some limitations and suggest testing alternative loss functions in future research.
+
+To optimize the model, we use the Adam optimizer (\citet{kingma2017adammethodstochasticoptimization}), a widely used method in deep learning known for its fast convergence and reliability.
 
 \subsection{Base Model Architecture}
 \label{subsec:base_model_architecture}
-Now, we will focus on the description of the base architecture of our model. This architecture serves as the basis of our model and throughout the research we subsequently implemented additional modules to improve the model performance and its biological plausibility.
 
-Since now we will call this model as \emph{simple model} and we will build additional enhancements on this variant.
+This section introduces the base model architecture, which serves as the foundation for later enhancements aimed at improving both model performance and biological realism.
 
-The simple model is an RNN that should reflect the biological architecture of the selected layers IV and II/III of the V1. Basically the architecture is the same as the one from our template SNN model from \citet{antolik2024comprehensive} that also serve as our artificial dataset source. However, there has been some simplifications of the model as application of such a high amount of the biological plausibility is very demanding and would require much more research out of the bounds of this thesis. The idea of the whole project is to integrate the original SNN from \citet{antolik2024comprehensive} with our model to improve the whole simulation.
+We refer to this initial version as the \emph{simple model}, and it acts as the starting point for further development throughout this study.
 
-The input of our model is a sequence of LGN neuronal spiking responses. These sequences we note as $s_{ON}$ and $s_{OFF}$ distinguishing neuronal populations of ON and OFF LGN cells (\ref{fig:on_off_cells}, \ref{sec:lgn}). These are passed to the 2 RNN layers representing layer IV of V1. We separate the layer IV to inhibitory (noted as $I_4$) and excitatory (noted as $E_4$) sublayer. These layers consists of artificial neurons where each should correspond to exactly one neuron from the original SNN of the appropriate layer. As mentioned in Section \ref{subsubsec:subset_selection} we select only subset of these neurons from original SNN as it is computationally unsuitable to create the 1:1 model architecture of the original SNN. These sublayers are interconnected with all-to-all connections within each other. There are also an all-to-all connections within each sublayer. The output of $E_4$ is passed in all-to-all manner to other 2 sublayers representing both excitatory and inhibitory populations of the layer II/III. These layers we will denote as $E_{2/3}$ and $I_{2/3}$. There is the same interconnectivity and self-connectivity in all-to-all manner as in the layer IV. In addition there is a recurrent connection from $E_{2/3}$ to both sublayers of layer IV ($E_4$ and $I_4$) also in the all-to-all manner. This recurrent connection is a simplification of the biological architecture introduced in the model \citet{antolik2024comprehensive}. The idea is in omitting the feedback connections from the layers V and VI and replacing them with direct layer II/III connection. 
+The simple model is a recurrent neural network (RNN) designed to approximate the structure and function of layers IV and II/III of the primary visual cortex (V1). Its design is inspired by the spiking neural network (SNN) described in~\citet{antolik2024comprehensive}, which also provides the artificial dataset used for training and evaluation. Because fully replicating all biological details is computationally intensive and beyond the scope of this thesis, we introduce several simplifications that maintain key structural aspects while keeping the model tractable. Our long-term objective is to integrate this RNN with the original SNN to build a more comprehensive simulation framework.
 
-Formally the computation done by an artificial neurons in one arbitrary layer of the base model described above is defined as:
+The model takes as input a sequence of spiking responses from LGN neurons, represented by vectors $s_{ON}$ and $s_{OFF}$, corresponding to ON and OFF LGN cell populations (see Figure~\ref{fig:on_off_cells} and Section~\ref{sec:lgn}). These inputs are fed into two RNN layers that model the excitatory ($E_4$) and inhibitory ($I_4$) subpopulations of layer IV in V1. Each artificial neuron is designed to correspond to a neuron in the original SNN, though we use only a subset of these due to memory constraints (see Section~\ref{subsubsec:subset_selection}).
 
-\begin{defn}[Base Neuronal layer]
-    Let's mark $L$ as the neuronal layer that contains $m_{h} \in \N$ neurons. Let $x \in \R^{m_{in}}$ be a vector of all corresponding neuronal responses that are passed as to a neuronal layer $L$ where $m_{in} \in \N$ is a total number of the input neurons. And let $W_{ih} \in \R^{m_{h} \times m_{in}}$ and $b_{ih} \in \R^{m_{h}}$ be input weights matrix and bias vector of the layer $L$. Let $h \in \R^{m_h}$ be the vector of neuronal responses of each neuron from layer $L$ in the previous time step and its corresponding weights matrix $W_{hh} \in \R^{m_{h} \times m_{h}}$ and bias $b_{hh} \in \R^{m_h}$. Let's mark $f: \R^{m_h} \to \R^{m_h}$ to be an arbitrary activation function. Then vector of neuronal responses $h'$ of the layer $L$ on the input neuronal responses $x$ and $h$ is defined as:
+Within layer IV, $E_4$ and $I_4$ are fully interconnected and also include full self-connections. The output from $E_4$ is passed to two additional RNN layers that represent the excitatory ($E_{2/3}$) and inhibitory ($I_{2/3}$) subpopulations of layer II/III. These layers follow the same full connectivity and self-connectivity pattern as layer IV. Additionally, we include a recurrent feedback connection from $E_{2/3}$ to both $E_4$ and $I_4$. This simplifies the feedback typically mediated by deeper cortical layers (V and VI), as described in~\citet{antolik2024comprehensive}.
 
+We define the operation of each RNN layer as follows:
+
+\begin{defn}[Base Neuronal Layer]
+    Let $L$ be a layer with $m_h \in \mathbb{N}$ neurons. Let $x \in \mathbb{R}^{m_{in}}$ be the input vector, where $m_{in} \in \mathbb{N}$ is the number of input neurons. Let $W_{ih} \in \mathbb{R}^{m_h \times m_{in}}$ and $b_{ih} \in \mathbb{R}^{m_h}$ be the input weight matrix and bias vector. Let $h \in \mathbb{R}^{m_h}$ be the previous hidden state of the layer, with recurrent weights $W_{hh} \in \mathbb{R}^{m_h \times m_h}$ and bias $b_{hh} \in \mathbb{R}^{m_h}$. Let $f: \mathbb{R}^{m_h} \to \mathbb{R}^{m_h}$ be an activation function. Then the updated hidden state $h'$ is calculated as:
+    
     $$h' = f\left(W_{ih}x + b_{ih} + W_{hh}h + b_{hh}\right)$$
 \end{defn}
 \label{def:base_neuron}
 
-The activation function $f$ can be basically chosen as any function that fulfils the condition from the definition. We will focus on the activation function more profoundly in the subsequent text. Please note that in the following text there will be multiple times used the notation for the activation function in vector format as in the definition \ref{def:base_neuron}. The reason for this notation is mainly to clearly define the input and output size but if not stated otherwise these functions are typically the activation functions $\R \to \R$ and vector notation then just means that we apply this function on each element of the vector separately (the elements in the layer typically does not influence each other).
+The activation function $f$ can be any non-linear function that operates element-wise. In this thesis, we often use vector notation for clarity. Unless otherwise stated, $f$ is applied independently to each element of the vector.
 
-The overall structure is inspired by the real V1 cortical architecture that is briefly described in the Section \ref{sec:v1} with the simplifications applied in the SNN model by \citet{antolik2024comprehensive}. In addition there are simplifications applied in our model. These simplifications are as mentioned before the selection of only a random subset of the neurons from the model by \citet{antolik2024comprehensive} that are modeled. Alongside with this there are no spatial constraints applied on the connections. This means that the neurons are connected all-in-all manner. This is not valid neither biologically nor in the SNN model where the connections are defined stochastically with the distribution where the probability of the connection decreases with the spatial distance and orientation selectivity. This limitation are planned to be replaced in the future studies building on our ground model as they will allow us apart from the improving the biological plausibility also scale up our model as the number of connections are directly linked with the number of parameters that the model needs.
+This model architecture is loosely based on the biological structure of V1 (see Section~\ref{sec:v1}) and incorporates similar simplifications found in the original SNN~\citep{antolik2024comprehensive}. Our main simplifications include:
+\begin{itemize}
+    \item Modeling only a randomly chosen subset of neurons, not the full population.
+    \item Using all-to-all connectivity rather than spatially constrained, probabilistic connections.
+\end{itemize}
 
-The output of the model are all the outputs of the layers as these should represent the appropriate neuronal responses in the given time step of each modeled neuronal population. The output in time $t$ is then thus in the format:
+In contrast, the original SNN uses a connection probability that decreases with spatial distance and considers features like orientation selectivity. While this simplification speeds up computation and reduces model complexity, it reduces biological realism. Future work could reintroduce spatial constraints to make the model more scalable and biologically accurate.
 
-$$\hat{R}(t) = (E_4(t); I_4(t); E_{2/3}(t); I_{2/3}(t)) $$
+At each time step $t$, the model's output consists of the concatenated outputs from all four RNN layers:
 
-We should mention that we treat our task as a regression task eventhough it might make sense to treat is as classification task. This is due the non-clarity of the ideal loss and evaluation metrics selection. It is quite common in this field to perform the regression task like we do in our study.
+$$\hat{R}(t) = (E_4(t); I_4(t); E_{2/3}(t); I_{2/3}(t))$$
+
+While the output could potentially be interpreted as categorical, we frame our task as a regression problem. This choice reflects current practice in the field and acknowledges the lack of standardized loss and evaluation metrics for neural response prediction tasks.
 
 \subsubsection{Time Bins Merging}
 \label{subsubsec:time_bins_merging}
 
-Additionally, as the training of the NNs is time consuming and dealing with the sequences in resolution 1ms is both time and memory demanding we have after some brief dataset observation and empirical decisions based on the capturing temporal behavior alongside with the omitting the noisiness of our data since we are working only with single trial data (this problem with noisiness was already discussed in Section \ref{sec:evaluation_methods}) we decided to merge the time bins from 1ms resolution to 20ms resolution. As this resolution reasonably captures the temporal behavior of the neuronal responses, is much less time and memory consuming and also we omit the noisiness of the data. Further will this decision be discussed in the following chapter where we will discuss the results of our study.
+Training neural networks with millisecond-resolution data is both time- and memory-intensive, especially when using single-trial recordings, which are inherently noisy. After inspecting the dataset and considering the trade-off between temporal detail and computational efficiency, we decided to aggregate the data into 20~ms bins instead of 1~ms. This change preserves meaningful temporal patterns in neural activity while significantly reducing data volume and smoothing out noise. While this binning reduces high-frequency detail, our data showed low spike rates overall, making this trade-off acceptable. The impact of this decision is further discussed in the results section.
 
 \subsubsection{LeakyTanh Activation Function}
 \label{subsubsec:leakytanh}
 
-In the definition of the ground model layer computation there has been mentioned that basically there can be selected any activation function that fulfills the conditions \ref{def:base_neuron}.
+As mentioned in Definition~\ref{def:base_neuron}, the model architecture allows flexibility in choosing the activation function. For our baseline RNN, we use a custom activation function called \emph{LeakyTanh}, which was developed by Richard Kraus as part of his bachelor's thesis, which extends this work.
 
-In this ground RNN model we use classical RNN neurons with the custom activation function that we call \emph{LeakyTanh}. This function was designed by other student Richard Kraus who is currently working on the extensition of the model as his bachelor's thesis that should apply the spatial constrains to our model. The idea behind the selection of activation function and motivation to develop custom one is that since our model predictions are spiking rates of the individual neurons its value should never be negative as it does not make biologically sense. Additionally as we are working with the 20ms time resolution and as mentioned in \citet{dayan2005theoretical} there is at most 1 spike in 1ms then theoretically there should be maximally 20 spikes in one time bin. Thus, it would make sense to force the activation function to predict values in interval from 0 to 20. While doing some additional research on the dataset we have also found out that maximal number of spikes throughout our dataset in one time bin is only 4 and in majority cases these responses are still binary (this was also one of the reasons why we have chosen this resolution) the final activation function should predict the values in ideally much narrower interval. There has been several activation functions that we have tried such as ReLU and its variants (also constraints), tanh and several other custom variants. Finally, we have empirically selected the LeakyTanh function as the training was the most stable and behaved in a predictable way in comparison to others. Our hypothesis is that our custom function behaves the best because, it is fully differentiable in $\R$, it is constrained only from the bottom in contrast to other activation functions that we tried that are constrained from both sides. These properties has been proven to not work well while training the DNN models (\citet{shiv2022activation, nwankpa2018activationfunctionscomparisontrends}). On the other hand non-constrained functions also did not perform well (eventhough it would be ideal) in comparison to constrained. There was a problem mainly with the gradients reaching infinity during training. Although, we have solved these problems using gradient clipping it still did not prove to be better option. It is also worth noting that we are still using gradient clipping to prevent the model of the exploding gradients as our activation function is not constrained from the top. This clipping has however high threshold and we expect we do not need to apply it also never as the LeakyTanh function is designed the way that is it almost never possible. Formally the LeakyTanh is defined as:
+LeakyTanh was designed to produce biologically plausible outputs while preserving stable gradients during training. The goal was to create an activation function suitable for predicting firing rates, which should be non-negative. Given our 20~ms binning and the theoretical upper bound of 20 spikes per bin (based on a maximum rate of one spike per millisecond~\citep{dayan2005theoretical}), it makes sense for the activation function to output values in a narrow, biologically meaningful range. However, our dataset rarely shows more than four spikes per bin, and most responses are binary, so even lower outputs are typically sufficient.
+
+We tested several activation functions, including ReLU, tanh, and custom variants. LeakyTanh provided the most stable training behavior. We believe this is because it is fully differentiable across $\R$ and unbounded on the upper end, while still being partially constrained from below. Functions that are bounded on both ends performed poorly~\citep{shiv2022activation, nwankpa2018activationfunctionscomparisontrends}, and fully unbounded functions caused issues with exploding gradients, even when gradient clipping was applied. Although we still use gradient clipping with LeakyTanh, its design generally avoids the need for it.
+
+The LeakyTanh function is defined as follows:
 
 \begin{defn}[LeakyTanh]
-    Let us define the interval of our main interest $[0, m]$. Let us define scale offset $c = \frac{m}{2}$, parameter that ensures the function is positive. Next define steepness parameter $s \in \R$ specifying steepness of the core $\tanh$ function. Finally, define leakage function $f(x) = \text{softplus}(x, \beta)$ with parameter $\beta \in \R$ and leakage strength $l \in \R$ that serves as a leakage factor of our tanh function to ensure non-boundness. The LeakyTanh function is then defined as:
-        $$\text{LeakyTanh}(x; c, s, l, \beta) = c + c \cdot \tanh(s \cdot x) + l \cdot \text{softplus}(x, \beta)$$
+    Let $[0, m]$ be the target output range. Define $c = \frac{m}{2}$ as the central offset, $s \in \mathbb{R}$ as the steepness parameter for the $\tanh$ core, and $l \in \mathbb{R}$ as the leakage factor. We also use the softplus function $\text{softplus}(x, \beta)$ with steepness parameter $\beta \in \mathbb{R}$ as a leakage factor. The LeakyTanh function is defined as:
+    
+    $$\text{LeakyTanh}(x; c, s, l, \beta) = c + c \cdot \tanh(s \cdot x) + l \cdot \text{softplus}(x, \beta)$$
 \end{defn}
 \label{def:leakytanh}
 
-Note that $\text{softplus}(x, \beta)$ function with parameter $\beta \in \R$ is a function serving as a continuous replacement for the ReLU function (mentioned for example in the paper from \citet{nwankpa2018activationfunctionscomparisontrends}). In our model we use LeakyTanh with parameters $c=2.5$ to prefer mainly the values in interval $[0, 5]$ as explained above. Additionally, we have chosen the parameters $l=0.001$, $s=0.2$ and $\beta=20$. It is worth noting that these parameters has been profoundly studies by Richard Kraus and our contribution to this hyperparameters selection and activation function development was mainly in terms of stating the expected properties by the dataset examination conducted by us and by testing the function parameters on our developed model and comparison to results and model behavior while using other activation function. As stated before, we have decided to use this activation function as it empirically seemed as the most reasonable one out of all tested. 
-
-The comprehensive study on the ideal activation function can be for example found in the papers from \citet{shiv2022activation, nwankpa2018activationfunctionscomparisontrends}.
+In our experiments, we used $c = 2.5$ (centering outputs around the 0--5 range), $l = 0.001$, $s = 0.2$, and $\beta = 20$. These parameters were fine-tuned by Richard Kraus. Our contribution focused on analyzing the dataset to define the desired output characteristics and comparing the performance of various activation functions in our model.
 
 \subsubsection{Excitatory/Inhibitory Neurons Differentiation}
 \label{subsubsec:exc_inh_differentiation}
 
-Alongside with this we differentiate between the inhibitory and excitatory neurons \ref{subsec:synaptic_transmission}. The artificial neurons of RNN in excitatory layers $E_4$ and $E_{2/3}$ are weights constrained to be non-negative throughout all training that should represent the excitatory (empowering) signal from these neurons. On the other hand, the inhibitory neurons in layers $I_4$ and $I_{2/3}$ have weights strictly constrained to be non-positive, representing the inhibitory effect of these cells. This should lead to even higher biological plausibility. These constraints are forced during each optimizer step. In case the threshold is passed during the optimizer step the weights are reset to the threshold value ensuring this constraint is fulfilled during the whole training procedure.
+To increase biological realism, we differentiate excitatory and inhibitory neurons by applying sign constraints to their weights (see Section~\ref{subsec:synaptic_transmission}). Neurons in excitatory layers ($E_4$ and $E_{2/3}$) are constrained to have non-negative weights, promoting excitatory (amplifying) effects. Inhibitory layers ($I_4$ and $I_{2/3}$) are constrained to have non-positive weights, modeling their suppressive role in the network.
 
-Formally the constrained function applied after each weights update on the weights corresponding to excitatory layers $E_4$ and $E_{2/3}$:
+These constraints are enforced after every optimization step. If any updated weight violates the constraint, it is clipped to the appropriate boundary.
+
+Formally, the constraints are applied as follows:
 
 \begin{defn}[Weight Constraints]
-    Let $w_E, w_I \in \R$ be a weight of on arbitrary neuron from the arbitrary excitatory layer $E_4$ or $E_{2/3}$ respectively arbitrary inhibitory layer $I_4$ or $I_{2/3}$  of our model. Then after each update of these weights there are applied the following functions. For excitatory neurons (when $w_{E_{\text{new}}}$ labels the updated weight):
+    Let $w_E, w_I \in \mathbb{R}$ be weights from excitatory and inhibitory neurons, respectively. After each update step, we apply the following rules:
+    
+    \textbf{Excitatory neurons:}
     \begin{equation*}
         w_{E_{\text{new}}} =
         \begin{cases}
-            w_{E} & \text{if $w_E \geq 0$} \\
-            0 & \text{else} \\
+            w_E & \text{if } w_E \geq 0 \\
+            0 & \text{otherwise}
         \end{cases}
     \end{equation*}
     
-    And for inhibitory neurons (where $w_{I_{\text{new}}}$ labels the updated weight):
+    \textbf{Inhibitory neurons:}
     \begin{equation*}
-        w_{I_{\text{new}}} =   
+        w_{I_{\text{new}}} =
         \begin{cases}
-            w_{I} & \text{if $w_I \leq 0$} \\
-            0 & \text{else} \\
+            w_I & \text{if } w_I \leq 0 \\
+            0 & \text{otherwise}
         \end{cases}
     \end{equation*}
 \end{defn}
+\label{def:weight_constraints}
 
 
 \subsubsection{Training of the Model}
