@@ -239,103 +239,132 @@ Formally, the constraints are applied as follows:
 \subsubsection{Training of the Model}
 \label{subsubsec:training_model}
 
-The training of the model was done the following way. At the beginning we pass the appropriate input values to the network starting with the processing in layer IV. As this layer apart from the LGN neuronal responses works with the recurrent input from the other cortical layers we pass these values from our artificial dataset from the previous time steps. This we apply for all the recurrent connections in the model. We perform one forward step, compute the loss between the neuronal predictions in each layer, perform backpropagation step and optimizer step and at the end we apply the weights constraints to fulfill the excitatory/inhibitory differentiation \ref{subsubsec:exc_inh_differentiation}. After the model weight update we do not pass the model outputs as the recurrent inputs for the next time step, but we reset these values with the corresponding target value from the artificial dataset. This ensures the model gets the correct input values in each time step and also speeds up the training. As we do not really have any hidden parameters in the simple model and we know exactly how should each neuron in our model respond on all the stimuli, we can exploit this non-typical property of the RNN training for facilitation of the model training. Since we are working with the RNN model it also makes sense to try to apply the hidden time steps. On the other words, to perform multiple forward steps and take the last time step as the model predictions in the target time step. This variant makes it possible to use the backpropagation through time (\citet{webos1990btt}) and have some kind of memory encoded in the model. We have implemented this option, but while testing it did not show any promising results and we won't apply this option in the future study. It is worth noting that in the future this functionality might be useful and might improve the model performance.
+The training procedure was conducted as follows. At each time step, the model receives the relevant input values and begins processing in layer IV. Because this layer also depends on recurrent inputs from other cortical layers, we provide these recurrent inputs using values from previous time steps of our artificial dataset. This approach is applied consistently across all recurrent connections in the model.
+
+For each time step, we perform a forward pass through the network, compute the loss between the predicted and target neuronal responses at every layer, and then carry out the backpropagation and optimizer steps. After the model weights are updated, we apply weight constraints to maintain excitatory/inhibitory differentiation, as described in Section~\ref{subsubsec:exc_inh_differentiation}.
+
+Importantly, we do not use the model's outputs as recurrent inputs for the following time step. Instead, we reset these inputs using the target values from the dataset. This ensures the model receives the correct inputs at each step and accelerates training. Since the simple model has no hidden internal states and we know how each neuron is expected to respond to all stimuli, we can take advantage of this unusual property of RNN training to simplify and stabilize learning.
+
+We also experimented with a variant involving multiple forward steps over a sequence of inputs referred to here as a "hidden time step" approach where the final output is used to make a prediction for a specific time point. This allows for backpropagation through time (BPTT)~\citep{webos1990btt}, enabling the model to develop a form of temporal memory. However, this approach did not yield meaningful improvements. A likely reason is that our model already has access to many ground-truth target time steps, making the introduction of additional predictive time steps unnecessary and potentially noisy. Moreover, while increasing the sequence length could theoretically help, it would require returning to finer temporal resolution, which as previously discussed introduces significant noise and computational cost (Section~\ref{subsubsec:time_bins_merging}). For these reasons, we decided not to include this variant in the final version of the model, though it may prove valuable in future work.
 
 \subsubsection{Evaluation of the Model}
 \label{subsubsec:evaluation_model}
 
-The evaluation of the model is simple though. We initiate the recurrent inputs with the first time step targets from our artificial dataset and then perform the forward steps for all the time steps when taking only the LGN inputs and not resetting the recurrent inputs anymore. This means that during the evaluation we can test whether our model is able to predict the whole series of the time steps in the experiment, eventhough, it was never really presented to the model during the training.
+The model evaluation procedure is straightforward. We initialize the recurrent inputs using the target values from the first time step in the artificial dataset. We then perform forward passes for each subsequent time step, using only the LGN input without resetting the recurrent inputs. This setup allows us to assess whether the model can successfully predict the entire sequence of neuronal responses in an experiment despite never being exposed to continuous sequences in this way during training.
 
 \subsection{Additional Modules}
 \label{subsec:additional_modules}
-Apart from the simple model described in the Section \ref{subsec:base_model_architecture} we added multiple additional modules that enhance the model performance and architecture using additional biological constraints. We will describe the modules in the order in which we was adding the modules to improve the model performance. So, the reader can see the process of the model development and the ideas behind each of the module addition. In theory it does not refrain the user from omitting the previously defined modules but it typically does not make sense as they were build to fine-tune the previous version of the model.
+
+Beyond the simple model described in Section~\ref{subsec:base_model_architecture}, we introduced several additional modules aimed at enhancing model performance and incorporating further biological constraints. These modules were added sequentially, each one motivated by the limitations of the previous version. This section presents the modules in the order they were added, allowing readers to follow the development process and understand the reasoning behind each addition. While each module is theoretically optional, they were designed to build upon one another, and omitting earlier components typically undermines their intended effect.
 
 \subsubsection{Feed-forward Neuron Module}
 \label{subsubsec:dnn_neuron}
-The first and arguably also the most impactful complement is the replacement of LeakyTanh neuron activation functions of the simple model using the shared small trainable feed-forward DNN modules that should better reflect the complex behavior of the neuron. We use 4 separate DNN modules for each output neuronal population layer ($E_4$, $I_4$, $E_{2/3}$, $I_{2/3}$). This should also differentiate different neuronal types in the system. As in the source model of our artificial dataset the other types are omitted thus the model is simplified by this. At the end of each of these modules there is a final LeakyTanh activation function to maintain the properties of the predictions mentioned in the Section \ref{subsubsec:leakytanh}.
 
-The feed-forward DNN neuron module is defined as:
+The first and arguably most impactful extension was replacing the LeakyTanh activation functions in the simple model with small, trainable feed-forward neural network (DNN) modules. These modules aim to more accurately reflect the complex, nonlinear behavior of biological neurons.
+
+We implemented four distinct DNN modules one for each output neuronal population ($E_4$, $I_4$, $E_{2/3}$, $I_{2/3}$) to capture functional differences not only between excitatory and inhibitory neuron types, but also across different cortical layers (layer IV vs. layer II/III) of the V1. While the source model (\citet{antolik2024comprehensive}) of our artificial dataset is based on biologically detailed neuron models (e.g., exponential integrate-and-fire), it does not include deeper cortical layers such as layers V or VI. Therefore, our model likewise avoids incorporating these layers, since we lack corresponding target activity and adding unobserved structure would not be justified. To preserve the output properties described in Section~\ref{subsubsec:leakytanh}, each DNN module ends with a LeakyTanh activation.
 
 \begin{defn}[DNN Joint Neuron Module]
-    Let $n \in \N$ be a number of module layers and $s \in \N$ be a size of a single layer. Let there be a sequence of the following operations Layer Normalization (\citet{ba2016layernormalization}), fully-connected hidden NN layer and ReLU. This sequence represents one layer with exception to the first layer. The input size of the DNN joint neuron module is 1 as it is the output element of the vector of the base model defined in \ref{def:base_neuron}. Then the DNN neuron module $f: \R \to \R$ is defined as the sequence of operations:
+    Let $n \in \mathbb{N}$ be the number of layers in the module and $s \in \mathbb{N}$ the size of each hidden layer. Each layer consists of a sequence of Layer Normalization (\citet{ba2016layernormalization}), a fully connected layer, and a ReLU activation. The first layer differs slightly in that it consists only of a fully connected layer that maps the input (a scalar output from the base model defined in Definition~\ref{def:base_neuron}) to the hidden size $s$. The complete module $f: \mathbb{R} \to \mathbb{R}$ is defined by the following sequence:
+    
     \begin{enumerate}
-        \item Fully connected NN layer with input size $1$ and output size $s$.
-        \item Sequence of $(n-1)$ repetitions of the layer block with operations:
-            \begin{enumerate}
-                \item Layer Normalization.
-                \item Fully connected NN layer with input size $s$ and output size $s$.
-                \item ReLU
-            \end{enumerate}
-        \item Fully connected NN layer with input size $s$ and output size $1$.
-        \item LeakyTanh final activation function.
+        \item Fully connected layer: input size 1, output size $s$.
+        \item $(n-1)$ repetitions of:
+        \begin{enumerate}
+            \item Layer Normalization
+            \item Fully connected layer: input and output size $s$.
+            \item ReLU activation
+        \end{enumerate}
+        \item Fully connected layer: input size $s$, output size 1.
+        \item Final LeakyTanh activation.
     \end{enumerate}
-
-    Optionally, there might be a residual connection from that skips the whole module and is summed with the module result before the final activation function is applied.
+    
+    Optionally, a residual connection may bypass the entire module and be summed with its output before the final activation.
 \end{defn}
 \label{def:dnn_joint}
 
-Since now we will name model using this feed-forward neuronal module as \emph{DNN joint model}. The reason for the "joint" adverb is that this type of module does not differentiate excitatory and inhibitory outputs of the base RNN defined in the Section \ref{subsec:base_model_architecture} marked as simple model.
+We refer to the version of the model incorporating this module as the \emph{DNN joint model}. The term "joint" reflects the naming convention used in our source code and indicates that the model jointly processes both excitatory and inhibitory outputs from the base RNN (defined in Section~\ref{subsec:base_model_architecture}) through a shared DNN architecture. This contrasts with the "separate" model variant (described in the following section), which handles excitatory and inhibitory outputs using distinct pathways.
 
-The idea behind this module is to capture the different behavior of different neuronal populations. Alongside with this there is also a motivation to learn more complex activation function than the simple ones that are typically used in the DNN model.
+The main motivation behind this extension is to capture the complex and diverse behavior of different neuronal subtypes and cortical layers more effectively. Additionally, it enables the network to learn more expressive, trainable activation functions in place of static ones typically used in deep learning, potentially improving model capacity and flexibility.
 
 \subsubsection{Splitting Excitatory/Inhibitory Output in Base RNN}
 \label{subsubsec:dnn_separate}
-We will call another extension of our model as \emph{DNN Separate model}. This model is basically the same as the one as the DNN joint \ref{subsubsec:dnn_neuron} with one modification that is separation of the excitatory and inhibitory outputs during the base model RNN computation defined in \ref{def:base_neuron}. In the separate models we will separate the linear RNN cell computation into 2 part one part that performs the linear step for all excitatory input neurons and the other part that does the same for the inhibitory neurons. The result of the linear base RNN neuron is the vector with 2 elements (inhibitory and excitatory). These 2 elements are then passed together to the DNN neuron module basically the same as used in the DNN joint model defined in \ref{def:dnn_joint}. The only difference is that the module takes the input of size 2 (excitatory and inhibitory part) and in case of residual connection it first sums both input elements and then it sums this sum before the final activation function application. The difference between the definition \ref{def:dnn_joint} is then that the DNN separate module is a function $f: \R^2 \to \R$.
+In this version, the linear base RNN cell computation is split into two parts—one processing excitatory inputs and the other processing inhibitory inputs. The output of the base RNN neuron is thus a two-element vector (excitatory and inhibitory contributions), which is then passed to a shared DNN module, similar to that used in the DNN joint model~\ref{def:dnn_joint}. The main difference is that this module now takes an input of size 2. In the case of a residual connection, the excitatory and inhibitory inputs are summed before being added to the module output prior to the final activation function.
 
-The idea behind this extension is to facilitate the model to distinguish between the excitatory and inhibitory neurons and separate their functionality from each other. The formal definition of the base model using "separate" variant is the following:
+The purpose of this extension is to allow the model to distinguish and independently process excitatory and inhibitory contributions at the neuronal level.
 
 \begin{defn}[Separate Base RNN]
-    Let's $L$ be an arbitrary neuronal layer containing $m_h \in \N$ neurons. Let $x_E \in R^{m_{in_E}}$ and $x_I \in R^{m_{in_I}}$ be input neuronal responses from the excitatory respectively inhibitory neurons of the layer $L$ and $m_{in_E}, m_{in_I} \in \N$ sizes of these populations. Also let $W_{ih_E} \in \R^{m_h \times m_{in_E}}$, $W_{ih_I} \in \R^{m_h \times m_{in_I}}$, $b_{ih_E} \in \R^{m_{in_E}}$ and $b_{ih_I} \in \R^{m_{in_I}}$ be input weights matrices and bias vectors of the excitatory respectively inhibitory appropriate input neurons. Let $h \in \R^{m_h}$ be the vector of neuronal responses for each neuron from layer $L$ from the previous time step and its corresponding weights $W_{hh} \in \R^{m_h \times m_h}$ and bias $b_{hh} \in \R^{m_h}$. Let's mark $f: \R^{2 \times m_h} \to \R^{m_h}$ to be an arbitrary activation function. Then vector of neuronal responses $h'$ of the layer $L$ on the input responses $x_E$, $x_I$ and $h$ is defined as:
+Let $L$ be a neuronal layer with $m_h \in \mathbb{N}$ neurons. Let $x_E \in \mathbb{R}^{m_{in_E}}$ and $x_I \in \mathbb{R}^{m_{in_I}}$ be input vectors from excitatory and inhibitory populations, respectively. Let $W_{ih_E}, W_{ih_I}$ be their corresponding input weight matrices, and $b_{ih_E}, b_{ih_I}$ be the associated bias vectors. Let $h \in \mathbb{R}^{m_h}$ be the recurrent input with weight matrix $W_{hh}$ and bias $b_{hh}$. Let $f: \mathbb{R}^{2 \times m_h} \to \mathbb{R}^{m_h}$ be the activation function. Then the output $h'$ at the next time step is defined as:
 
-    \begin{equation*}
-        h' = 
-        \begin{cases}
-            f\left(W_{ih_E}x + b_{ih_E} + W_{hh}h + b_{hh}; W_{ih_I}x + b_{ih_I}\right) & \text{if $L$ is excitatory layer}\\
-            f\left(W_{ih_E}x + b_{ih_E}; W_{ih_I}x + b_{ih_I} + W_{hh}h + b_{hh}\right) & \text{if $L$ is inhibitory layer}\\
-        \end{cases}      
-    \end{equation*}
+\begin{equation*}
+    h' = 
+    \begin{cases}
+        f\left(W_{ih_E}x_E + b_{ih_E} + W_{hh}h + b_{hh};\ W_{ih_I}x_I + b_{ih_I}\right) & \text{if $L$ is excitatory} \\
+        f\left(W_{ih_E}x_E + b_{ih_E};\ W_{ih_I}x_I + b_{ih_I} + W_{hh}h + b_{hh}\right) & \text{if $L$ is inhibitory}
+    \end{cases}
+\end{equation*}
 \end{defn}
 \label{def:separate_base_rnn}
 
-As mentioned before as the activation function we use the same neuronal DNN module as in the DNN joint model with the slight modification that is that it takes input of size $2$ and sums the input excitatory and inhibitory values across in case of residual connection. We won't define this formally as the definition would be almost the same as in case of \ref{def:dnn_joint}.
+As with the DNN joint model, we use the same shared DNN module for the activation function, except now it takes two inputs and handles them accordingly. Since this is a minor structural modification, we omit the formal redefinition.
 
 \subsubsection{Recurrent Neuron Module}
 \label{subsubsec:rnn_neuron_module}
-Another extension we call \emph{RNN joint} or \emph{RNN separate} based on whether we use joint \ref{def:base_neuron} or separate base \ref{def:separate_base_rnn} model. This extension aims to bring some form of a "memory" of the neurons. The principle is the same as in the feed-forward DNN neuronal modules \ref{subsubsec:dnn_neuron} and \ref{subsubsec:dnn_separate} we just replace the feed-forward DNN with the RNN variant. As the small shared RNN module we use either LSTM (\citet{hochreiter1997lstm}) or GRU (\citet{cho2014gru}) RNN model variant. Formally, the RNN neurons are defined as:
+
+We also implemented a recurrent version of the DNN neuron module, called either \emph{RNN joint} or \emph{RNN separate}, depending on whether it uses the joint (Section~\ref{def:base_neuron}) or separate (Section~\ref{def:separate_base_rnn}) base model.
+
+Instead of feed-forward layers, this version replaces the neuron modules with small recurrent networks (either LSTM (\citet{hochreiter1997lstm}) or GRU (\citet{cho2014gru})) to provide memory across time steps.
 
 \begin{defn}[RNN Neuron Module]
-    Let $n \in \N$ be a number of layers of either LSTM or GRU units and $s \in \N$ be a size of a single layer. Let the input size of the module be $s_i \in \{1, 2\}$ to be $1$ in case of joint model variant and $2$ in case of the separate variant. Let $h \in \R^{m_h}$ be a vector of hidden states of the module where $m_h \in \N$ is given by the variant of the RNN section (either LSTM or GRU). The RNN neuron is then the given sequence of operations:
+    Let $n \in \mathbb{N}$ be the number of RNN layers and $s \in \mathbb{N}$ the size of each hidden layer. Let $s_i \in \{1, 2\}$ be the input size (1 for joint, 2 for separate). Let $m_h \in \mathbb{N}$ be the size of the hidden state. The sequence of operations is as follows:
+    
     \begin{enumerate}
-        \item Apply fully connected NN with input size $s_i$ and output size $m_h$.
-        \item Apply multi layer RNN variant based on our choice. Let the final hidden states mark as $h_{out} \in \R^{m_h}$.
-        \item Apply final fully connected layer with input size $m_h$ and output size $1$.
-        \item Apply final LeakyTanh activation function.
+        \item Fully connected layer: input size $s_i$, output size $m_h$.
+        \item Apply $n$-layer RNN (LSTM or GRU) to produce $h_{out} \in \mathbb{R}^{m_h}$.
+        \item Fully connected layer: input size $m_h$, output size 1.
+        \item Final LeakyTanh activation.
     \end{enumerate}
-
-    Optionally, same as in the DNN neuron variant we might apply the residual connection that skips the module and adds the input before the final activation function call.
+    
+    A residual connection may be added before the final activation.
 \end{defn}
 \label{def:rnn_neuron_module}
 
-The motivation behind this extension is the fact that the neurons adapt their behavior based on the short-term dynamics. Thus this might lead to better capturing temporal dynamics of the overall network spiking.
+This extension is motivated by the biological reality that neurons adapt based on short-term input history. Thus, temporal memory might help improve prediction of network dynamics.
 
-However, the introduction of the RNN neurons raises the concern about the training procedure and there needs to be some modifications done during the training as these models captures the temporal dynamics only when applying backpropagation through time (BPTT) (\citet{webos1990btt}). This problem has been already mentioned in the Section \ref{subsubsec:training_model} as our base model is also designed on the RNN architecture. In the mentioned case there, however, was not the necessity for BPTT as we in fact know all the hidden states in all time steps and we can reset the hidden states using the values from our dataset as we also have biological explanation of the base RNN hidden states. Although, this is not the case while using the neuronal modules. These are the new aspects in our system and we do not know what should be the ideal hidden values throughout the experiment sequence. We thus need to modify our training procedure to allow the model to perform the BPTT.
+Training this model requires adjustments to the procedure described in Section~\ref{subsubsec:training_model}. Unlike the base model where hidden states are known from the dataset these neuron modules have internal hidden states that must be learned. Therefore, we introduce backpropagation through time (BPTT) (\citet{webos1990btt}).
 
-The modification to the training procedure described in \ref{subsubsec:training_model} is fairly simple. The only difference is that we will perform the backpropagation computation and the optimizer step only after the given number $T_{\text{back}} \in \N$ of forward steps representing the system neuronal responses in $T_{\text{back}}$ time steps and after this we perform the backpropagation computation, optimizer step and excitatory/inhibitory neurons constraint application. After this we do this repeatedly till the experiment sequence is not over. We perform the backpropagation computation only till the time step where the last optimizer call happened. We do not reset the hidden states of the RNN shared modules, however, we still reset the states of the base RNN model using the known neuronal responses as before. It is worth mentioning that in the original BPTT there should be all forward steps in the sequence performed and then there should be only one BPTT call as described before. However, as we want to capture mainly the short-term dynamics and as with the longering the time sequence for BPTT is significantly memory and time efficient that is our big concern as mentioned in the previous text. We cut the backpropagation step only for the given number of time steps. This variant is also called truncated backpropagation through time (TBPTT) (\citet{Williams1990tbptt}).
+To manage this, we use truncated BPTT (TBPTT) (\citet{Williams1990tbptt}). Specifically, we:
+\begin{itemize}
+    \item Accumulate forward steps for a fixed window $T_{\text{back}} \in \N$.
+    \item Perform the backward and optimizer steps after each window.
+    \item Do not reset the internal RNN neuron states, but continue resetting the base RNN states with known values.
+\end{itemize}
 
-It is also worth noting that since we do not apply the optimizer time steps after each time step the training itself also takes more time and also as mentioned before especially memory consumption of this variant rises significantly with the number of time steps that we want to perform while using TBPTT. We thus need to find the balance between the efficiency and the temporal resolution. In this step there significantly rises the necessity to apply some kind of spatial constraint in neuronal connections to reduce number of model parameters that there currently is due to the all-to-all connections as mentioned in the Section \ref{subsec:base_model_architecture}. These constraints are also present in the original template SNN from \citet{antolik2024comprehensive} and are the case of the parallel research that should focus on the improvement of our model and is out of the scope of our thesis.
+While TBPTT allows training, it increases memory and computation costs significantly. Thus, this module would benefit from future integration of spatial constraints to reduce parameter count—similar to those used in the original SNN (\citet{antolik2024comprehensive}).
+
 
 \subsubsection{Synaptic Depression}
 \label{subsubsec:synaptic_depression}
-The last extension of the model aims to include even more network short-term temporal adaptability to the model while using the principles of the synaptic depression (\citet{abbott1997syndepression}) that are also included in our template model by \citet{antolik2024comprehensive}. The idea of this principle is quite simple. The input neuronal connections adapt to the increased or decreased firing rate in the dynamical changes of the stimuli and thus modulate the postsynaptic signal that is transmitted from one neuron to other for example by amount of neurotransmitter efflux etc. (\ref{subsec:synaptic_transmission}).
 
-In our model we apply this principle using the similar approach as in the shared modules of the neurons introduced in the previous extensions. We would have a small shared RNN module across the same ordered synaptic pairs. This will ensure that connection between each layers are independently modulated in time based on the stimuli. The highest influence of this phenomenon in biological network is in the synapses from LGN neurons to layer IV neurons. So, we first introduce the model that we call \emph{LGN only synaptic adaptation model} that applies synaptic depression only on the connections from LGN. The extension of this model is the one that we call \emph{synaptic adaptation model} that applies this principle to each synaptic pair population. In the model the synaptic depression module is applied as a preprocessing step of the input to the layer.
+Our final extension introduces synaptic depression~\citep{abbott1997syndepression}, mimicking short-term plasticity effects like reduced neurotransmitter release under sustained firing. This phenomenon is already represented in the original template model (\citet{antolik2024comprehensive}).
 
-Formally the synaptic depression module is defined as:
+We model synaptic depression using small shared RNN modules placed between presynaptic and postsynaptic populations. These modules dynamically modulate incoming inputs. The most significant biological effect occurs between LGN and layer IV neurons, leading to two variants:
+\begin{itemize}
+    \item \textbf{LGN-only adaptation model:} applies synaptic depression only to LGN to layer IV connections.
+    \item \textbf{Full adaptation model:} applies it to all synaptic connections.
+\end{itemize}
 
 \begin{defn}[Synaptic Depression Module]
-    Let there be layer of neuronal population $L$ that takes input from neuronal populations from the set $\Lambda_{L}$. Let there be an arbitrary input layer $L_{in} \in \Lambda_{L}$ and let $x \in \R^{m_{in}}$ be a vector of neuronal responses of the layer $L_{in}$ in time $t$ where $m_{in} \in \N$ is a size of the layer. Let there $\sigma: \R^{m_{in}} \to \R^{m_{in}}$ be an synaptic depression module that fulfills the definition of an RNN joint module from the definition \ref{def:rnn_neuron_module}. Then input of the layer $L$ in time $t$ from the layer $L_{in}$ after application of the synaptic depression module is:
+    Let $L$ be a target layer, and $\Lambda_L$ the set of input populations. For $L_{in} \in \Lambda_L$, let $x \in \mathbb{R}^{m_{in}}$ be its input at time $t$. Let $\sigma: \mathbb{R}^{m_{in}} \to \mathbb{R}^{m_{in}}$ be an RNN neuron module (as in Definition~\ref{def:rnn_neuron_module}). Then the modulated input is:
+    
     $$x' = \sigma(x)$$
 \end{defn}
 \label{def:synaptic_depression}
 
-As it was already mentioned in the Section concerning the RNN neuron modules \ref{def:rnn_neuron_module} there needs to be TBPTT applied as the synaptic depression modules are basically the same as the RNN neuron modules. Furthermore, the problem of the memory and computational cost is in case of this model even stronger since the number of parameters increased and thus with each additional time step in TBPTT the number memory usage increase rapidly. This is also reason why we use the smallest as possible GRU variants of the RNN modules as they are using less parameters and thus are less memory consuming. Furthermore, the LGN only synaptic depression module was developed due to this problems as it significantly reduces the number of synaptic depression modules and thus does not increase the memory usage that significantly. Overall this module seems to be problematic to use in a current state of our model as with the all-to-all connection it is not very feasible to train such a model in a reasonable time, scale and memory usage. However, we have high expectations that this module might have severe influence in the overall quality of the model temporal predictions and with the application of the spatial connectivity constraints this extension might significantly improve the model.
+Since these modules are recurrent, we again use TBPTT. This approach increases memory consumption substantially, especially when applied to all synaptic connections. To mitigate this, we:
+\begin{itemize}
+    \item Use minimal GRU-based modules.
+    \item Prefer the LGN-only variant to limit parameter growth.
+\end{itemize}
+
+In its current form, this extension is computationally demanding due to the all-to-all connectivity. However, we believe it holds significant potential for improving the model's ability to capture temporally dynamic behavior—especially when combined with future spatial connectivity constraints. In particular, we expect that this form of adaptability could help differentiate between response types, such as spontaneous activity and stimulus-driven responses. For instance, spontaneous responses should be less suppressed, while late responses to sustained stimuli may be attenuated due to short-term synaptic fatigue. Capturing this nuance may improve the biological realism and predictive accuracy of the model.
