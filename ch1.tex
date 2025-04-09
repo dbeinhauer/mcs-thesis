@@ -1,21 +1,19 @@
 \chapter{Early Visual System}
 \label{chap:visual_system}
-This thesis focuses on modeling the \emph{primary visual cortex} (V1), a critical structure in early visual processing within the mammalian brain. V1 has been extensively studied for decades \citep{hubel1965receptive} and serves as a central focus in both experimental and computational neuroscience. In this chapter, we provide an overview of the most relevant components of the visual system for our modeling work. A comprehensive review of the entire visual system is beyond the scope of this thesis; for more detailed information, we refer the reader to standard neuroscience texts such as \citet{bear2020neuroscience} and \citet{goebel2004visual}, which also served as key references for this section.
+
+In this thesis, we focus on modeling the primary visual cortex (V1), a region that plays a crucial role in early visual processing in the mammalian brain. V1 is among the most studied brain areas and has been a topic of extensive research for decades (\citet{hubel1965receptive}). This chapter highlights the aspects of the visual system that are most relevant to our work. For a more comprehensive overview, we recommend referring to the textbook \citet{bear2020neuroscience} (3rd. Edition) and \citet{goebel2004visual}.
 
 \section{Neuron}
 \label{sec:neuron}
 
-The fundamental unit of neural processing in the brain is \emph{neuron}, a highly specialized cell adapted for the reception, integration, and transmission of electrochemical signals. Neurons differ from other cell types in both their unique morphology and functional properties, enabling rapid and complex information processing. Each neuron is composed of three principal components:
+The fundamental unit of neural processing is the \emph{neuron}, a specialized cell composed of three primary parts: the soma, the axon, and the dendrites. The soma, or cell body, contains the nucleus and other organelles, and is structurally similar to other cell types. Dendrites are branched extensions that receive signals from other neurons. The axon is a long projection that transmits electrical impulses away from the soma toward other neurons.
 
-\begin{description}
-    \item[Soma (Cell Body):] The \emph{soma} contains the nucleus and essential organelles responsible for protein synthesis, metabolic regulation, and overall cellular maintenance. It plays a crucial role in the integration of synaptic inputs received by the dendrites.
+\subsection{Axon Overview}
+\label{subsec:axon}
 
-    \item[Dendrites:] \emph{Dendrites} extend from the soma and serve as the primary sites for receiving synaptic input from other neurons. Their extensive branching increases the surface area available for synaptic connections, allowing each neuron to integrate thousands of excitatory and inhibitory signals.
+The axon originates from the \emph{axon hillock} and terminates at the \emph{axon terminal}, where it forms a \emph{synapse} with the target cell. For efficient signal transmission, the axon contains specialized proteins for propagating electrical potentials. The axon terminal is rich in \emph{synaptic vesicles} containing \emph{neurotransmitters}—chemical messengers such as glutamate, gamma-aminobutyric acid (GABA), glycine, and acetylcholine—that facilitate communication between neurons.
 
-    \item[Axon:] The \emph{axon} is a specialized elongated projection responsible for transmitting electrical impulses to target neurons, often over long distances. It originates from \emph{axon hillock}, a region where the integrated membrane potential is evaluated and, if a threshold is reached, triggers an action potential and ends at \emph{axon terminals}, where communication with downstream neurons occurs through synapses.
-\end{description}
-
-The detailed anatomy of a neuron is illustrated in Figure \ref{fig:neuron}.
+A detailed illustration of neuronal anatomy is provided in Figure~\ref{fig:neuron}. Further discussion on neuronal architecture can be found in \citet{bear2020neuroscience} (3rd Edition, p. 28--45).
 
 \begin{figure}
     \centering
@@ -24,39 +22,14 @@ The detailed anatomy of a neuron is illustrated in Figure \ref{fig:neuron}.
     \label{fig:neuron}
 \end{figure}
 
-Understanding the structure and function of individual neurons is essential, as these properties form the biological basis for the computational models used in this thesis. In the following sections, we build on this cellular foundation to explore how neurons are organized and interact within the primary visual cortex.
-
-\subsection{Axon Overview}
-\label{subsec:axon}
-
-The axon is uniquely adapted for efficient signal propagation, enabled by specialized ion channels and structural proteins. At its terminal, the axon contains synaptic vesicles, membrane-bound structures that store \emph{neurotransmitters}, the chemical messengers essential for synaptic communication. Upon arrival of an action potential, these vesicles undergo exocytosis, releasing neurotransmitters into the synaptic cleft to influence the activity of the postsynaptic neuron. Common neurotransmitters include glutamate (the principal excitatory neurotransmitter in the central nervous system), gamma-aminobutyric acid (GABA; the primary inhibitory neurotransmitter), as well as glycine and acetylcholine, which play essential roles in both central and peripheral neural circuits.
-
-Understanding the molecular mechanisms involved in neurotransmitter release and postsynaptic modulation is also vital from a computational modeling perspective. These processes govern signal integration and network dynamics, and their abstraction into model parameters such as synaptic weights and time constants plays a crucial role in biologically inspired simulations.
-
 \subsection{Action Potential}
 \label{subsec:action_potential}
 
-The primary mechanism by which neurons transmit signals is the \emph{action potential}, a rapid, all-or-nothing electrical impulse that propagates along the axon. This process is governed by ion concentration gradients across the neuronal membrane and the resulting electrical potential differences.
+The primary function of neurons is to propagate \emph{action potentials}, enabling communication with other neurons or target cells. This process relies on differences in ion concentrations and electrical potentials across the cell membrane. Key concepts include the \emph{membrane potential}—the voltage difference between the inside and outside of the neuron and \emph{equilibrium potentials}, where electrochemical forces are balanced.
 
-At rest, neurons maintain a resting membrane potential of approximately $-65 \text{mV}$, established through selective ion permeability and the activity of the sodium-potassium ($\text{Na}^{+}/\text{K}^{+}$) pump. This pump actively transports $\text{Na}^{+}$ ions out of the cell and $\text{K}^{+}$ ions into the cell, preserving the concentration gradients required for neuronal excitability. Additional ions, including chloride ($\text{Cl}^{-}$) and calcium ($\text{Ca}^{2+}$), also contribute to membrane dynamics. In particular, most of these ions are more concentrated extracellularly, with the exception of $\text{K}^{+}$, which is more abundant within the neuron. Maintaining these ionic gradients accounts for a substantial portion of the brain's energy consumption.
+Ion types central to this mechanism include sodium ($\text{Na}^+$), potassium ($\text{K}^+$), chloride ($\text{Cl}^-$), and calcium ($\text{Ca}^{2+}$). All except potassium are typically found in higher concentrations outside the cell. Maintaining these gradients is energetically demanding and accounts for a substantial portion of the brain's energy consumption.
 
-The action potential unfolds in a stereotypical sequence of phases, as illustrated in Figure \ref{fig:action_potential}:
-
-\begin{enumerate}
-    \item \textbf{Generator Potential and Threshold Activation:} Synaptic inputs induce local changes in the membrane potential known as generator potentials. If the excitatory input is sufficient to depolarize the membrane to a threshold (typically around $-55 \text{mV}$), an action potential is initiated.
-    
-    \item \textbf{Rising Phase and Depolarization:} Voltage-gated $\text{Na}^{+}$ channels open, allowing a rapid influx of $\text{Na}^{+}$ ions. This drives the membrane potential sharply upward, occasionally overshooting to positive values.
-    
-    \item \textbf{Falling Phase and Repolarization:} As depolarization peaks, voltage-gated $\text{K}^{+}$ channels open and the $\text{Na}^{+}$ channels inactivate. The efflux of $\text{K}^{+}$ restores the membrane to a more negative potential.
-    
-    \item \textbf{Undershoot and Hyperpolarization:} $\text{K}^{+}$ conductance transiently exceeds baseline levels, causing the membrane potential to drop below the resting level, a phase called hyperpolarization.
-
-    \item \textbf{Refractory Periods:}
-    \begin{enumerate}
-        \item \textbf{Absolute Refractory Period:} During this phase, $\text{Na}^{+}$ channels remain inactivated, rendering the neuron temporarily unresponsive to further stimulation.
-        \item \textbf{Relative Refractory Period:} The membrane is still hyperpolarized, requiring a stronger stimulus than usual to trigger another action potential.
-    \end{enumerate}
-\end{enumerate}
+The resting membrane potential of a neuron is approximately $-65$~mV. Action potentials are initiated and propagated along the axonal membrane through the coordinated opening and closing of ion channels. The temporal profile of an action potential is shown in Figure~\ref{fig:action_potential}.
 
 \begin{figure}
     \centering
@@ -65,62 +38,47 @@ The action potential unfolds in a stereotypical sequence of phases, as illustrat
     \label{fig:action_potential}
 \end{figure}
 
-From a modeling point of view, the stereotyped threshold-based firing of neurons offers a basis for simplifying complex electrophysiological dynamics into discrete spiking models such as the leaky integration-and-fire model. These abstractions are commonly used in computational neuroscience to simulate neuronal behavior across large-scale networks.
+To accelerate signal conduction over long distances, axons are often insulated by \emph{myelin}, which enables \emph{saltatory conduction} via gaps called \emph{nodes of Ranvier}. This arrangement significantly increases propagation speed. 
 
-\subsection{Axonal Conduction and Myelination}
-\label{subsec:axonal_conduction}
-
-Efficient transmission of action potentials across long axons is essential for rapid neural communication. The speed of conduction is significantly enhanced by \emph{myelination}, in which oligodendrocytes (in the central nervous system) and Schwann cells (in the peripheral nervous system) wrap the axons in layers of lipid-rich myelin. This insulation reduces ion leakage and allows \emph{saltatory conduction}, in which the action potential "jumps" between exposed regions of the axon known as \emph{nodes of Ranvier}. These nodes concentrate voltage-gated ion channels, supporting the regeneration of the action potential at regular intervals. This mechanism substantially increases the speed of transmission of the signal, particularly in long-range axonal projections. This structure is depicted in Figure \ref{fig:neuron}.
+For a more detailed understanding of these processes, see \citet{bear2020neuroscience}, 3rd Edition, p. 52--98.
 
 \subsection{Synaptic Transmission}
 \label{subsec:synaptic_transmission}
 
-At the axon terminal, the arrival of an action potential triggers the release of neurotransmitters stored in synaptic vesicles. This process, known as \emph{synaptic transmission}, unfolds through the following sequence:
+At the synapse, neurotransmitters are released by exocytosis when the action potential reaches the axon terminal. Synaptic connections can be either \emph{excitatory}, leading to membrane depolarization and potential generation of an action potential, or \emph{inhibitory}, which hyperpolarize the target cell and suppress firing.
 
-\begin{enumerate}
-    \item \textbf{Calcium Influx:} Voltage-gated $\text{Ca}^{2+}$ channels open, allowing $\text{Ca}^{2+}$ ions to enter the presynaptic terminal.
-    \item \textbf{Vesicle Fusion and Neurotransmitter Release:} The increase in intracellular $\text{Ca}^{2+}$ concentration triggers vesicle fusion with the presynaptic membrane and subsequent neurotransmitter exocytosis.
-    \item \textbf{Receptor Activation:} Neurotransmitters diffuse across the synaptic cleft and bind to specific receptors on the postsynaptic membrane, modulating the excitability of the postsynaptic neuron.
-\end{enumerate}
+Additionally, synaptic strength can adapt over short timescales based on recent activity—a phenomenon known as \emph{synaptic depression} (\citet{abbott1997syndepression}). This adaptive behavior is commonly modeled in simulation frameworks and plays a critical role in temporal filtering and network dynamics.
 
-Synapses can be broadly classified on the basis of their functional effects:
+For a more detailed understanding of these processes, see \citet{bear2020neuroscience}, 3rd Edition, p. 102--131.
 
-\begin{description}
-    \item[Excitatory synapses:] Promote depolarization of the postsynaptic membrane, increasing the likelihood of generation of action potential.
-    \item[Inhibitory synapses:] Induce hyperpolarization, decreasing the likelihood of postsynaptic firing.
-\end{description}
-
-This delicate balance between excitation and inhibition is fundamental for the function of neural circuits and underlies complex processes such as sensory perception, motor coordination, and cognition. In computational modeling, excitatory and inhibitory connections form the core of simulated network dynamics and are typically implemented using weighted synaptic interactions that modulate the state of artificial neurons in time.
 
 \section{General Structure of the Early Visual System}
 \label{sec:general_structure}
 
-Almost half of the human brain is dedicated to visual processing, highlighting the importance of vision in human cognition and behavior. The initial stages of this processing occur within \emph{early visual system}.
+A significant part of the human brain is involved in visual processing. The initial stage of this process occurs within the so-called \emph{early visual system}.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.6\linewidth]{img/visual_pathway.pdf}
-    \caption{\textbf{Anatomical Pathway of Visual Information Processing.} Schematic representation of the anatomical pathway of visual information in the early visual system, tracing the route from the eye to the primary visual cortex. Adapted from \citet{yaramothu2014short}. "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/wpfx0a2".}
+    \caption{\textbf{Anatomical Pathway of Visual Information Processing.} Schematic representation of the anatomical pathway of visual information in the early visual system, tracing the route from the eye to the primary visual cortex. Adapted from \citet{yaramothu2014short} and elaborated with the description from \citet{bear2020neuroscience} (3rd Edition, p. 311--314). "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/wpfx0a2".}
     \label{fig:visual_system_pathway}
 \end{figure}
-
-Light from the environment enters the eye and passes through its complex optical components, ultimately reaching the retina a thin layer of neural tissue at the back of the eye. The retina not only detects light, but also performs the first stages of visual information processing. Signals from the retina travel along the optic nerve to the optic chiasm, where input from the visual fields is reorganized. The signal then continues through the optic tract to the \emph{lateral geniculate nucleus} (LGN) of the thalamus, a crucial relay station that refines and filters the input before sending it to the cortex. The overall anatomical route of this visual signal, from the eye to the primary visual cortex, is illustrated in Figure \ref{fig:visual_system_pathway}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/early_visual_processing.pdf}
-    \caption{\textbf{Stages of Visual Processing in the Brain.} Schematic depiction of visual information flow from retinal ganglion cells to extrastriate cortical areas. The figure illustrates the receptive fields associated with each stage: starting with ON and OFF retinal ganglion cells and their concentric receptive fields, progressing through LGN cells, and into V1 where simple cells respond to centrally positioned oriented lines and complex cells to oriented lines regardless of exact position. The signal continues to higher-order extrastriate areas involved in advanced visual processing. Adapted from \citet{felleman_distributed_1991}. "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/byl57wb".}
+    \caption{\textbf{Stages of Visual Processing in the Brain.} Schematic depiction of visual information flow from retinal ganglion cells to extrastriate cortical areas. The figure illustrates the receptive fields associated with each stage: starting with ON and OFF retinal ganglion cells and their concentric receptive fields, progressing through LGN cells, and into V1 where simple cells respond to centrally positioned oriented lines and complex cells to oriented lines regardless of exact position. The signal continues to higher-order extrastriate areas involved in advanced visual processing. Adapted from \citet{felleman_distributed_1991} and collaborated with the information from \citet{bear2020neuroscience} (3rd Edition, p. 298--303, 316--337). "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/byl57wb".}
     \label{fig:early_vis_processing}
 \end{figure}
 
-From the LGN, visual information is transmitted through optical radiations to the \emph{primary visual cortex} (V1), the first cortical area exclusively dedicated to visual processing. V1 performs fundamental computations such as edge detection, orientation selectivity, and spatial frequency tuning (\citet{bear2020neuroscience}). Figure \ref{fig:early_vis_processing} provides an overview of the transformation of receptive fields across processing stages from the concentric organization of ON and OFF ganglion cells in the retina, through LGN neurons, to the oriented receptive fields of simple and complex cells in V1. From there, signals are sent to higher-order visual areas that support more complex functions, including object recognition, motion analysis, and depth perception.
+Visual information enters the system in the form of light, which passes through the eye's complex optical apparatus and is projected onto the retina. The retina is a thin layer of neural tissue responsible for detecting light and initiating signal processing. From there, signals travel through the optic nerve to the optic chiasm, where fibers are sorted based on the visual field, then continue via the optic tract to the \emph{lateral geniculate nucleus} (LGN) of the thalamus.
 
-From a computational point of view, the early visual system provides a powerful model of hierarchical processing. Each stage from the retina to V1 performs increasingly complex transformations of sensory input, extracting spatial, temporal, and contextual features. Many principles underlying modern artificial and biologically inspired neural networks, such as receptive fields, feedforward and feedback loops, and parallel processing, can be traced back to the structure and function of these early visual pathways. In the following sections, we examine these components in more detail, with a particular focus on the transformations that occur in the retina, LGN, and V1, laying the groundwork for computational models that emulate these processes.
+The LGN performs early-stage processing and forwards most of the visual input to the \emph{primary visual cortex} (V1) via the optic radiation. V1 is the first cortical region dedicated to visual analysis, where more complex computations begin. Signals leaving V1 proceed to higher-order visual areas responsible for advanced visual perception. The anatomical pathway from the eye to V1 is depicted in Figure~\ref{fig:visual_system_pathway}, and the transformation of receptive fields throughout visual stages is illustrated in Figure~\ref{fig:early_vis_processing}.
 
 \section{Eye}
 \label{sec:eye}
 
-The eye acts as a sophisticated optical system that captures electromagnetic radiation (light), modulates it through a series of specialized structures, and focuses it onto the retina. Key components including the cornea, lens, iris, and pupil work together to regulate light entry and ensure proper focusing. A detailed anatomical overview is presented in Figure~\ref{fig:eye} and elaborated upon in \citet{snell2013clinical}.
+One of the primary roles of the eye is to capture electromagnetic signals from the environment, focus them using its optical system, and project them onto the retina. The eye consists of several specialized structures that modulate and direct light. An anatomical overview is presented in Figure~\ref{fig:eye} and further discussed in \citet{bear2020neuroscience, snell2013clinical}.
 
 \begin{figure}
     \centering
@@ -129,81 +87,89 @@ The eye acts as a sophisticated optical system that captures electromagnetic rad
     \label{fig:eye}
 \end{figure}
 
-
 \subsection{Retina}
 \label{subsec:retina}
 
-Beyond capturing light, a key function of the eye is to convert optical stimuli into neural signals for transmission to the brain. This conversion is carried out by the retina a multilayered neural tissue composed of several specialized cell types organized into distinct layers. These include \emph{photoreceptors}, \emph{bipolar cells}, \emph{horizontal cells}, \emph{amacrine cells}, and \emph{ganglion cells}, as shown in Figure \ref{fig:retina_anatomy}.
+A second essential function of the eye is the conversion and initial preprocessing of light into neural signals suitable for further brain processing. This task is carried out by the retina—a thin neural tissue layer located at the back of the eye. It is composed of multiple types of cells organized in distinct layers, each contributing to signal modulation. These include photoreceptors, bipolar cells, horizontal cells, amacrine cells, and ganglion cells.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{img/retina_anatomy.pdf}
-    \caption{\textbf{Layered anatomy of the retina.} Adapted from (\citet{schwartz1991principles}, 4th Edition, p. 436) and (\citet{purves2019neurosciences}, 6th Edition, p. 239). "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/oy5qz9v".}
-    \label{fig:retina_anatomy}
-\end{figure}
+The first cells involved in visual processing are the \emph{photoreceptors}, namely \emph{rods} and \emph{cones}. These cells utilize photochemical reactions in their outer segments to convert light into chemical signals. Rods are highly sensitive to low light and detect a wide range of wavelengths, making them crucial for scotopic (low-light) vision. Cones, by contrast, are less light-sensitive but selective for specific wavelengths and are responsible for color vision and visual acuity.
 
-Visual processing begins with \emph{photoreceptors}, which include \emph{rods} and \emph{cones}. These cells transduce light into electrical signals via photochemical reactions in their outer segments. Rods are highly sensitive and support scotopic (low-light) vision, whereas cones enable color perception and high-acuity vision under photopic (well-lit) conditions. Their spatial distribution is nonuniform: the central region of the retina - \emph{fovea} contains a dense concentration of cones, while rods dominate the peripheral retina. A \emph{blind spot} exists in the optic disc, where ganglion cell axons exit the eye to form the optic nerve; this region does not contain photoreceptors.    
+Photoreceptors are distributed non-uniformly across the retina. The \emph{fovea}, the central region of the retina, is densely packed with cones, while the peripheral retina predominantly contains rods. Additionally, the \emph{optic disc}, or \emph{blind spot}, is a region devoid of photoreceptors where the optic nerve exits the eye.
 
-Upon light activation, photoreceptors undergo hyperpolarization \ref{subsec:action_potential}, which reduces their release of the neurotransmitter \emph{glutamate}. This change is detected by \emph{bipolar cells}, which relays the signal deeper into the retina. Most retinal neurons, except for ganglion cells, communicate using graded potentials rather than action potentials, allowing fine-grained signal modulation.
+Upon activation, photoreceptors hyperpolarize and release the neurotransmitter glutamate. This signal is detected by \emph{bipolar cells}, which serve as an intermediary step in the signal pathway. Notably, most retinal cells operate via graded potentials, with the exception of ganglion cells, which fire action potentials.
 
-Approximately 10 million bipolar cells integrate input from around 125 million photoreceptors. Their connectivity patterns vary by cell type and location in the retina. \emph{Horizontal cells} provide lateral inhibition by integrating the input of multiple photoreceptors, thus enhancing the contrast at the earliest stage of processing.
+The signal is further processed by \emph{bipolar cells}, which aggregate input from varying numbers of photoreceptors depending on retinal location and cell type. This mechanism emphasizes foveal detail by focusing higher visual resolution centrally. Bipolar cells interact closely with \emph{horizontal cells}, which contribute to lateral inhibition and temporal contrast.
 
-Bipolar cells are functionally categorized into the \emph{ON} and \emph{OFF} types, depending on their response to light. ON bipolar cells depolarize in response to light onset, while OFF bipolar cells hyperpolarize. Both types exhibit \emph{center-surround receptive fields}, which support spatial contrast detection. Horizontal cells contribute to this mechanism by mediating inhibitory signals from surrounding photoreceptors. Figure \ref{fig:on_off_cells} illustrates these pathways for ON bipolar cells.
+Bipolar, ganglion, and LGN cells are categorized into \emph{ON} and \emph{OFF} types. ON bipolar cells are excited by illumination at the center of their receptive field, whereas OFF cells are excited when the center receives less illuminated than the surrounding area. This organization is visualized in Figure~\ref{fig:on_off_cells}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/on_off_cells.pdf}
-    \caption{\textbf{Direct and indirect pathways from photoreceptors to bipolar cells.} \textbf{a)} An ON bipolar cell depolarizes in response to light in the center of its receptive field. \textbf{b)} The same cell hyperpolarizes in response to surround stimulation. Based on \emph{Neuroscience} (\citet{bear2020neuroscience}, 3rd Edition, p. 300). "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/bpeqbrd".}
+    \caption{\textbf{Direct and indirect pathways from photoreceptors to bipolar cells.} \textbf{a)} An ON bipolar cell depolarizes in response to light in the center of its receptive field. \textbf{b)} The same cell hyperpolarizes in response to surround stimulation. Adapted from \emph{Neuroscience} (\citet{bear2020neuroscience}, 3rd Edition, p. 300). "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/bpeqbrd".}
     \label{fig:on_off_cells}
 \end{figure}
 
-The final stage of retinal processing occurs in the \emph{ganglion cells}, the only retinal neurons that generate action potentials. These cells receive input from bipolar and \emph{amacrine cells}, preserving the center-surround receptive field structure. Their axons converge to form the \emph{optic nerve}, which transmits encoded visual information to the LGN.
+The signal is then transmitted to \emph{ganglion cells}, which interact with \emph{amacrine cells}. Signal processing at this level follows similar principles to those seen in bipolar and horizontal cell interactions. Ganglion cells are the first neurons in the pathway to generate action potentials, which is essential for transmitting signals over long distances to the brain. Their axons converge to form the optic nerve, terminating in the \emph{lateral geniculate nucleus (LGN)} of the thalamus. The retina's layered structure is shown in Figure~\ref{fig:retina_anatomy}. For further details on retinal signal processing, see \citet{bear2020neuroscience} (3rd Edition, p. 288--306).
 
-This layered processing within the retina fundamentally shapes the signals that reach the cortical areas. Mechanisms such as lateral inhibition, center-surround receptive fields, and ON/OFF channel segregation serve as early examples of efficient, parallelized feature extraction, an inspiration for many biologically plausible models in computational neuroscience. These transformations determine the structure of the input received by the higher visual areas and influence how visual scenes are encoded and interpreted. Understanding these mechanisms is therefore essential when designing models that aim to replicate the spatial and temporal dynamics of visual processing observed in the brain.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/retina_anatomy.pdf}
+    \caption{\textbf{Layered anatomy of the retina.} Adapted from \citet{schwartz1991principles}, 4th Edition, p. 436 and \citet{purves2019neurosciences}, 6th Edition, p. 239. "Created in BioRender. Beinhauer, D. (2025) https://BioRender.com/oy5qz9v".}
+    \label{fig:retina_anatomy}
+\end{figure}
+
 
 \section{Lateral Geniculate Nucleus}
 \label{sec:lgn}
-The next major processing stage in the visual pathway is \emph{Lateral Geniculate Nucleus (LGN)}, a subcortical relay structure located within the thalamus. The LGN acts as the main gateway to the cortex, receiving input from retinal ganglion cells and transmitting these signals to the primary visual cortex (V1) via the optic radiations. Given V1's critical role in conscious visual perception, lesions anywhere along this pathway, from the retina to the LGN to V1 \ref{fig:visual_system_pathway}, can result in localized or complete visual deficits, illustrating the hierarchical and modular organization of the visual system.
 
-In particular, the LGN receives more input from the cortex than from the retina itself. This corticothalamic feedback, predominantly originating in V1, is believed to modulate LGN activity through top-down influences such as attention, expectation, and dynamic gain control. These mechanisms reflect the brain's predictive and adaptive coding strategies, supporting context-dependent processing rather than passive transmission.
+The next stage in visual processing occurs in the \emph{lateral geniculate nucleus (LGN)}, located in the thalamus on each side of the brain. The LGN is a key structure responsible for the initial cortical-bound processing of visual signals. It serves as the primary termination site for most optic tract fibers (\citet{bear2020neuroscience}, 3rd Edition, p. 313). From there, the majority of visual information is relayed to the \emph{primary visual cortex (V1)} via the optic radiation. V1 is the principal cortical area involved in conscious visual perception (see Figure~\ref{fig:visual_system_pathway}).
 
-Structurally, the LGN is composed of six distinct layers, each of which processes input from only one eye, maintaining strict monocular segregation. These layers are organized to preserve the \emph{retinotopy}, where the spatial
-arrangement of neurons preserves the topographical representation of the retina, ensuring spatial continuity of the visual field. This anatomical organization is illustrated in Figure \ref{fig:visual_system_pathway}.
+Damage to any part of the visual pathway—from the retina to the LGN to the V1—can result in various forms of visual impairment or blindness (\citet{bear2020neuroscience}, 3rd Edition, p. 313). Because of the structured, topographic nature of this pathway, lesions can often be traced to specific anatomical locations.
 
-Functionally, the LGN supports multiple parallel processing streams: magnocellular layers (M) encode motion and low-spatial-frequency information; parvocellular layers (P) process color and fine spatial details; and koniocellular layers contribute additional chromatic and feature-specific inputs. LGN neurons retain the receptive field structure of the center surrounding the retinal ganglion cells (see Section \ref{subsec:retina} and Figure \ref{fig:early_vis_processing}), enhancing contrast and edge representation.
+Interestingly, while the LGN receives direct input from the retina, the majority of its synaptic input actually originates from the cortex, particularly from V1. Although the exact functional role of this feedback remains under investigation, it is widely believed to support signal modulation and attentional feedback (\citet{bear2020neuroscience}, 3rd Edition, p. 318).
 
-This layered and functionally diverse architecture makes the LGN more than a simple relay station. It serves as a dynamic filter that integrates sensory input with cortical modulation.
+Anatomically, the LGN is composed of six distinct layers, each organized to separately process input from one eye. These layers exhibit concentric receptive fields similar to those found in retinal ganglion cells (see Figure~\ref{fig:on_off_cells}). Importantly, the layers maintain \emph{retinotopic} organization (\citet{bear2020neuroscience}, 3rd Edition, p. 319--320), preserving the spatial layout of the visual field across neurons.
+
+Functionally, the LGN is responsible for maintaining multiple parallel processing streams, with distinct pathways specialized for detecting motion, color, and fine spatial details. These properties make the LGN a fundamental stage for visual signal refinement and dynamic modulation, and also mark the beginning of feedback-dependent processing. For a more comprehensive description of LGN function and structure, refer to \citet{bear2020neuroscience} (3rd Edition, p. 315--320).
 
 \section{Primary Visual Cortex}
 \label{sec:v1}
 
-The primary visual cortex (V1), located in the occipital lobe, represents the first cortical stage dedicated to visual information processing. It extracts fundamental features from visual stimuli, including orientation, spatial frequency, motion, and color. Following this initial analysis, visual information is funneled into two major processing streams: the parvocellular (P) pathway, which emphasizes high resolution spatial detail and object recognition, and the magnocellular (M) pathway, specialized for motion detection and temporal dynamics (as mentioned in Section \ref{sec:lgn}).
+The primary visual cortex (V1) is the first cortical area fully specialized for visual processing. It is located in the occipital lobe at the back of the brain. V1 is responsible for the initial cortical analysis of visual stimuli, including the encoding of orientation, size, motion, and color. Its outputs are split into two major processing streams: the parvocellular (P) stream, associated with form and color, and the magnocellular (M) stream, associated with motion and spatial information (\citet{bear2020neuroscience}, 3rd Edition, p. 330--332).
 
-V1 is organized into six histologically distinct layers, conventionally labeled with Roman numerals. The primary input from the LGN is directed to layer IV, which is divided into four sublayers (IVA, IVB, IVC$\alpha$, and IVC$\beta$). Layer IVC, in particular, serves as the principal recipient of LGN projections, processing monocular input before distributing signals to layers II and III, where binocular integration occurs. From these layers, information is transmitted to higher-order visual areas such as V2, V3, and beyond, enabling progressively more complex visual computations. Layers V and VI are primarily involved in feedback connections, modulating activity within earlier visual processing stages.
+V1 is composed of six layers, conventionally labeled with Roman numerals (\citet{bear2020neuroscience}, 3rd Edition, p. 320). Input from the LGN is primarily directed to layer IV, which is further subdivided into layers IVA, IVB, IVC\textsubscript{\ensuremath{\alpha}}, and IVC\textsubscript{\ensuremath{\beta}}. This layer primarily processes monocular input. The output is then relayed to layers II and III (\citet{bear2020neuroscience}, 3rd Edition, p. 322), which are functionally similar and often grouped together as layer II/III. From this point onward, binocular integration becomes dominant. Outputs from these layers project to extrastriate areas such as V2 and V3, where higher-level visual processing occurs. Layers I, V, and VI are primarily involved in feedback and modulatory functions, with layers V and VI specifically contributing to recurrent processing from earlier visual stages (\citet{bear2020neuroscience}, 3rd Edition, p. 323).
 
-Intricate interlaminar connectivity is a hallmark of V1, particularly within layer IV, where excitatory and inhibitory neurons form recurrent circuits that refine feature detection. Although inhibitory interneurons predominantly exert influence within their respective layers, excitatory pyramidal neurons extend projections across multiple layers, facilitating hierarchical processing.
+Interlaminar connectivity is a key feature of V1, particularly within layer IV, where excitatory and inhibitory neurons form dense recurrent circuits that refine visual features. Inhibitory interneurons typically exert influence within their own layers, while excitatory pyramidal neurons project across layers to support hierarchical processing (\citet{bear2020neuroscience}, 3rd Edition, p. 320--323).
 
-A critical organizational feature of V1 is retinotopy \ref{sec:lgn}. However, this mapping is nonuniform, with a disproportionately large cortical representation of the fovea relative to peripheral visual fields, reflecting the
-greater density of photoreceptors in central vision. 
+Of note, layer IV exhibits extensive interlayer connectivity. Inhibitory neurons remain confined to their respective layers, affecting only local circuitry, whereas excitatory neurons extend projections across layers (\citet{bear2020neuroscience}, 3rd Edition, p. 323).
+
+V1 also exhibits \emph{retinotopy} (mentioned in Section~\ref{sec:lgn}), a topographic organization whereby neighboring neurons correspond to adjacent locations in the retina, LGN, and visual field. This mapping is not uniform—central regions of the visual field are represented with greater cortical magnification than peripheral regions.
 
 \subsection{Receptive Field Properties of V1 Cells}
 \label{subsec:receptive_field}
-V1 neurons exhibit selectivity for different stimulus attributes, forming overlapping computational maps that encode various aspects of the visual scene. These selectivities include:
+
+Neurons in V1 are organized into overlapping, interconnected functional maps, each tuned to specific features of visual stimuli. These include:
 
 \begin{description}
-    \item[Orientation selectivity:] Neurons in the layer IVC ($\alpha$ and $\beta$) begin to exhibit elongated receptive fields, departing from the concentric organization observed in earlier visual processing stages \ref{subsec:retina}. This transformation enables sensitivity to the orientation of edges and lines, with each neuron preferentially responding to a specific angular configuration. The arrangement of orientation-selective neurons follows a columnar organization in which cells with similar orientation preferences are clustered.
+    \item[Orientation selectivity:] Starting in layer IVC\textsubscript{\ensuremath{\alpha}} and IVC\textsubscript{\ensuremath{\beta}}, receptive fields become elongated, and neurons begin responding preferentially to stimuli of particular orientations. These preferences vary gradually across the cortical surface. Orientation selectivity gives rise to two classes of cells:
     \begin{description}
-        \item[Simple Cells:] Simple cells demonstrate selectivity not only for orientation but also for the precise spatial positioning of an edge within their receptive field. Their response properties are derived from the summation of inputs from multiple LGN cells arranged antagonistically.
-        \item[Complex Cells:] Complex cells, in contrast, maintain orientation selectivity but are less constrained by stimulus position within their receptive field. They integrate signals from multiple simple cells, resulting in robust responses to oriented edges regardless of their exact location.
+        \item[Simple cells:] These neurons are selective for both the orientation and position of a stimulus. Their receptive fields contain distinct ON and OFF regions, and their responses can be modeled as the sum of aligned LGN inputs.
+        \item[Complex cells:] These neurons are orientation selective but respond across the entire receptive field, regardless of precise stimulus location. Their responses can be modeled as the pooled output of multiple simple cells.
     \end{description}
-    \item[Direction Selectivity:] Certain V1 neurons are tuned to the direction of motion, responding preferentially to stimuli moving in a specific trajectory. These neurons play a crucial role in encoding motion dynamics and contribute to higher-order motion perception.
-    \item[Binocularity:] While neurons in layer IV process monocular input primarily, subsequent layers integrate signals from both eyes, enabling binocular depth perception through mechanisms such as disparity tuning.
-    \item[Additional Functional Specializations:] Beyond orientation and motion selectivity, subsets of V1 neurons are specialized for processing stereoscopic depth, color opponency, and feedback modulation from higher-order cortical areas.
+    See \citet{bear2020neuroscience} (3rd Edition, pp. 325--329) for further discussion.
+
+    \item[Direction selectivity:] Some V1 neurons respond preferentially to motion in a specific direction, typically orthogonal to the orientation axis.
+
+    \item[Binocularity:] While early layers (such as IV) are largely monocular, higher layers integrate signals from both eyes, allowing binocular perception and depth processing.
+
+    \item[Other selectivities:] Additional V1 neurons are tuned for motion sensitivity, depth cues, feedback modulation, and color processing.
 \end{description}
 
-The functional organization and response properties of V1 serve as a crucial foundation for computational approaches in visual neuroscience. By abstracting principles such as orientation selectivity, hierarchical processing, and receptive field structure, computational models aim to capture the essential dynamics of early visual processing. These models not only facilitate a deeper understanding of the underlying neural mechanisms but also provide a framework for testing hypotheses and exploring how complex visual representations emerge from relatively simple circuit motifs.
+For a more comprehensive description of V1 function and structure, refer to \citet{bear2020neuroscience} (3rd Edition, p. 318--333).
+
+The functional architecture and tuning properties of V1 lay the groundwork for computational modeling in visual neuroscience. By abstracting key principles such as orientation selectivity, hierarchical processing, and receptive field organization, researchers can build computational models that emulate early visual processing. These models not only shed light on underlying biological mechanisms but also provide a framework for testing how complex visual representations arise from structured cortical circuits.
 
 \section{Extrastriate Visual Cortex}
 \label{sec:extrastriate}
 
-Beyond V1, visual processing continues in a network of extrastriate cortical regions that extract increasingly abstract features of the visual scene. These areas include V2, V3, V4, and MT (middle temporal area), each contributing to distinct aspects of perception such as object recognition, motion tracking, and depth analysis. Damage to these regions does not typically result in complete blindness, but instead leads to specific deficits, such as achromatopsia (loss of color perception) or motion blindness (inability to perceive fluid motion), depending on the affected region.
+Beyond V1, visual processing continues in a network of extrastriate cortical regions that extract increasingly abstract features of the visual scene. These areas include V2, V3, V4, and MT (middle temporal area) (see Figure~\ref{fig:early_vis_processing}), each contributing to distinct aspects of perception such as object recognition, motion tracking, and depth analysis. Damage to these regions does not typically result in complete blindness, but instead leads to specific deficits, such as achromatopsia (loss of color perception) or motion blindness (inability to perceive fluid motion), depending on the affected region. For a more comprehensive description of V1 function and structure, refer to \citet{bear2020neuroscience} (3rd Edition, p. 333--337).
