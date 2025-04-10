@@ -25,13 +25,23 @@
 # Chapter 3 - Methods
 - picture of dataset sequence of stimuli
 - picture of single experiment
-- define base model architecture
-    - outer RNN
-    - how it is connected
-    - mathematical description of the model
-    - picture of the model architecture
-- define model variants
-    - ideally also mathematically and mention the motivation behind each of the model (the biological motivation)
+- picture of the model architecture
+    - and its extensions
+
+# Chapter 4 - Results
+
+## Dataset Analysis
+- plot the spikes distribution histogram across the original dataset and our subset
+    - maybe do some statistical test on the various subsets
+        - I would ideally take the subsets that I am using in my experiment
+        - compare the distributions with each other -> whether they are approx. same
+            - the selection of subset is reasonable
+        - do this for each population separately
+            - for statistical validity
+- write the summary of bin spike counts - to show it does not reach 4 -> we can use LeakyTanh
+
+- do some temporal resolution comparison of the 
+
 
 
 
@@ -61,6 +71,9 @@
     - probably only for one setup
 - comparison for `different train set sizes`
 - comparison for `different time step size`
+- comparison of results for the evaluation dataset
+    - mainly because we want to get the information about how bad are our assumptions that the 10% of data are enough to capture the cc_norm of the full dataset
+    - also because we want to kind tell that the only one validation split is kind of ok
 
 
 
@@ -70,3 +83,4 @@
 https://nba.uth.tmc.edu/neuroscience/m/s2/chapter15.html
 https://dspace.cuni.cz/handle/20.500.11956/176078
 https://dspace.cuni.cz/handle/20.500.11956/183997
+
