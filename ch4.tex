@@ -17,3 +17,74 @@ At the end, we would like to mention the recommended machines on which we perfor
 
 \section{Dataset Overview}
 \label{sec:dataset_overview}
+
+In this section we will focus on statistical analysis of our dataset and we will investigate the influence of our dataset simplifications on our data. We will focus first on the influence of merging time bins from 1~ms to 20~ms and then we will focus on the influence of selecting random subset of 10\% neurons. Implementation of all tests performed during the dataset overview can be found in the appropriate files in the supplementary materials to the text of the thesis and in the github repository of the project.
+
+\subsection{Time Bin Merging Analysis}
+\label{subsec:time_bin_merging_analysis}
+As already stated in Section~\ref{subsubsec:time_bins_merging} we merge our time intervals from 1~ms time bins to 20~ms time bins to speed up the calculations and ideally also to remove the noisiness of our data while still capturing reasonable temporal resolution.
+
+\subsubsection{Spike Counts Across Time Bins}
+\label{subsubsec:spike_counts_time_bins}
+
+First, we will focus on the comparison of the distribution of spike counts across all time bins with the different. We claim the following:
+
+\begin{claim}[Distribition of Time Bin Counts]
+    The distribution of spike counts across all time bins remains similar for time bin sizes $\{1, 5, 10, 15, 20\}$. This indicates that the temporal behavior of the neuronal responses stays roughly the same.
+\end{claim}
+\label{claim:tim_bin_counts}
+
+Our claim is that if the time binning maintains mainly the binary like properties of the data it also mostly maintains the temporal properties of the sequences. First, let us compare the distribution of spike counts across all time bins for different binning sizes that are depicted in the Table~\ref{tab:train_bin_count_distribution} for the train dataset and Table~\ref{tab:test_bin_count_distribution} for the test dataset.
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{cccccc}
+    \toprule
+        Spike Count & 1 ms & 5 ms & 10 ms & 15 ms & 20 ms \\ \hline
+        0 & 0.9928 & 0.9671 & 0.9364 & 0.9059 & 0.8760 \\
+        1 & 0.0072 & 0.0303 & 0.0571 & 0.0836 & 0.1091 \\
+        2 & 0.0000 & 0.0024 & 0.0053 & 0.0083 & 0.0116 \\
+        3 & 0.0000 & 0.0002 & 0.0010 & 0.0017 & 0.0025 \\
+        4 & 0.0000 & 0.0000 & 0.0002 & 0.0004 & 0.0006 \\
+        5 & 0.0000 & 0.0000 & 0.0000 & 0.0001 & 0.0001 \\
+    \addlinespace % a nice non-intrusive separator of data groups (or final table sums)
+    \bottomrule
+    \end{tabular}
+    \caption{\textbf{Train spike count distribution:} This table depicts the ratios of number of spikes in one time bin for different time bin sizes in train dataset. Spike counts above 5 are omitted as they are present only in minority of examples and does not really affect the distribution.}
+    \label{tab:train_bin_count_distribution}
+\end{table}
+    
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{cccccc}
+    \toprule
+        Spike Count & 1 ms & 5 ms & 10 ms & 15 ms & 20 ms \\ \hline
+        0 & 0.9929 & 0.9675 & 0.9373 & 0.9074 & 0.8782 \\
+        1 & 0.0071 & 0.0300 & 0.0563 & 0.0821 & 0.1068 \\
+        2 & 0.0000 & 0.0023 & 0.0052 & 0.0084 & 0.0118 \\
+        3 & 0.0000 & 0.0002 & 0.0009 & 0.0017 & 0.0025 \\
+        4 & 0.0000 & 0.0000 & 0.0002 & 0.0004 & 0.0006 \\
+        5 & 0.0000 & 0.0000 & 0.0000 & 0.0001 & 0.0001 \\
+    \addlinespace % a nice non-intrusive separator of data groups (or final table sums)
+    \bottomrule
+    \end{tabular}
+    \caption{\textbf{Test spike count distribution:} This table depicts the ratios of number of spikes in one time bin for different time bin sizes in test dataset. Spike counts above 5 are omitted as they are present only in minority of examples and does not really affect the distribution.}
+    \label{tab:test_bin_count_distribution}
+\end{table}
+
+As we can see the distributions are very similar between train and test dataset furthermore we can see that there has not been very serious shift in the spike count distribution across time bins as majority remained either 0 or 1 and only a few of them contain more than 1 spike. Namely for the time bin size of our interest 20~ms there is only approximately 2\% of time bins that contain at least 2 spikes. However, what changed significantly is the amount of time bins where at least one spike occurred that changed from roughly 0.7\% to roughly 10.7\% for time bin size 20~ms. This is a clear sign that the sparsity of our dataset significantly dropped and since the distribution does not really change that much it might be also a sign that this time bin size is ideal for balancing the temporal resolution and dataset size since we reduce sparsity of our dataset. For comparison of the time bin count distribution we have also prepared plots of the spike counts for each time bin variant for each neuronal population. These plots can be seen in the Figure~\ref{fig:spike_count_distribution_train} for train dataset and in the Figure~\ref{fig:spike_count_distribution_test} for the test dataset.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/time_step_counts_train.pdf}
+    \caption{The evolution of the spike counts in single time bin with rise of the time bin size across all neuronal populations for train dataset.}
+    \label{fig:spike_count_distribution_train}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/time_step_counts_test.pdf}
+    \caption{The evolution of the spike counts in single time bin with rise of the time bin size across all neuronal populations for test dataset.}
+    \label{fig:spike_count_distribution_test}
+\end{figure}
