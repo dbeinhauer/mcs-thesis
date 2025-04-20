@@ -22,14 +22,14 @@ In this section we will focus on statistical analysis of our dataset and we will
 
 \subsection{Time Bin Merging Analysis}
 \label{subsec:time_bin_merging_analysis}
-As already stated in Section~\ref{subsubsec:time_bins_merging} we merge our time intervals from 1~ms time bins to 20~ms time bins to speed up the calculations and ideally also to remove the noisiness of our data while still capturing reasonable temporal resolution.
+As already stated in Section~\ref{subsubsec:time_bins_merging} we merge our time intervals from 1~ms time bins to 20~ms time bins to speed up the calculations and ideally also to remove the noisiness of our data while still capturing reasonable temporal resolution. We will perform our experiments on time bin sizes 1~ms, 5~ms, 10~ms, 15~ms and 20~ms. We should also mention that it was not really suitable to test this on the larger subset of different time bins as the usage of each time bin requires computationally demanding processing of the whole dataset that merges the time bins and then stored the new dataset that also requires significant amount of memory and is not suitable for us to prepare more different subsets. It is done to massively speed up the model training and to reduce the memory consumption. 
 
-\subsubsection{Spike Counts Across Time Bins}
+\subsubsection{Total Spike Counts Across Time Bins}
 \label{subsubsec:spike_counts_time_bins}
 
 First, we will focus on the comparison of the distribution of spike counts across all time bins with the different. We claim the following:
 
-\begin{claim}[Distribition of Time Bin Counts]
+\begin{claim}[Distribition of Spike Counts Across All Time Bins]
     The distribution of spike counts across all time bins remains similar for time bin sizes $\{1, 5, 10, 15, 20\}$. This indicates that the temporal behavior of the neuronal responses stays roughly the same.
 \end{claim}
 \label{claim:tim_bin_counts}
@@ -88,3 +88,40 @@ As we can see the distributions are very similar between train and test dataset 
     \caption{The evolution of the spike counts in single time bin with rise of the time bin size across all neuronal populations for test dataset.}
     \label{fig:spike_count_distribution_test}
 \end{figure}
+
+\subsubsection{Spike Count Distribution Across Time}
+\label{subsubsec:spike_time_distribution}
+In the next step we will focus on the temporal distribution of total spike counts. Our claim is the following:
+
+\begin{claim}[Temporal Spike Count Distribution]
+    The spike count distribution in time per experiment is similar for each of our selected time bin sizes. This indicates that the temporal behavior of the neural responses stays roughly the same.
+\end{claim}
+
+First, we will plot mean spike count in each time interval across all experiments and all neuronal populations for train dataset in Figure~\ref{fig:temporal_spike_distribution_train} and for test dataset in Figure~\ref{fig:temporal_spike_distribution_test}. 
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/temporal_spike_distribution_train.pdf}
+    \caption{The comparison of the spike count distribution in time for different time bin sizes for all neuronal populations in train dataset. The distribution lines are interpolated to the original 1~ms distribution from the spike counts using cubic interpolation for smoothness of the line plot.}
+    \label{fig:temporal_spike_distribution_train}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/temporal_spike_distribution_test.pdf}
+    \caption{The comparison of the spike count distribution in time for different time bin sizes for all neuronal populations in test dataset. The distribution lines are interpolated to the original 1~ms distribution from the spike counts using cubic interpolation for smoothness of the line plot.}
+    \label{fig:temporal_spike_distribution_test}
+\end{figure}
+
+In these plots we can clearly see that the noisiness of the count distribution clearly drops with the increasing time bin size. This phenomenon can be clearly seen especially in the excitatory layers. It is also worth noting that the training dataset seems to be noisier than the testing one. This might be caused be the much smaller ratio of data in the test dataset alongside and by the fact that in the test dataset there are multiple trials of each experiment present that might lead to smoothing of the distribution.
+
+Furthermore, we can clearly see that the shape of the distribution remains similar across all tested time bin sizes. This is a sign that time bin merging strategy maintains the temporal properties of the data while reducing the noisiness of the data. Thus, it is sign that our merging strategy is appropriate and selection of 20~ms is a good compromise between the temporal resolution and the noisiness of the data.
+
+To further describe the similarity of the temporal distribution of the different binning sizes, we also computed Pearson's correlation coefficients between each binning size temporal spike counts across all the neuronal layers for both train and test dataset. We visualize these using heatmaps in the Figure~\ref{fig:correlation_time_bin_size}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/temporal_correlation_time_bin_size.pdf}
+    \caption{Heatmaps of the Pearson's correlation coefficients of the spike counts in time between different time bin sizes for train and test dataset.}
+    \label{fig:correlation_time_bin_size}
+\end{figure}
+
