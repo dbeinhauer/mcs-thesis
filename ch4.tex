@@ -3,6 +3,8 @@
 
 In the following chapter we will first describe the experimental setup, the assumptions used. Further we will perform brief dataset description. In the main part we will focus on the evaluation of different model variants and their comparison and evaluation of impact of each additional extension on the model performance. Lastly, we will briefly approximate the dependence of our model performance on the number of experiments in our train dataset and number of neurons taken from the original SNN of cat.
 
+Note that in this chapter we will use the abbreviations for the model layers as follows: X\_ON, X\_OFF for LGN ON and OFF cell populations, V1\_Exc\_L4 and V1\_Inh\_L4 for V1 excitatory and inhibitory cell populations in layer 4, V1\_Exc\_L23 and V1\_Inh\_L23 for V1 excitatory and inhibitory cell populations in layer 2/3. These abbreviations will be used throughout the whole chapter and reflects the exact naming of the layers in our model implementation.
+
 \section{Experimental Setup and Technicalities}
 \label{sec:experimental_setup}
 In all the experimental runs if not stated differently we use the model setup and artificial dataset closely described in the Chapter~\ref{chap:methods}.
@@ -40,7 +42,8 @@ Our claim is that if the time binning maintains mainly the binary like propertie
     \centering\footnotesize\sf
     \begin{tabular}{cccccc}
     \toprule
-        Spike Count & 1 ms & 5 ms & 10 ms & 15 ms & 20 ms \\ \hline
+        Spike Count & 1 ms & 5 ms & 10 ms & 15 ms & 20 ms \\
+    \midrule
         0 & 0.9928 & 0.9671 & 0.9364 & 0.9059 & 0.8760 \\
         1 & 0.0072 & 0.0303 & 0.0571 & 0.0836 & 0.1091 \\
         2 & 0.0000 & 0.0024 & 0.0053 & 0.0083 & 0.0116 \\
@@ -59,7 +62,8 @@ Our claim is that if the time binning maintains mainly the binary like propertie
     \centering\footnotesize\sf
     \begin{tabular}{cccccc}
     \toprule
-        Spike Count & 1 ms & 5 ms & 10 ms & 15 ms & 20 ms \\ \hline
+        Spike Count & 1 ms & 5 ms & 10 ms & 15 ms & 20 ms \\
+    \midrule
         0 & 0.9929 & 0.9675 & 0.9373 & 0.9074 & 0.8782 \\
         1 & 0.0071 & 0.0300 & 0.0563 & 0.0821 & 0.1068 \\
         2 & 0.0000 & 0.0023 & 0.0052 & 0.0084 & 0.0118 \\
@@ -125,3 +129,35 @@ To further describe the similarity of the temporal distribution of the different
     \label{fig:correlation_time_bin_size}
 \end{figure}
 
+\subsubsection{Synchrony of Neuronal Populations in Different Time Bins}
+\label{subsubsec:neuron_synchrony_binning}
+
+Last part focused on the time binning influence is focused on the \emph{synchrony} of the neuronal populations. The synchrony is basically a measure that describes what ratio of the neuronal population fire together in the same time bin. This is an important property of the neuronal population as it can describe the temporal properties of the whole networks and is widely used in the study of the neural systems (\citet{Singer1999}). In our analysis we focus only on the mean synchrony across all time steps. We claim the following:
+
+\begin{claim}[Synchrony of Neuronal Populations Across Time Bins]
+    The mean synchrony of the neuronal populations across different time bin sizes is similar. This indicates that the temporal behavior of the neuronal responses stays roughly the same.
+\end{claim}
+\label{claim:synchrony_time_bins_size}
+
+First we will plot the synchrony distributions in each layer separately for train dataset in Figure~\ref{fig:boxplot_synchrony_time_train} and for test dataset in Figure~\ref{fig:boxplot_synchrony_time_test}. The boxplots show the distribution of the mean synchrony values across all experiments.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.92\linewidth]{img/plots/synchrony_boxplot_time_bins_train.pdf}
+    \caption{Distribution of mean population synchrony of all neuronal populations across different time bin sizes for train dataset. The boxplot shows the distribution of the mean synchrony values across all experiments.}
+    \label{fig:boxplot_synchrony_time_train}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.92\linewidth]{img/plots/synchrony_boxplot_time_bins_test.pdf}
+    \caption{Distribution of mean population synchrony of all neuronal populations across different time bin sizes for test dataset. The boxplot shows the distribution of the mean synchrony values across all experiments.}
+    \label{fig:boxplot_synchrony_time_test}
+\end{figure}
+
+As we can see there is clearly a visible raise in synchrony with the larger time bin sizes. This is a sign that the larger time bins contain more spikes and thus it is more probable that more neurons will fire together more often in one time bin. As we can see there is significant raise in synchrony mainly in the LGN layers especially the layer X\_ON. On the other hand the excitatory V1 layers are effected only slightly. From these findings we can clearly see that the temporal behavior of the neuronal population is affected by the time binning and we need to be careful while interpreting the results of the model performance especially in case of the synchrony. However, despite these findings we still claim that the bin size 20~ms is the reasonable compromise between the temporal resolution, the noisiness of the data and effectiveness of the data manipulation.
+
+\subsection{Model Subset Selection Analysis}
+\label{subsec:subset_selection_analysis}
