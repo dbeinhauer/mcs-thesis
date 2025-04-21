@@ -1,42 +1,46 @@
 \chapter{Results}
 \label{chap:results}
 
-In the following chapter we will first describe the experimental setup, the assumptions used. Further we will perform brief dataset description. In the main part we will focus on the evaluation of different model variants and their comparison and evaluation of impact of each additional extension on the model performance. Lastly, we will briefly approximate the dependence of our model performance on the number of experiments in our train dataset and number of neurons taken from the original SNN of cat.
+This chapter begins with a description of the experimental setup and key assumptions. We then give a brief overview of the dataset. The main section evaluates and compares different versions of our model, focusing on how each added component affects performance. Finally, we explore how the model's performance depends on the number of training experiments.
 
-Note that in this chapter we will use the abbreviations for the model layers as follows: X\_ON, X\_OFF for LGN ON and OFF cell populations, V1\_Exc\_L4 and V1\_Inh\_L4 for V1 excitatory and inhibitory cell populations in layer 4, V1\_Exc\_L23 and V1\_Inh\_L23 for V1 excitatory and inhibitory cell populations in layer 2/3. These abbreviations will be used throughout the whole chapter and reflects the exact naming of the layers in our model implementation.
+To simplify notation throughout this chapter, we use the following abbreviations for the model layers: X\_ON and X\_OFF represent the LGN ON and OFF cell populations. V1\_Exc\_L4 and V1\_Inh\_L4 refer to the excitatory and inhibitory cell populations in V1 layer 4, and V1\_Exc\_L23 and V1\_Inh\_L23 refer to those in V1 layer 2/3. These match the layer names used in our model code and will be used consistently throughout.
 
 \section{Experimental Setup and Technicalities}
 \label{sec:experimental_setup}
-In all the experimental runs if not stated differently we use the model setup and artificial dataset closely described in the Chapter~\ref{chap:methods}.
 
-Apart from the setup closely described in the previous chapter there are a few of the general truth parameters that we typically empirically selected based on our experience from the initial phases of the model development either because of the technical limitations, such as appropriate GPU machines (or long waiting times), memory constraints etc., or some other difficulties specific to our model and dataset. In selection of these parameters we typically have decided empirically the ideal values as the comprehensive experimental confirmation would be typically too demanding in terms of the computational power and time, and typically we do not expect that these would have significant effect on the results of our study. It is worth to mention though, that these might be fine-tuned in the future research for optimization.
+Unless otherwise specified, all experiments were run using the model setup and artificial dataset described in Chapter~\ref{chap:methods}.
 
-Example of such a parameter is the batch size. As mentioned in Section~\ref{sec:artificial_dataset} our dataset data are split into the samples representing the experiments. These needs to be split into the batches. In our experimental setup we have empirically chosen the batch size to be $50$. This size has been selected from a various reasons. As the RNN training process is being done sequentially on the temporal data it is usually demanding in time necessary for the training step as the properties does not really support parallel backpropagation computation. From this reason there is only a limited possibility to reasonable speed up the computations. One of this is selection of the bigger batch size that enables a parallel backpropagation step across the batch of experiments if executed on the GPUs. On the other hand, with the increasing batch size there also rises demand for the memory usage. The memory consumption is especially problematic while using the RNN neuronal variants closely described in Section~\ref{subsec:additional_modules} that requires truncated backpropagation throughout time (TBPTT) computation that significantly increases memory demands needed for the training of the model that is intensified by the small shared NN modules instead of activation functions. This problem is partially solved by merging the time bins into 20~ms time bins and thus reducing the necessity for applying TBPTT in large number of time steps as mentioned in Section~\ref{subsubsec:time_bins_merging}, however, it does not solve the memory problems fully. Additionally as mentioned in the Section~\ref{subsubsec:subset_selection} we have been forced for the same reasons to select only subset 10\% of the artificial neurons from our template SNN model from each layer in order to meet the memory constraints. Based on these we have then finally selected to choose batch size $50$ to maintain the same conditions in all experiments as possible and that fulfils the memory constraints also for the most memory demanding model variants such as the one using synaptic depression module (Section~\ref{subsubsec:synaptic_depression}).
+In addition to the setup from the previous chapter, we used several parameters chosen based on our experience during model development. These were mostly influenced by practical constraints such as limited GPU access, memory availability, or model-specific issues. Because thorough testing of all parameter combinations would have required too many resources, we selected values that we believed were reasonable. While we do not expect these parameters to drastically affect our findings, they could be optimized in future work.
 
-Additionally to batch size, we also apply gradient clipping to secure the exploding gradient problem. In all our experiments it is applied 10,000. This value has been selected as a sanity boundary to ensure the gradient updates applied during model training do not overflow the floating number representation in our model implementation and do not cause the errors caused by overflowing numbers. It has been empirically tested that this gradient clipping has not been necessary to apply throughout all our variants of the model used in the experiment. It is used mainly because there has been such problems especially at the initial stages of the model training while using activation function different from our current LeakyTanh. This problematic is also briefly mentioned in the Section~\ref{subsubsec:leakytanh}. Overall, the effect of the gradient clipping in our setup should not have a significant impact on the model performance.
+ne important parameter is the batch size. As explained in Section~\ref{sec:artificial_dataset}, our dataset is made up of samples that each represent a single experiment. These had to be grouped into batches for training. We chose a batch size of $50$ based on a balance of performance and hardware limits. Training RNNs on time-based data is typically slow, since computations must happen in sequence and cannot be easily parallelized. Using larger batch sizes allows some parallel processing on GPUs, which helps speed things up. However, larger batches also require more memory.
 
-At the end, we would like to mention the recommended machines on which we performed our experiments and are tested to perform without problems in our model. Majority of the experiments has been performed on the Metacentrum computational server. While some of the model variants does not require high amount of the GPU RAM we typically selected the devices with at least 40~GB GPU RAM as these GPUs are typically optimized for large tensor operations in DNN related computation, additionally in the models that require TBPTT it is almost necessary to use at least 40~GB GPU RAM. Alongside with this we worked with at least 8 CPU Cores with 100~GB RAM.
+Memory demands were particularly high when using certain RNN neuronal modules, described in Section~\ref{subsec:additional_modules}, that rely on truncated backpropagation through time (TBPTT). TBPTT increases memory use significantly, especially when paired with small shared neural networks used in place of typical activation functions. To reduce this load, we merged time bins into 20~ms intervals, as described in Section~\ref{subsubsec:time_bins_merging}, which helped but did not fully solve the issue. As noted in Section~\ref{subsubsec:subset_selection}, we also had to limit our model to just 10\% of the artificial neurons from each layer of the original SNN template to stay within memory limits. After weighing all these factors, we chose a batch size of $50$, which worked reliably even with the most memory-intensive versions of our model, like the one using the synaptic depression module (Section~\ref{subsubsec:synaptic_depression}).
+
+Another training safeguard we used was gradient clipping, which prevents gradients from growing too large and causing numerical issues. In all our experiments, we clipped gradients to a maximum value of 10,000. This was mainly a precaution to avoid overflow errors during training, especially during early development phases when we were experimenting with activation functions other than LeakyTanh. This topic is discussed further in Section~\ref{subsubsec:leakytanh}. In our final models, this gradient clipping had little to no effect on performance, but we kept it in place to ensure stability.
+
+Finally, we want to mention the hardware used to run our experiments. Most were carried out on the Metacentrum computing cluster. While not every model variant needed a large GPU, we generally used GPUs with at least 40~GB of RAM. These are well-suited for deep learning tasks and were essential for models that relied on TBPTT. We also used machines with at least 8 CPU cores and 100~GB of RAM to support the computational load.
+
 
 \section{Dataset Overview}
 \label{sec:dataset_overview}
 
-In this section we will focus on statistical analysis of our dataset and we will investigate the influence of our dataset simplifications on our data. We will focus first on the influence of merging time bins from 1~ms to 20~ms and then we will focus on the influence of selecting random subset of 10\% neurons. Implementation of all tests performed during the dataset overview can be found in the appropriate files in the supplementary materials to the text of the thesis and in the github repository of the project.
+In this section, we present a statistical analysis of our dataset and evaluate the impact of the dataset simplifications we applied. First, we assess the effect of merging time bins from 1~ms to 20~ms, followed by an analysis of the influence of selecting a random subset comprising 10\% of neurons. All scripts used for this analysis are provided in the supplementary materials and the project's GitHub repository.
 
 \subsection{Time Bin Merging Analysis}
 \label{subsec:time_bin_merging_analysis}
-As already stated in Section~\ref{subsubsec:time_bins_merging} we merge our time intervals from 1~ms time bins to 20~ms time bins to speed up the calculations and ideally also to remove the noisiness of our data while still capturing reasonable temporal resolution. We will perform our experiments on time bin sizes 1~ms, 5~ms, 10~ms, 15~ms and 20~ms. We should also mention that it was not really suitable to test this on the larger subset of different time bins as the usage of each time bin requires computationally demanding processing of the whole dataset that merges the time bins and then stored the new dataset that also requires significant amount of memory and is not suitable for us to prepare more different subsets. It is done to massively speed up the model training and to reduce the memory consumption. 
+As described in Section~\ref{subsubsec:time_bins_merging}, we merged the original 1~ms time bins into 20~ms intervals to accelerate computation and reduce data noisiness, while maintaining sufficient temporal resolution. We performed experiments using five bin sizes: 1~ms, 5~ms, 10~ms, 15~ms, and 20~ms. Due to the high computational cost of reprocessing the dataset for each binning size, we limited the analysis to this subset. Each configuration required substantial memory for processing and storage, which constrained the number of variants we could feasibly evaluate. The binning was introduced to significantly accelerate model training and reduce memory consumption.
 
 \subsubsection{Total Spike Counts Across Time Bins}
 \label{subsubsec:spike_counts_time_bins}
 
-First, we will focus on the comparison of the distribution of spike counts across all time bins with the different. We claim the following:
+We begin by comparing the distribution of spike counts across all time bins for each binning size. We hypothesize the following:
 
-\begin{claim}[Distribition of Spike Counts Across All Time Bins]
-    The distribution of spike counts across all time bins remains similar for time bin sizes $\{1, 5, 10, 15, 20\}$. This indicates that the temporal behavior of the neuronal responses stays roughly the same.
+\begin{claim}[Distribution of Spike Counts Across All Time Bins]
+    The distribution of spike counts across time bins remains similar for bin sizes \{1, 5, 10, 15, 20\}~ms. This suggests that the temporal behavior of neuronal responses is largely preserved.
 \end{claim}
 \label{claim:tim_bin_counts}
 
-Our claim is that if the time binning maintains mainly the binary like properties of the data it also mostly maintains the temporal properties of the sequences. First, let us compare the distribution of spike counts across all time bins for different binning sizes that are depicted in the Table~\ref{tab:train_bin_count_distribution} for the train dataset and Table~\ref{tab:test_bin_count_distribution} for the test dataset.
+Our assumption is that maintaining the binary-like properties of spike data should also preserve its temporal characteristics. Tables~\ref{tab:train_bin_count_distribution} and~\ref{tab:test_bin_count_distribution} show spike count distributions for the training and test datasets, respectively.
 
 \begin{table}
     \centering\footnotesize\sf
@@ -77,7 +81,9 @@ Our claim is that if the time binning maintains mainly the binary like propertie
     \label{tab:test_bin_count_distribution}
 \end{table}
 
-As we can see the distributions are very similar between train and test dataset furthermore we can see that there has not been very serious shift in the spike count distribution across time bins as majority remained either 0 or 1 and only a few of them contain more than 1 spike. Namely for the time bin size of our interest 20~ms there is only approximately 1.5\% of time bins that contain at least 2 spikes. However, what changed significantly is the amount of time bins where at least one spike occurred that changed from roughly 0.6\% to roughly 7\% for time bin size 20~ms. This is a clear sign that the sparsity of our dataset significantly dropped and since the distribution does not really change that much it might be also a sign that this time bin size is ideal for balancing the temporal resolution and dataset size since we reduce sparsity of our dataset. For comparison of the time bin count distribution we have also prepared plots of the spike counts for each time bin variant for each neuronal population. These plots can be seen in the Figure~\ref{fig:spike_count_distribution_train} for train dataset and in the Figure~\ref{fig:spike_count_distribution_test} for the test dataset.
+The distributions for both training and test sets are highly similar. Most time bins contain either zero or one spike, and only a small proportion include more than one. For the 20~ms bins, about 1.5\% of time bins contain two or more spikes. Notably, the percentage of time bins with at least one spike increases from roughly 0.6\% (1~ms bins) to 7\% (20~ms bins). This reduction in sparsity supports the hypothesis that the 20~ms bin size offers a reasonable balance between temporal resolution and data density.
+
+Figures~\ref{fig:spike_count_distribution_train} and~\ref{fig:spike_count_distribution_test} further illustrate this by showing spike count distributions across all neuronal populations.
 
 \begin{figure}
     \centering
@@ -93,15 +99,17 @@ As we can see the distributions are very similar between train and test dataset 
     \label{fig:spike_count_distribution_test}
 \end{figure}
 
+
 \subsubsection{Spike Count Distribution Across Time}
 \label{subsubsec:spike_time_distribution}
-In the next step we will focus on the temporal distribution of total spike counts. Our claim is the following:
+Next, we examine the distribution of spike counts across time for different bin sizes. We propose the following:
 
 \begin{claim}[Temporal Spike Count Distribution]
-    The spike count distribution in time per experiment is similar for each of our selected time bin sizes. This indicates that the temporal behavior of the neural responses stays roughly the same.
+    The temporal distribution of spike counts per experiment remains consistent across all tested bin sizes. This supports the preservation of temporal response patterns.
 \end{claim}
 
-First, we will plot mean spike count in each time interval across all experiments and all neuronal populations for train dataset in Figure~\ref{fig:temporal_spike_distribution_train} and for test dataset in Figure~\ref{fig:temporal_spike_distribution_test}. 
+Figures~\ref{fig:temporal_spike_distribution_train} and~\ref{fig:temporal_spike_distribution_test} show the mean spike counts over time for all neuronal populations in the training and test datasets, respectively. These distributions were interpolated to the 1~ms time scale using cubic interpolation.
+
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_spike_distribution_train.pdf}
@@ -116,11 +124,9 @@ First, we will plot mean spike count in each time interval across all experiment
     \label{fig:temporal_spike_distribution_test}
 \end{figure}
 
-In these plots we can clearly see that the noisiness of the count distribution clearly drops with the increasing time bin size. This phenomenon can be clearly seen especially in the excitatory layers. It is also worth noting that the training dataset seems to be noisier than the testing one. This might be caused be the much smaller ratio of data in the test dataset alongside and by the fact that in the test dataset there are multiple trials of each experiment present that might lead to smoothing of the distribution.
+These plots show a clear reduction in noise with increasing bin size, particularly in excitatory layers. The training dataset appears noisier than the test set, likely due to the test set's smaller size and the averaging effect of multiple trials per experiment.
 
-Furthermore, we can clearly see that the shape of the distribution remains similar across all tested time bin sizes. This is a sign that time bin merging strategy maintains the temporal properties of the data while reducing the noisiness of the data. Thus, it is sign that our merging strategy is appropriate and selection of 20~ms is a good compromise between the temporal resolution and the noisiness of the data.
-
-To further describe the similarity of the temporal distribution of the different binning sizes, we also computed Pearson's correlation coefficients between each binning size temporal spike counts across all the neuronal layers for both train and test dataset. We visualize these using heatmaps in the Figure~\ref{fig:correlation_time_bin_size}.
+Importantly, the overall distribution shape is preserved across bin sizes. This indicates that binning effectively reduces noise without substantially altering temporal dynamics. Heatmaps in Figure~\ref{fig:correlation_time_bin_size} display Pearson correlation coefficients across different bin sizes, confirming strong similarity in spike distributions over time.
 
 \begin{figure}
     \centering
@@ -132,15 +138,16 @@ To further describe the similarity of the temporal distribution of the different
 \subsubsection{Synchrony of Neuronal Populations in Different Time Bins}
 \label{subsubsec:neuron_synchrony_binning}
 
-Last part focused on the time binning influence is focused on the \emph{synchrony} of the neuronal populations. The synchrony is basically a measure that describes what ratio of the neuronal population fire together in the same time bin. This is an important property of the neuronal population as it can describe the temporal properties of the whole networks and is widely used in the study of the neural systems (\citet{Singer1999}). In our analysis we focus only on the mean synchrony across all time steps. We claim the following:
+Lastly, we evaluate how time binning affects synchrony, the proportion of neurons firing simultaneously within the same time bin. Synchrony provides insight into the collective temporal dynamics of neuronal populations and is widely studied in neuroscience (\citet{Singer1999}).
+
+Our analysis focuses on the mean synchrony across all time steps. We state the following:
 
 \begin{claim}[Synchrony of Neuronal Populations Across Time Bins]
-    The mean synchrony of the neuronal populations across different time bin sizes is similar. This indicates that the temporal behavior of the neuronal responses stays roughly the same.
+    The mean synchrony of neuronal populations remains consistent across different time bin sizes. This implies that temporal structure of the dataset is largely preserved.
 \end{claim}
 \label{claim:synchrony_time_bins_size}
 
-First we will plot the synchrony distributions in each layer separately for train dataset in Figure~\ref{fig:boxplot_synchrony_time_train} and for test dataset in Figure~\ref{fig:boxplot_synchrony_time_test}. The boxplots show the distribution of the mean synchrony values across all experiments. Alongside with this we also compute the mean and variance of the synchrony in time bin across all layers for different time bin sizes. The results are summarized in the Table~\ref{tab:synchrony_time_bins_summary_train} for train dataset and in the Table~\ref{tab:synchrony_time_bins_summary_test} for test dataset.
-
+Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_time_test} show synchrony distributions for each layer in the training and test datasets. Tables~\ref{tab:synchrony_time_bins_summary_train} and~\ref{tab:synchrony_time_bins_summary_test} summarize the mean and variance of synchrony values.
 
 \begin{figure}
     \centering
@@ -193,18 +200,21 @@ First we will plot the synchrony distributions in each layer separately for trai
     \label{tab:synchrony_time_bins_summary_test}
 \end{table}
 
-As we can see there is clearly a visible raise in synchrony with the larger time bin sizes. This is a sign that the larger time bins contain more spikes and thus it is more probable that more neurons will fire together more often in one time bin. As we can see there is significant raise in synchrony mainly in the LGN layers especially the layer X\_ON. On the other hand the excitatory V1 layers are effected only slightly. From these findings we can clearly see that the temporal behavior of the neuronal population is affected by the time binning and we need to be careful while interpreting the results of the model performance especially in case of the synchrony. However, despite these findings we still claim that the bin size 20~ms is the reasonable compromise between the temporal resolution, the noisiness of the data and effectiveness of the data manipulation.
+Synchrony increases with larger time bins, reflecting a higher likelihood of coincident spiking. This effect is most pronounced in LGN layers, especially X\_ON, while V1 excitatory layers show a milder change. These findings suggest that while synchrony is affected by bin size, the overall temporal dynamics are preserved.
+
+We conclude that a bin size of 20~ms strikes a practical balance between maintaining temporal fidelity, minimizing data noise, and ensuring computational efficiency.
 
 
 \subsection{Model Subset Selection Analysis}
 \label{subsec:subset_selection_analysis}
-In this section we will focus on the analysis of the influence of the subset selection of the all neurons from the original SNN model. As mentioned in Section~\ref{subsubsec:subset_selection} we have selected only 10\% of the neurons from the original SNN model. This was done mainly because of the memory constraints and the computational power needed for the training of the model. We will focus mainly on the affect of the subset section on the dataset temporal properties as they are our main focus of interest in our research.
 
-In this section we will perform the experiments exclusively on the dataset with 20~ms time bin size (as those are the ones that we use in our model) and we will focus only on the train dataset (if not stated otherwise) as we have seen  in the previous Section~\ref{subsubsec:time_bins_merging} that the test and train dataset does not really yield different results. 
+In this section, we analyze the impact of selecting a subset of neurons from the original SNN model. As discussed in Section~\ref{subsubsec:subset_selection}, we selected only 10\% of the neurons due to memory constraints and the computational demands of model training. Our primary interest lies in assessing how this subset selection affects the temporal properties of the dataset, which are central to our research.
+
+All experiments in this section are conducted on the dataset with a 20~ms time bin size (as used in our model) and focus on the training dataset unless stated otherwise. As shown previously in Section~\ref{subsubsec:time_bins_merging}, the results from the training and test datasets are largely consistent.
 
 \subsubsection{Total Spike Counts Across Time Bins}
 \label{subsubsec:total_spike_counts_subset}
-Same as in the comparison of the different time bins we will not focus on the distributions of the spike counts in time bins of the model subsets to full dataset. We have prepared the table summarizing mean ratio of spike counts in the time bins across all the model subsets in comparison to full dataset that can be seen in the Table~\ref{tab:subset_spike_count_distribution}.
+We begin by analyzing the distribution of spike counts in the time bins for the full dataset and for the subset datasets. Table~\ref{tab:subset_spike_count_distribution} summarizes the mean spike count ratios across all model subsets compared to the full dataset.
 
 \begin{table}
     \centering\footnotesize\sf
@@ -220,37 +230,42 @@ Same as in the comparison of the different time bins we will not focus on the di
         5 & 0.0001 & 0.0001 & 0.0000 \\
         \bottomrule
     \end{tabular}
-    \caption{\textbf{Comparison of spike count distribution in full and subset datasets.} This table depicts the mean ratio of spike counts in the time bins across all the model subsets and their standard deviation in comparison to full dataset spike counts ratio.}
+    \caption{\textbf{Comparison of spike count distribution in full and subset datasets:} This table presents the mean spike count ratios and standard deviations across all model subsets compared to the full dataset.}
     \label{tab:subset_spike_count_distribution}
 \end{table}
 
-From the table we can clearly see that the difference in the distribution of the spike counts in the time bins pretty small and so as the standard deviation. This is a sign that the random selection of subset of neuronal population is not critical for maintaining the properties of the dataset.
-
+The table shows that the differences in spike count distributions between the full and subset datasets are minimal, with low standard deviations. This suggests that randomly selecting a subset of neurons does not significantly impact the overall spike count distribution.
 
 \subsubsection{Spike Count Distribution Across Time}
 \label{subsubsec:spike_time_distribution_subset}
-In this part we focus on the temporal spike count distribution of the subset datasets and compare them to full dataset. First we plot the comparison of the mean temporal behavior across the layers for the full dataset and the mean across the subsets in the Figure~\ref{fig:temporal_distribution_subset_vs_full_train}
 
+Next, we compare the temporal spike count distributions of the subset datasets with that of the full dataset. Figure~\ref{fig:temporal_distribution_subset_vs_full_train} shows the mean temporal behavior across layers for both the full dataset and the average of all subsets. The shaded area represents the standard deviation across subsets.
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_distribution_subset_vs_full_train.pdf}
-    \caption{Comparison of the mean temporal behavior across the layers for the full dataset and the mean across the subsets. There is a standard deviation of the mean across the subsets plotted as a shaded area around the mean.}
+    \caption{Comparison of the mean temporal behavior across layers for the full dataset and the average across subsets. The shaded region represents the standard deviation across subsets. Note that the shaded area is very small and thus nearly invisible in the plot.}
     \label{fig:temporal_distribution_subset_vs_full_train}
 \end{figure}
 
-As we can see from the plot the mean temporal behavior of the subsets is almost identical to the original full dataset. Furthermore, the standard deviation is very small and thus we conclude that using random subset of the neurons does not really affect the temporal properties of the dataset.
+The plot demonstrates that the mean temporal patterns of the subsets closely match those of the full dataset. The small standard deviation further confirms that the temporal properties are preserved despite the neuron subset selection.
+
 
 \subsubsection{Synchrony of Neuronal Populations in Subsets}
 \label{subsubsec:neuron_synchrony_subset}
-In the last part of the analysis of the subset selection we will focus on the synchrony of the neuronal populations in the subsets. We will investigate the effect of the subset selection on the synchrony of the neuronal populations. Our idea is that since we take only the subset of the neurons from the original SNN model we might encounter the changes in the synchrony of the neuronal populations since the groups of the neurons that spike together might be affected by this modification. We plot the boxplot and jitter plot of both full and all subset synchrony values to compare the distribution of the synchrony values across all the subsets and the full dataset that is depicted in the Figure~\ref{fig:boxplot_synchrony_subset}.
+Finally, we assess the effect of subset selection on neuronal synchrony. Since we are using only a portion of the neurons from the full model, it is possible that groups of neurons that typically spike together may be disrupted, potentially affecting synchrony.
+
+Figure~\ref{fig:boxplot_synchrony_subset} displays a boxplot and jitter plot comparing the synchrony values of the full dataset and all subsets.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/synchrony_comparison_subset_full_train.pdf}
-    \caption{Boxplot and jitter plot of both full and all subset synchrony values to compare the distribution of the synchrony values across all the subsets and the full train dataset. The jitter plot has been generated using 5\% of the data point randomly selected from each subset dataset and each layer to avoid the large memory size of the image and reduce the rendering time of the plot.}
+    \caption{Boxplot and jitter plot comparing synchrony values between the full dataset and all subsets.}
     \label{fig:boxplot_synchrony_subset}
 \end{figure}
 
-As we can see from the boxplot the distribution of the synchrony values is very similar especially to in the excitatory layers which is expected as we have seen that the variance of the synchrony across the different time bins was always small and did not really change. The same holds for the mean synchrony that also was not very affected by the time binning and does not really seem to be affected by subset selection either. As we can see from teh jitter plot the distribution of the synchrony values is very similar but there are some differences in the spread of the values especially in the LGN layers. The full dataset seems to have a larger spread of the synchrony values than the subset datasets. From the box plot we do not see any significant difference, so, we suppose the difference in the synchrony is not marginal. Since we have also generated the jitter plot only from subset of the data we assume that the difference in the spread might be cause by the random selection eventhough we aimed to cover the whole range of the data by the selection of the same portion of data from each subset and each layer to cover the dataset the most representatively. It is worth noting that we have also plotted the jitter plot for the full dataset and it there does not seem to be that significant visual difference between these and the jitter plot using 5\% of the data points. Unfortunately, the original jitter plot is not possible to display in this thesis due to the large size of the image.
+As shown, the synchrony distributions are largely similar, particularly in the excitatory layers. This aligns with earlier findings that synchrony variance was low across time bins. Although the jitter plot suggests a slightly narrower spread in the LGN layers for the subsets, the boxplots do not indicate a significant difference.
 
-Building on the remarks from this subsection we state that the dataset has not been significantly affected by the random selection of the 10\% of the neurons from the original SNN model. However, we should take this fact in notice while interpreting the results of the model performance as we have seen that especially the synchrony has been affected by the dataset modifications.
+Based on these observations, we conclude that random selection of 10\% of neurons from the full SNN model does not substantially affect the dataset's statistical or temporal properties. Nevertheless, slight changes in synchrony, particularly in LGN layers, should be taken into account when interpreting model performance results.
+
+\section{Model Evaluation}
+\label{sec:model_evaluation}
