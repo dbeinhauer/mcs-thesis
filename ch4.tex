@@ -239,3 +239,18 @@ In this part we focus on the temporal spike count distribution of the subset dat
 \end{figure}
 
 As we can see from the plot the mean temporal behavior of the subsets is almost identical to the original full dataset. Furthermore, the standard deviation is very small and thus we conclude that using random subset of the neurons does not really affect the temporal properties of the dataset.
+
+\subsubsection{Synchrony of Neuronal Populations in Subsets}
+\label{subsubsec:neuron_synchrony_subset}
+In the last part of the analysis of the subset selection we will focus on the synchrony of the neuronal populations in the subsets. We will investigate the effect of the subset selection on the synchrony of the neuronal populations. Our idea is that since we take only the subset of the neurons from the original SNN model we might encounter the changes in the synchrony of the neuronal populations since the groups of the neurons that spike together might be affected by this modification. We plot the boxplot and jitter plot of both full and all subset synchrony values to compare the distribution of the synchrony values across all the subsets and the full dataset that is depicted in the Figure~\ref{fig:boxplot_synchrony_subset}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/synchrony_comparison_subset_full_train.pdf}
+    \caption{Boxplot and jitter plot of both full and all subset synchrony values to compare the distribution of the synchrony values across all the subsets and the full train dataset. The jitter plot has been generated using 5\% of the data point randomly selected from each subset dataset and each layer to avoid the large memory size of the image and reduce the rendering time of the plot.}
+    \label{fig:boxplot_synchrony_subset}
+\end{figure}
+
+As we can see from the boxplot the distribution of the synchrony values is very similar especially to in the excitatory layers which is expected as we have seen that the variance of the synchrony across the different time bins was always small and did not really change. The same holds for the mean synchrony that also was not very affected by the time binning and does not really seem to be affected by subset selection either. As we can see from teh jitter plot the distribution of the synchrony values is very similar but there are some differences in the spread of the values especially in the LGN layers. The full dataset seems to have a larger spread of the synchrony values than the subset datasets. From the box plot we do not see any significant difference, so, we suppose the difference in the synchrony is not marginal. Since we have also generated the jitter plot only from subset of the data we assume that the difference in the spread might be cause by the random selection eventhough we aimed to cover the whole range of the data by the selection of the same portion of data from each subset and each layer to cover the dataset the most representatively. It is worth noting that we have also plotted the jitter plot for the full dataset and it there does not seem to be that significant visual difference between these and the jitter plot using 5\% of the data points. Unfortunately, the original jitter plot is not possible to display in this thesis due to the large size of the image.
+
+Building on the remarks from this subsection we state that the dataset has not been significantly affected by the random selection of the 10\% of the neurons from the original SNN model. However, we should take this fact in notice while interpreting the results of the model performance as we have seen that especially the synchrony has been affected by the dataset modifications.
