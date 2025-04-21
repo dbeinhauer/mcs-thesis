@@ -204,4 +204,38 @@ In this section we will perform the experiments exclusively on the dataset with 
 
 \subsubsection{Total Spike Counts Across Time Bins}
 \label{subsubsec:total_spike_counts_subset}
-Same as in the comparison of the different time bins we will not focus on the distributions of the spike counts in time bins of the model subsets to full dataset.
+Same as in the comparison of the different time bins we will not focus on the distributions of the spike counts in time bins of the model subsets to full dataset. We have prepared the table summarizing mean ratio of spike counts in the time bins across all the model subsets in comparison to full dataset that can be seen in the Table~\ref{tab:subset_spike_count_distribution}.
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{rrrr}
+        \toprule
+        Spike Count & Full Ratio & Subset Mean Ration & Subset std \\
+        \midrule
+        0 & 0.9105 & 0.9102 & 0.0004 \\
+        1 & 0.0710 & 0.0712 & 0.0003 \\
+        2 & 0.0147 & 0.0148 & 0.0001 \\
+        3 & 0.0032 & 0.0032 & 0.0000 \\
+        4 & 0.0005 & 0.0005 & 0.0000 \\
+        5 & 0.0001 & 0.0001 & 0.0000 \\
+        \bottomrule
+    \end{tabular}
+    \caption{\textbf{Comparison of spike count distribution in full and subset datasets.} This table depicts the mean ratio of spike counts in the time bins across all the model subsets and their standard deviation in comparison to full dataset spike counts ratio.}
+    \label{tab:subset_spike_count_distribution}
+\end{table}
+
+From the table we can clearly see that the difference in the distribution of the spike counts in the time bins pretty small and so as the standard deviation. This is a sign that the random selection of subset of neuronal population is not critical for maintaining the properties of the dataset.
+
+
+\subsubsection{Spike Count Distribution Across Time}
+\label{subsubsec:spike_time_distribution_subset}
+In this part we focus on the temporal spike count distribution of the subset datasets and compare them to full dataset. First we plot the comparison of the mean temporal behavior across the layers for the full dataset and the mean across the subsets in the Figure~\ref{fig:temporal_distribution_subset_vs_full_train}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/temporal_distribution_subset_vs_full_train.pdf}
+    \caption{Comparison of the mean temporal behavior across the layers for the full dataset and the mean across the subsets. There is a standard deviation of the mean across the subsets plotted as a shaded area around the mean.}
+    \label{fig:temporal_distribution_subset_vs_full_train}
+\end{figure}
+
+As we can see from the plot the mean temporal behavior of the subsets is almost identical to the original full dataset. Furthermore, the standard deviation is very small and thus we conclude that using random subset of the neurons does not really affect the temporal properties of the dataset.
