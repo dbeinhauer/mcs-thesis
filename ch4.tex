@@ -269,3 +269,42 @@ Based on these observations, we conclude that random selection of 10\% of neuron
 
 \section{Model Evaluation}
 \label{sec:model_evaluation}
+In this section we focus on the evaluation of the model performance, we compare different model variants and evaluate the influence of each model additional module on the overall results. First, we focus on summary of the results and comparison of all the models based on the high level metrics. Followingly, we focus on the separate inspection of each model perfomance. At the end we focuse on the caveats of our models and try to pin point the aspects of the model that might be the cause of the prediction flaws.
+
+If not stated differently we work with the aggregated values across 20 randomly selected neuronal populations of 10\% size of the original dataset as profoundly described in the Section~\ref{subsubsec:subset_selection}. We have selected 20 randomly chosen subsets to ideally capture the behavior of the model the best without bias caused by the model subset selection.
+
+Throughout this section if not stated differently we will use the uniform naming of the model types that mainly build on the namings defined in the Section~
+\ref{sec:model_description}. However, we also compare some model variants with slightly different setup, because of that we need to invent new naming for the differentiation of these throughout the analysis. The naming is the following. We use two simple variant models (Section~\ref{subsec:base_model_architecture}) one with tanh activation function that we note as \emph{simple (tanh)} and the second variant with leakytanh activation function (Section~\ref{subsubsec:leakytanh}) that we note as \emph{simple (leakytanh)}. Then we use only one varian of both \emph{dnn joint} (Section~\ref{subsubsec:dnn_neuron}) and \emph{dnn separate} (Section~\ref{subsubsec:dnn_separate}) for these we keep the naming as it was before. The we use 2 rnn separate (Section~\ref{subsubsec:rnn_neuron_module}) models with different TBPTT time steps that we call \emph{rnn (5 steps)} and \emph{rnn (10 steps)} for either 5 or 10 TBPTT time steps used during the model training. Last model we compare is the model using synaptic depression (Section~\ref{subsubsec:synaptic_depression}) applied only on LGN connections and with 5 TBPTT time steps, this model we label as \emph{syn adapt lgn (5 steps)}. The label part "adapt" comes from the "adaptation", the naming convention for the synaptic depression module used in our model implementation, we kept this naming to facilitate the experimental processing of the data. 
+
+During the evaluation of the model variants on 20 subsets we have used the general setup profoundly described in the Section~\ref{sec:experimental_setup} and additionally for each model variant the hyperparameter setup described in Table~\ref{tab:evaluation_setup}. These hyperparameters has been chosen mainly by the grid search of different experimental setups for each model and partly base on our empirical knowledge and experience throughout the model development. The grid search and selection of the hyperparameters will be deeply descride in the up-comming sections of the chapter.
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{lrrrrrrrr}
+        \toprule
+        Model Variant & Epochs & lr & n-ls & n-nl & n-res & s-ls & s-nl & n-tbptt \\
+        \midrule
+        simple (tanh) & 10 & 0.000008 & - & - & - & - & - & - \\
+        simple (leakytanh) & 10 & 0.000075 & - & - & - & - & - & - \\
+        dnn joint & 10 & 0.000010 & 10 & 5 & True & - & - & - \\
+        dnn separate & 10 & 0.000010 & 10 & 5 & True & - & - & - \\
+        rnn (steps 5) & 40 & 0.000030 & 10 & 3 & True & - & - & 5 \\
+        rnn (steps 10) & 40 & 0.000030 & 10 & 3 & True & - & - & 10 \\
+        syn adapt lgn (steps 5) & 40 & 0.000030 & 10 & 3 & True & 10 & 2 & 5 \\
+        \bottomrule
+        \end{tabular}
+    \caption{\textbf{Setup of the models in evaluation:} This table presents the setup of each model used in the evaluation results processing. The setup has been mainly selected by the grid search and partially by empirical selection. The columns depicts namely: "Model Variant" - variant of the model, "Epochs" - number of training epochs, "lr" - learning rate, "n-ls" - layer size of the module of neuron, "n-nl" - number of layers of the neuron module, "n-res" - flag whether the neuron module use residual connection, "s-ls" - layer size of the synaptic depression module, "s-nl" - number of layers of synaptic depression module, "n-tbptt" - number of TBPTT time steps. In case the value is not stated (symbol "-"), it is not relevant for the model.}
+    \label{tab:evaluation_setup}
+\end{table}
+
+\subsection{Overall Model Types Comparison}
+\label{subsec:overall_model_types_comparison}
+First, we look at the average pearson correlation coefficients and normalized cross correlations (Section~\ref{subsec:pearson_cc} and Section~\ref{subsec:normalized_cross_correlation}) comparison of each model performance. This is depicted in the Figure~\ref{fig:model_types_correlation_comparison}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/model_types_correlation_comparison.pdf}
+    \caption{Boxplot comparing mean Pearson correlation coefficients and normalized correlation coefficients of all model predictions between different model types across all model subsets.}
+    \label{fig:model_types_correlation_comparison}
+\end{figure}
+
