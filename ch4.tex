@@ -57,7 +57,7 @@ Our assumption is that maintaining the binary-like properties of spike data shou
     \addlinespace % a nice non-intrusive separator of data groups (or final table sums)
     \bottomrule
     \end{tabular}
-    \caption{\textbf{Train spike count distribution:} This table depicts the ratios of number of spikes in one time bin for different time bin sizes in train dataset. Spike counts above 5 are omitted as they are present only in minority of examples and does not really affect the distribution.}
+    \caption{\textbf{Spike count distribution in the train dataset:} This table shows the proportion of time bins containing 0 to 5 spikes for different time bin sizes. Spike counts above 5 are omitted as they occur rarely and have a negligible impact on the overall distribution.}
     \label{tab:train_bin_count_distribution}
 \end{table}
     
@@ -77,7 +77,7 @@ Our assumption is that maintaining the binary-like properties of spike data shou
     \addlinespace % a nice non-intrusive separator of data groups (or final table sums)
     \bottomrule
     \end{tabular}
-    \caption{\textbf{Test spike count distribution:} This table depicts the ratios of number of spikes in one time bin for different time bin sizes in test dataset. Spike counts above 5 are omitted as they are present only in minority of examples and does not really affect the distribution.}
+    \caption{\textbf{Spike count distribution in the test dataset:} This table shows the proportion of time bins containing 0 to 5 spikes for different time bin sizes. Spike counts above 5 are omitted as they occur rarely and have a negligible impact on the overall distribution.}
     \label{tab:test_bin_count_distribution}
 \end{table}
 
@@ -88,14 +88,14 @@ Figures~\ref{fig:spike_count_distribution_train} and~\ref{fig:spike_count_distri
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/time_step_counts_train.pdf}
-    \caption{The evolution of the spike counts in single time bin with rise of the time bin size across all neuronal populations for train dataset.}
+    \caption{Evolution of spike counts per time bin with increasing bin size across all neuronal populations in the train dataset.}
     \label{fig:spike_count_distribution_train}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/time_step_counts_test.pdf}
-    \caption{The evolution of the spike counts in single time bin with rise of the time bin size across all neuronal populations for test dataset.}
+    \caption{Evolution of spike counts per time bin with increasing bin size across all neuronal populations in the test dataset.}
     \label{fig:spike_count_distribution_test}
 \end{figure}
 
@@ -113,14 +113,14 @@ Figures~\ref{fig:temporal_spike_distribution_train} and~\ref{fig:temporal_spike_
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_spike_distribution_train.pdf}
-    \caption{The comparison of the spike count distribution in time for different time bin sizes for all neuronal populations in train dataset. The distribution lines are interpolated to the original 1~ms distribution from the spike counts using cubic interpolation for smoothness of the line plot.}
+    \caption{Comparison of temporal spike count distributions for different time bin sizes across all neuronal populations in the train dataset. The curves are interpolated to the original 1~ms resolution using cubic interpolation to improve line smoothness.}
     \label{fig:temporal_spike_distribution_train}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_spike_distribution_test.pdf}
-    \caption{The comparison of the spike count distribution in time for different time bin sizes for all neuronal populations in test dataset. The distribution lines are interpolated to the original 1~ms distribution from the spike counts using cubic interpolation for smoothness of the line plot.}
+    \caption{Comparison of temporal spike count distributions for different time bin sizes across all neuronal populations in the test dataset. The curves are interpolated to the original 1~ms resolution using cubic interpolation to improve line smoothness.}
     \label{fig:temporal_spike_distribution_test}
 \end{figure}
 
@@ -131,7 +131,7 @@ Importantly, the overall distribution shape is preserved across bin sizes. This 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_correlation_time_bin_size.pdf}
-    \caption{Heatmaps of the Pearson's correlation coefficients of the spike counts in time between different time bin sizes for train and test dataset.}
+    \caption{Heatmaps of Pearson correlation coefficients for spike count distributions over time between different time bin sizes in the train and test datasets.}
     \label{fig:correlation_time_bin_size}
 \end{figure}
 
@@ -152,7 +152,7 @@ Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_ti
 \begin{figure}
     \centering
     \includegraphics[width=0.92\linewidth]{img/plots/synchrony_boxplot_time_bins_train.pdf}
-    \caption{Distribution of mean population synchrony of all neuronal populations across different time bin sizes for train dataset. The boxplot shows the distribution of the mean synchrony values across all experiments.}
+    \caption{Distribution of mean population synchrony across different time bin sizes for all neuronal populations in the train dataset. The boxplot represents the distribution of mean synchrony values calculated across all experiments}
     \label{fig:boxplot_synchrony_time_train}
 \end{figure}
 
@@ -160,7 +160,7 @@ Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_ti
 \begin{figure}
     \centering
     \includegraphics[width=0.92\linewidth]{img/plots/synchrony_boxplot_time_bins_test.pdf}
-    \caption{Distribution of mean population synchrony of all neuronal populations across different time bin sizes for test dataset. The boxplot shows the distribution of the mean synchrony values across all experiments.}
+    \caption{Distribution of mean population synchrony across different time bin sizes for all neuronal populations in the test dataset. The boxplot represents the distribution of mean synchrony values calculated across all experiments}
     \label{fig:boxplot_synchrony_time_test}
 \end{figure}
 
@@ -178,7 +178,7 @@ Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_ti
     \addlinespace % a nice non-intrusive separator of data groups (or final table sums)
     \bottomrule
     \end{tabular}
-    \caption{\textbf{Summary of time bin synchrony statistics across all layers of train dataset:} The table depicts the mean and variance of the synchrony in time bin across all layers for different time bin sizes of the train dataset.}
+    \caption{\textbf{Summary of synchrony statistics across time bin sizes in the train dataset:} This table reports the mean and variance of population synchrony across all layers for each time bin size.}
     \label{tab:synchrony_time_bins_summary_train}
 \end{table}
 
@@ -196,7 +196,7 @@ Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_ti
     \addlinespace % a nice non-intrusive separator of data groups (or final table sums)
     \bottomrule
     \end{tabular}
-    \caption{\textbf{Summary of time bin synchrony statistics across all layers of test dataset:} The table depicts the mean and variance of the synchrony in time bin across all layers for different time bin sizes of the test dataset.}
+    \caption{\textbf{Summary of synchrony statistics across time bin sizes in the test dataset:} This table reports the mean and variance of population synchrony across all layers for each time bin size.}
     \label{tab:synchrony_time_bins_summary_test}
 \end{table}
 
@@ -220,7 +220,7 @@ We begin by analyzing the distribution of spike counts in the time bins for the 
     \centering\footnotesize\sf
     \begin{tabular}{rrrr}
         \toprule
-        Spike Count & Full Ratio & Subset Mean Ration & Subset std \\
+        Spike Count & Full Dataset Ratio & Subsets Mean Ratio & Subsets Standard Deviation \\
         \midrule
         0 & 0.9105 & 0.9102 & 0.0004 \\
         1 & 0.0710 & 0.0712 & 0.0003 \\
@@ -230,7 +230,7 @@ We begin by analyzing the distribution of spike counts in the time bins for the 
         5 & 0.0001 & 0.0001 & 0.0000 \\
         \bottomrule
     \end{tabular}
-    \caption{\textbf{Comparison of spike count distribution in full and subset datasets:} This table presents the mean spike count ratios and standard deviations across all model subsets compared to the full dataset.}
+    \caption{\textbf{Comparison of spike count distributions between full and subset datasets:} This table presents the mean spike count ratios and standard deviations across all model subsets, relative to the full dataset.}
     \label{tab:subset_spike_count_distribution}
 \end{table}
 
@@ -243,7 +243,7 @@ Next, we compare the temporal spike count distributions of the subset datasets w
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_distribution_subset_vs_full_train.pdf}
-    \caption{Comparison of the mean temporal behavior across layers for the full dataset and the average across subsets. The shaded region represents the standard deviation across subsets. Note that the shaded area is very small and thus nearly invisible in the plot.}
+    \caption{Comparison of mean temporal activity across layers for the full dataset and the average of all subsets. The shaded area indicates the standard deviation across subsets, which is very small and therefore barely visible in the plot.}
     \label{fig:temporal_distribution_subset_vs_full_train}
 \end{figure}
 
@@ -259,7 +259,7 @@ Figure~\ref{fig:boxplot_synchrony_subset} displays a boxplot and jitter plot com
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/synchrony_comparison_subset_full_train.pdf}
-    \caption{Boxplot and jitter plot comparing synchrony values between the full dataset and all subsets.}
+    \caption{Boxplot and jitter plot comparing population synchrony values between the full dataset and all subsets. Each data point represents the mean synchrony of one experiment.}
     \label{fig:boxplot_synchrony_subset}
 \end{figure}
 
