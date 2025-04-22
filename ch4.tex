@@ -299,7 +299,27 @@ During the evaluation of the model variants on 20 subsets we have used the gener
 
 \subsection{Overall Model Types Comparison}
 \label{subsec:overall_model_types_comparison}
-First, we look at the average pearson correlation coefficients and normalized cross correlations (Section~\ref{subsec:pearson_cc} and Section~\ref{subsec:normalized_cross_correlation}) comparison of each model performance. This is depicted in the Figure~\ref{fig:model_types_correlation_comparison}.
+First, we look at the pearson correlation coefficients and normalized cross correlations (Section~\ref{subsec:pearson_cc} and Section~\ref{subsec:normalized_cross_correlation}) comparison of each model performance. The Table~\ref{tab:model_evaluation_overview_comparison} depicts the result overview of every model variant in evaluation and Figure~\ref{fig:model_types_correlation_comparison} shows boxplot comparison of normalized cross correlation and pearson correlation coefficient values across all model subsets.
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{lrrrrrrrr}
+        \toprule
+        Model Variant & N-CC (mean) & P-CC (mean) & N-CC (std) & P-CC (std) \\
+        \midrule
+        rnn (10 steps) & 0.9212 & 0.7500 & 0.0084 & 0.0082 \\
+        rnn (5 steps) & 0.9176 & 0.7471 & 0.0103 & 0.0089 \\
+        syn adapt lgn (5 steps) & 0.8935 & 0.7275 & 0.0043 & 0.0042 \\
+        dnn joint & 0.8803 & 0.7168 & 0.0021 & 0.0034 \\
+        simple (leakytanh) & 0.8778 & 0.7147 & 0.0014 & 0.0032 \\
+        dnn separate & 0.8430 & 0.6864 & 0.0940 & 0.0766 \\
+        simple (tanh) & 0.2767 & 0.2252 & 0.0400 & 0.0321 \\
+        \bottomrule
+    \end{tabular}
+        
+    \caption{\textbf{Summary of Model Performance Metrics:} This table show summary of all model variant normalized cross correlation and pearson correlation coefficients mean and standard deviations across all model subset variants. The results are sorted by the mean normalized cross correlation. The columns depicts namely: "Model Variant" - variant of the model, "N-CC (mean)" - mean of the normalized cross correlation, "P-CC (mean)" - mean of the pearson correlation coefficient, "N-CC (std)" - standard deviation of the normalized cross correlation and "P-CC (std)" - standard deviation of the pearson correlation coefficient.}
+    \label{tab:model_evaluation_overview_comparison}
+\end{table}
 
 \begin{figure}
     \centering
@@ -308,3 +328,19 @@ First, we look at the average pearson correlation coefficients and normalized cr
     \label{fig:model_types_correlation_comparison}
 \end{figure}
 
+Overall from the results we can clearly see that the pearson CC and Normalized CC behave fairly similar, only difference is the offset that is expected based on the definition of normalized CC that should be basically pearson CC normalized to smaller range. Building on that we assume from now on that these 2 metrics behave similarly on our data and we will use mainly normalized CC in the rest of our analyses if not stated differently.
+
+From the results we can clearly see that there is one model outstander, the simple (tanh) that clearly performs the worst out of all tested models. On the other hand we can see that using the leakytanh activation function specially designed for the task performs surprisingly well even in the simple model and the model simple leakytanh is even comparable to dnn joint and dnn separate results. This may reflect the fact the the feed-forward dnn neuron modules represent some fairly simple function that we can approximate using some custom activation function like the leakytanh. However, we see that using rnn neuronal module improves our results which may indicate the importance of introducing the memory to our neurons and application of TBPTT training algorithm. 
+
+Another interesting outstander is dnn separate model. This model performs strangely variable in comparison to other model variants. However, we do not really see the clear reason for this behavior. In fact this model should introduce the separation of the excitatory and inhibitory processing in the dnn modules and we expected that it would improve the predictions. Furthermore, while developing the model it showed fairly similar behavior to dnn joint model. For the rnn neuronal modules we have selected only the separate variants since the additional modules should sequentially add more biological plausibility and it really does not sense in our case to omit the layer separation. Also during our empirical tests this model performed fairly similar even sometimes better than the joint variants. We thus suggest that the strange variance might be cause by the not really representative number of results that contains only results for 20 model subset variants and that might be better captured by additional experimental runs on more model subsets. Additionally our testing dataset consists only of 20 trials that might not be enough to compute representative normalized CC values. For the future research it would be definitely worth it to run these experiments on the larger number of subset variants and with larger testing dataset including experiments and trials.
+
+Overall of the models the best performing one seems to be rnn (10 steps) that shows reasonably variability across subset variants and performs best in terms of mean normalized CC. We might also suggest that adding more time steps to TBPTT calculation improves the results. However, experiments on larger number of time steps is not suitable for our experiments for time and memory consumption reasons and our restrained capability to access these.
+
+The last interesting notice from the results is that it seems that the model syn adapt lgn (5 steps) performs worse than the models without synaptic depression module at all. We are not sure about the reason for this phenomenon but it might well be cause by the non-profound grid search for synaptic depression models as well with the necessity for usage of more TBPTT time steps and training epochs. These things unfortunatelly could not be tested due the computational demands of the synaptic depression models.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/model_types_p_value_heatmap_cc_norm.pdf}
+    \caption{Heatmap that shows the p-value of Pairwise one-sided Mann-Whitney U test. The test has been performed on the values of normalized cross correlation of each subset of each model variant. The test should say whether one of the model has significantly higher normalized cross correlation values. In each tile the row value marked as "Model A" represents the model that is tested to perform better and column value marked as "Model B" represents the model that is tested to perform worse. Assuming significance level $\alpha=0.05$ the value smaller than $\alpha$ decline the null hypothesis that the normalized cross correlation distribution is the same or worse for "Model A".}
+    \label{fig:model_types_p_values_heatmap}
+\end{figure}
