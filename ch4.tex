@@ -338,6 +338,21 @@ Overall of the models the best performing one seems to be rnn (10 steps) that sh
 
 The last interesting notice from the results is that it seems that the model syn adapt lgn (5 steps) performs worse than the models without synaptic depression module at all. We are not sure about the reason for this phenomenon but it might well be cause by the non-profound grid search for synaptic depression models as well with the necessity for usage of more TBPTT time steps and training epochs. These things unfortunately could not be tested due the computational demands of the synaptic depression models.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/boxplot_model_comparison_synchrony_overall_pearson.pdf}
+    \caption{This figure shows comparison of distribution of pearson CC between model predictions and of model prediction synchrony curves across all layers and all model subset variants for each model type in respect targets.}
+    \label{fig:boxplot_models_overall_synchrony_pearson_comparison}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/boxplot_model_comparison_synchrony_pearson_layers.pdf}
+    \caption{This figure shows comparison of distribution of pearson CC between model prediction and target synchrony curves separately for each layer.}
+    \label{fig:boxplot_models_pearson_synchrony_different_layers}
+\end{figure}
+
 To empower our claims we have decided to conduct pairwise one-sided Mann-Whitney U test (\citet{mann_whithey_1947}) to test whether the distribution of normalized CC from one model are greater or equal to the normalized CC of the other model. We have selected this test because we do not know from which distribution our sampled normalized CC come from, so, we cannot really use some stronger more powerful parametric test. This test tests hypothesis that the two sampled groups are taken from the same distribution. Since we are using the one-sided variant we test the hypothesis that one sample is sampled from the distribution that is greater or equal to the other population. We have visualized the p-values of each tested pair in the heatmap depicted in the Figure~\ref{fig:model_types_p_values_heatmap}. In this heatmap the model in the row symbolizes the model that performs better in terms of the normalized CC in comparison to model in the row.
 
 \begin{figure}
@@ -351,6 +366,81 @@ The tests mainly confirms our claims that we have concluded from the box plots a
 
 Overall, based on the high level metrics of person CC and normalized CC we assume that majority of our additional modules improved our model performance and that additional biological constraints might lead to improved modeling of the neural responses. The only two exceptions that seemingly contradicts this statement are dnn separate model and syn adapt lgn (step 5) model. These facts we mainly assign to our limited ability to test the model performances deeply and thus our results might not cover all model properties comprehensively.
 
-\subsection{Each Model Variant Inspection}
-\label{subsec:each_model_variant_inspection}
+\subsection{Prediction-Target Comparison of Model Variants}
+\label{subsec:prediction_target_comparison_variants}
 
+
+\subsubsection{Simple Model With LeakyTanh Activation}
+\label{{subsubsec:simpl_leakytanh_eval}}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_simple_evaluation_new.pdf}
+    \caption{This figure depicts mean synchrony curve of simple (leakytanh) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_simple_leaky_tanh}
+\end{figure}
+
+\subsubsection{DNN Joint Model}
+\label{{subsubsec:dnn_joint_eval}}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_dnn_joint_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of dnn joint model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_dnn_joint}
+\end{figure}
+
+
+\subsubsection{DNN Separate Model}
+\label{{subsubsec:dnn_separate_eval}}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_dnn_separate_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of dnn separate model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_dnn_separate}
+\end{figure}
+
+\subsubsection{RNN Separate Model With 5 Backpropagation Steps}
+\label{{subsubsec:rnn_5_eval}}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_rnn_separate_5_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of rnn (time 5) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_rnn_5}
+\end{figure}
+
+
+\subsubsection{RNN Separate Model With 10 Backpropagation Steps}
+\label{{subsubsec:rnn_10_eval}}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_rnn_separate_10_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of rnn (time 10) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_rnn_10}
+\end{figure}
+
+\subsubsection{Synpatic Depression Model Only On LGN with 5 Backpropagation Steps}
+\label{{subsubsec:syn_adap_lgn_5}}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_syn_only_lgn_5_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of syn adapt lgn (time 5) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_syn_adapt_lgn_5}
+\end{figure}
+
+\section{Performance Gaps and Opportunities for Improvement}
+\label{sec:performace_gaps_and_opportunities_for_improvement}
+\subsection{Free vs Teacher-Forced Prediction Analysis}
+\label{{subsec:free_vs_teacher_forced_predictions}}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/tbptt_models_forced_included_model_synchrony_curve.pdf}
+    \caption{This figure depicts mean synchrony curve of all model variants using TBPTT training algorithm. It depicts their predictions, teacher-forced predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:free_vs_teacher_forced_synchrony}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/temporal_drift_forced_free.pdf}
+    \caption{}
+    \label{fig:drift}
+\end{figure}
