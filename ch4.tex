@@ -276,7 +276,7 @@ If not stated differently we work with the aggregated values across 20 randomly 
 Throughout this section if not stated differently we will use the uniform naming of the model types that mainly build on the namings defined in the Section~
 \ref{sec:model_description}. However, we also compare some model variants with slightly different setup, because of that we need to invent new naming for the differentiation of these throughout the analysis. The naming is the following. We use two simple variant models (Section~\ref{subsec:base_model_architecture}) one with tanh activation function that we note as \emph{simple (tanh)} and the second variant with leakytanh activation function (Section~\ref{subsubsec:leakytanh}) that we note as \emph{simple (leakytanh)}. Then we use only one varian of both \emph{dnn joint} (Section~\ref{subsubsec:dnn_neuron}) and \emph{dnn separate} (Section~\ref{subsubsec:dnn_separate}) for these we keep the naming as it was before. The we use 2 rnn separate (Section~\ref{subsubsec:rnn_neuron_module}) models with different TBPTT time steps that we call \emph{rnn (5 steps)} and \emph{rnn (10 steps)} for either 5 or 10 TBPTT time steps used during the model training. Last model we compare is the model using synaptic depression (Section~\ref{subsubsec:synaptic_depression}) applied only on LGN connections and with 5 TBPTT time steps, this model we label as \emph{syn adapt lgn (5 steps)}. The label part "adapt" comes from the "adaptation", the naming convention for the synaptic depression module used in our model implementation, we kept this naming to facilitate the experimental processing of the data. 
 
-During the evaluation of the model variants on 20 subsets we have used the general setup profoundly described in the Section~\ref{sec:experimental_setup} and additionally for each model variant the hyperparameter setup described in Table~\ref{tab:evaluation_setup}. These hyperparameters has been chosen mainly by the grid search of different experimental setups for each model and partly base on our empirical knowledge and experience throughout the model development. The grid search and selection of the hyperparameters will be deeply descride in the up-comming sections of the chapter.
+During the evaluation of the model variants on 20 subsets we have used the general setup profoundly described in the Section~\ref{sec:experimental_setup} and additionally for each model variant the hyperparameter setup described in Table~\ref{tab:evaluation_setup}. These hyperparameters has been chosen mainly by the grid search of different experimental setups for each model and partly base on our empirical knowledge and experience throughout the model development. The grid search and selection of the hyperparameters will be deeply describe in the up-coming sections of the chapter.
 
 \begin{table}
     \centering\footnotesize\sf
@@ -299,6 +299,8 @@ During the evaluation of the model variants on 20 subsets we have used the gener
 
 \subsection{Overall Model Types Comparison}
 \label{subsec:overall_model_types_comparison}
+In this section we focus on overall comparison of all model variants based on the global metrics.
+
 First, we look at the pearson correlation coefficients and normalized cross correlations (Section~\ref{subsec:pearson_cc} and Section~\ref{subsec:normalized_cross_correlation}) comparison of each model performance. The Table~\ref{tab:model_evaluation_overview_comparison} depicts the result overview of every model variant in evaluation and Figure~\ref{fig:model_types_correlation_comparison} shows boxplot comparison of normalized cross correlation and pearson correlation coefficient values across all model subsets.
 
 \begin{table}
@@ -332,11 +334,15 @@ Overall from the results we can clearly see that the pearson CC and Normalized C
 
 From the results we can clearly see that there is one model outstander, the simple (tanh) that clearly performs the worst out of all tested models. On the other hand we can see that using the leakytanh activation function specially designed for the task performs surprisingly well even in the simple model and the model simple leakytanh is even comparable to dnn joint and dnn separate results. This may reflect the fact the the feed-forward dnn neuron modules represent some fairly simple function that we can approximate using some custom activation function like the leakytanh. However, we see that using rnn neuronal module improves our results which may indicate the importance of introducing the memory to our neurons and application of TBPTT training algorithm. 
 
+Another possible explanation of the fact that simple model and feed-forward models performed fairly well is that they might capture the mean neuronal spiking pattern (as already mentioned in Section~\ref{subsec:deep_learning_approach}) and since the predicted neuronal responses are fairly sparse the high CC values might be caused due to the sparseness. On the other hand better results of TBPTT models might dawn of the temporal activity patterns in the predictions and thus sign of the model improvement.
+
 Another interesting outstander is dnn separate model. This model performs strangely variable in comparison to other model variants. However, we do not really see the clear reason for this behavior. In fact this model should introduce the separation of the excitatory and inhibitory processing in the dnn modules and we expected that it would improve the predictions. Furthermore, while developing the model it showed fairly similar behavior to dnn joint model. For the rnn neuronal modules we have selected only the separate variants since the additional modules should sequentially add more biological plausibility and it really does not sense in our case to omit the layer separation. Also during our empirical tests this model performed fairly similar even sometimes better than the joint variants. We thus suggest that the strange variance might be cause by the not really representative number of results that contains only results for 20 model subset variants and that might be better captured by additional experimental runs on more model subsets. Additionally our testing dataset consists only of 20 trials that might not be enough to compute representative normalized CC values. For the future research it would be definitely worth it to run these experiments on the larger number of subset variants and with larger testing dataset including experiments and trials.
 
 Overall of the models the best performing one seems to be rnn (10 steps) that shows reasonably variability across subset variants and performs best in terms of mean normalized CC. We might also suggest that adding more time steps to TBPTT calculation improves the results. However, experiments on larger number of time steps is not suitable for our experiments for time and memory consumption reasons and our restrained capability to access these.
 
 The last interesting notice from the results is that it seems that the model syn adapt lgn (5 steps) performs worse than the models without synaptic depression module at all. We are not sure about the reason for this phenomenon but it might well be cause by the non-profound grid search for synaptic depression models as well with the necessity for usage of more TBPTT time steps and training epochs. These things unfortunately could not be tested due the computational demands of the synaptic depression models.
+
+As the last part of the overview across all models we look at the correlation of the \emph{synchrony curves} for each model layer predictions. As it was already stated in Section~\ref{subsubsec:neuron_synchrony_binning} the synchrony of the time bin is a portion of the neurons in the layer that spike simultaneously at the given time step. The synchrony curve is then just temporal sequence of synchrony values across all time bins in the experiment. In the Figure~\ref{fig:boxplot_models_overall_synchrony_pearson_comparison} there is a boxplot comparing pearson CC of the model predictions (marked as overall CC) and of the synchrony curves (marked as synchrony CC) for all studied models. Note that there is a model simple (tanh) missing, because there has been technical difficulties during the evaluation and we were not able to replicate the results repeatedly for this model due to the time constraints. However, since we have already seen that this model does perform significantly worse than any other and our focus is mainly on the model of the highest level of biological relevance we claim that inclusion of only simple (leakytanh) give us enough insight into the simple model variant.
 
 \begin{figure}
     \centering
@@ -345,15 +351,100 @@ The last interesting notice from the results is that it seems that the model syn
     \label{fig:boxplot_models_overall_synchrony_pearson_comparison}
 \end{figure}
 
+As we can see from the boxplot the variance of the synchrony CC is in all model types predictions higher than for overall CC. Another interesting fact is that models using TBPTT training algorithm are more variable in terms of the synchrony CC in comparison to other model except of the dnn separate that behaves strangely also in other metrics as already stated. This fact might be a sign of better captured dynamics of the model. In other words the fact that the temporal activity of the predictions vary more might be a sign that the model is trying to capture the temporal activity not just the mean of it through time. Additionally, it seems that synchrony CC and overall CC does not vary much in terms of mean and comparison between the models. One interesting fact is that in this metric the rnn (5 steps) behaves slightly better than rnn (10 steps) we do not really see the reason why this happened but since we see that there are more outliers of the model rnn (5 steps) synchrony CC, we might assume that this might be an effect of the small number of model variants that we have tested and in more robust experiment the results might differ.
+
+As we have seen in the results previously the dnn separate model synchrony CC behaves strangely especially in its wide variance. This indicates some problematic model variants that is empowered by the occurrence of the low performing variants also in overall CC. Our hypothesis is that this is cause either by the selection of the subset variant that behaves badly only in dnn separate variance, or complexity of the input that is separated to excitatory and inhibitory and might be to complex for the small feed-forward network maybe because of the lack of some form of the memory. This statement supports the results of separate variants of rnn neuronal modules that behave the best across all tested variants. Last possible explanation that comes to our mind is the technical problem during the evaluation of some subset of the dnn separate models that we did not encounter and led to generally worse results in some subset variants.
+
+\subsection{Prediction-Target Temporal Behavior of Model Variants}
+\label{subsec:prediction_target_comparison_variants}
+In this section we focus mainly on comparison of the temporal behavior of the model predictions separately. We will inspect how each model synchrony curves look like and compare them with the expected target synchrony curves. Note that we will not focus on the model simple (tanh) as there has been a technical difficulties during the evaluation part and we were not able to retrieve the model predictions and thus compute the synchrony curves. As already mentioned we do not expect this to be serious problem for our analysis as we already have in our analysis simple model variant included and the model with tanh activation behave generally the worst, so, we do not expect to obtain much insight from this model synchrony curves.
+
+The idea behind the inspection of the synchrony curves is that these might unveil the temporal behavior of our model predictions that is the key aspect of the model that we want to capture correctly as this will be step forward in comparison to generally used approaches of NN models in system identification problem as mentioned in Section~\ref{subsec:deep_learning_approach}.
+
+\subsubsection{Simple Model}
+\label{{subsubsec:simpl_leakytanh_eval}}
+
+First, we depict in the Figure~\ref{fig:synchrony_curve_simple_leaky_tanh} the synchrony curve of the simple (leakytanh) model predictions. 
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{img/plots/boxplot_model_comparison_synchrony_pearson_layers.pdf}
-    \caption{This figure shows comparison of distribution of pearson CC between model prediction and target synchrony curves separately for each layer.}
-    \label{fig:boxplot_models_pearson_synchrony_different_layers}
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_simple_evaluation_new.pdf}
+    \caption{This figure depicts mean synchrony curve of simple (leakytanh) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_simple_leaky_tanh}
 \end{figure}
 
-To empower our claims we have decided to conduct pairwise one-sided Mann-Whitney U test (\citet{mann_whithey_1947}) to test whether the distribution of normalized CC from one model are greater or equal to the normalized CC of the other model. We have selected this test because we do not know from which distribution our sampled normalized CC come from, so, we cannot really use some stronger more powerful parametric test. This test tests hypothesis that the two sampled groups are taken from the same distribution. Since we are using the one-sided variant we test the hypothesis that one sample is sampled from the distribution that is greater or equal to the other population. We have visualized the p-values of each tested pair in the heatmap depicted in the Figure~\ref{fig:model_types_p_values_heatmap}. In this heatmap the model in the row symbolizes the model that performs better in terms of the normalized CC in comparison to model in the row.
+As we have already stated before it seems that the model mainly focuses on the prediction of the mean spiking rate across all time steps. We assume this by the flatness of the synchrony curve across the time that is the sign of not very dynamic activity. This leads to fairly reasonable results in the later stages of the stimuli part of the experiment but does not really capture the initial high spiking activity of the system in the early stage of the natural stimulus presentation. However this model surprisingly captures well the dynamics of the stimulus change when natural stimulus is replaced by the blank image. This as we will seen in the following models is captured fairly well also in comparison to other models. Lastly, as we can see that the model performs well mainly in the prediction of the mean spiking activity we might hypothesise that this is cause by the specially designed leakytanh activation function that focuses on the predictions in the reasonable interval of values and significantly enforce the model to predict values similar to mean neuronal responses. This influence of the leakytanh activation can be easily strenghten by the comparison to tanh variant that performed badly in terms of CC and eventhough we do not have the predictions of the neuronal responses for this model we assume that these will be much worse than currently tested simple (leakytanh) variant.
+
+\subsubsection{Feed-Forward Neuronal Modules Variants}
+\label{{subsubsec:dnn_eval}}
+Now, we focus on the synchrony curves of models dnn joint in Figure~\ref{fig:synchrony_curve_dnn_joint} and dnn separate model in Figure~\ref{fig:synchrony_curve_dnn_separate}.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_dnn_joint_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of dnn joint model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_dnn_joint}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_dnn_separate_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of dnn separate model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_dnn_separate}
+\end{figure}
+
+As we have already stated the model dnn separate behaves strangely noisy that can be also seen mainly in the error bars of its synchrony. As we have already discussed the causes of this phenomenon we will not focus on this model anymore. 
+
+In terms of the dnn joint model we do not really see significant difference in comparison to simple (leakytanh). There is a sign of the better initial activity as a response to early natural stimuli stages. Overall, these might be a sign that feed-forward neuron modules improved the temporal behavior a bit but as we can see the model still mainly captures the mean spiking behavior. Based on these fact we conclude that the as we used simple feed-forward NN we can capture only slightly more complex activation function than is leakytanh that leads to slightly better temporal behavior. However, since these modules do not have any form of "memory" and information about the past stimuli they are not really sufficient in the capturing of the temporal behavior. 
+
+\subsubsection{RNN Neuronal Modules Variants}
+\label{{subsubsec:rnn_eval}}
+The findings of the already tested variants naturally leads us to the usage of RNN model variants that use TBPTT time training algorithm that allows the model better see the temporal behavior of the network during the training and thus may lead to better predictions of the temporal behavior. Although the already tested variants have recurrent connections that capture the biological realism and that allows the temporal self-modulation we do not really allow the training algorithm to compute gradients over time since we reset the hidden states after each time step by the target neuronal responses. This is often called \emph{teacher-forced} training (\citet{NIPS2016_16026d60}). The network then theoretically can capture the temporal dynamics but since we do not use any hidden time steps we constraint our model from backpropagation through time training algorithm and be introducing the temporal behavior during training. In the following models this is however included.
+
+As we can see from the Figure~\ref{fig:synchrony_curve_rnn_5} and Figure~\ref{fig:synchrony_curve_rnn_10} that depicts the synchrony curves of the rnn separate model using TBPTT training algorithm for either 5 respectively 10 time steps the overall temporal behavior improved without doubt. We can see that there is a massive improvement in the prediction of the early stages of the natural stimuli that nicely captures the overall dynamics. The only flaws of the predicted dynamics that still persist are the neuronal responses to blank stimuli that in our model predictions does not really differ from later responses on natural stimuli but in target responses the spiking activity to blank stimuli also called as spontaneous neuronal activity (briefly mentioned in Section~\ref{subsec:stimulus_sequence}) is higher than later natural stimuli stages indicating the suppressed neuronal activity to the long term presented stimulus.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_rnn_separate_5_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of rnn (time 5) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_rnn_5}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_rnn_separate_10_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of rnn (time 10) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_rnn_10}
+\end{figure}
+
+While comparing the models using either 5 or 10 TBPTT time steps we conclude that higher number of time steps improve the model performance as from the synchrony curves it seems that the dynamics is better in the predictions of the model rnn (10 steps) also in terms of noisiness across the subset variants. This claim is empower by the findings that the rnn (10 steps) performed in fact the best of tested model variants in terms of both normalized and pearson CC.
+
+Looking on the synchrony curve we can now briefly reflect again on the synchrony pearson CC displayed in Figure~\ref{fig:boxplot_models_overall_synchrony_pearson_comparison} where we see that the synchrony CC is strangely more variable in the TBPTT models in comparison to the rest of the models. As we look at the synchrony curves we assume that this fact may be indeed caused by the higher and better dynamics of the TBPTT models. Furthermore, the seemingly comparable CC mainly in terms of synchrony CC is probably caused by the preference of non TBPTT models to capture the mean responses in comparison to more dynamic TBPTT models. The better capture of the quite stable later natural stimulus stage in the non TBPTT models probably leads to high values of the CC. On the other hand since the TBPTT models are more dynamic then nicely capture the response dynamics but is not that precise in non-dynamic behavior.
+
+The fact that rnn neuron model variants capture the dynamics better is a good sign towards the development of deep neural network model that is biologically explainable and that captures the dynamics reasonably well (as mentioned profoundly in Section~\ref{subsec:deep_learning_approach} and Section~\ref{subsec:spiking_neural_nets}).
+
+\subsubsection{Synpatic Depression Model}
+\label{{subsubsec:syn_adap_lgn_5}}
+In the last part of the analysis of synchrony curves we focus on the usage of the synaptic depression module. As mentioned in the previous section there are still flaws in the temporal dynamics of the spontaneous neuronal responses during the blank stage. This naturally leads to inclusion of the synaptic depression modules different for each pair of the layers. This should include the separation of the dynamical adaptation to the neuronal activity from the different neuronal populations and thus to improvement of the temporal behavior.
+
+We have performed the experiments including neuronal depression only on the model variant using 5 TBPTT time steps and only including the neuronal depression module on the LGN connections as these are the ones that in the biological network are most influenced by this phenomenon. The synchrony curve of the model predictions is depicted in the Figure~\ref{fig:synchrony_curve_syn_adapt_lgn_5}. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_syn_only_lgn_5_evaluation.pdf}
+    \caption{This figure depicts mean synchrony curve of syn adapt lgn (time 5) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
+    \label{fig:synchrony_curve_syn_adapt_lgn_5}
+\end{figure}
+
+The mentioned simplification has been done due several technical difficulties that we have encountered. The difficulties are mainly related to the largely rising necessity for the high memory GPU machines since each RNN synaptic depression module largely increase the memory consumption with increasing TBPTT time steps. Additionally, inclusion of these significantly prolongs the computational time of the model training. As a result of these problems we also have not been able to perform profound grid search for selection of the ideal hyperparameter and we have been forced to select the hyperparameters without that deep knowledge that we had for other model variants. These difficulties might lead to not really representative results of the model performance and might explain several non-clarities regarding this model performance.
+
+As we can see from the synchrony curve the temporal behavior is definitely better that in terms of non TBPTT model, however, worse than in terms of rnn models without synaptic depression module. Interestingly, the model predictions seemingly worsen across all time interval. We can see significantly worsen performance in terms on dynamics at the change from natural stimuli to blank stimuli and also in terms of mean responses (the later natural stimuli stages). Furthermore, the performance neither improve in spontaneous responses (blank stage). 
+
+These findings are surprising as we have expected the improved performance of the model while including more of the biological realism. Only explanation of this that comes to our mind is the non-ideal selection of the hyperparameters. Additionally, the problem might be related to small number of TBPTT time steps and lack of variable training dataset that might cover the dynamics of the network better.
+
+\subsection{Model Performance Statistical Comparison}
+\label{subsec:model_performance_statistical_comparison}
+
+To empower our claims about the various model performance we have decided to conduct pairwise one-sided Mann-Whitney U test (\citet{mann_whithey_1947}) to test whether the distribution of normalized CC from one model are greater or equal to the normalized CC of the other model. We have selected this test because we do not know from which distribution our sampled normalized CC come from, so, we cannot really use some stronger more powerful parametric test. This test tests hypothesis that the two sampled groups are taken from the same distribution. Since we are using the one-sided variant we test the hypothesis that one sample is sampled from the distribution that is greater or equal to the other population. We have visualized the p-values of each tested pair in the heatmap depicted in the Figure~\ref{fig:model_types_p_values_heatmap}. In this heatmap the model in the row symbolizes the model that performs better in terms of the normalized CC in comparison to model in the row.
 
 \begin{figure}
     \centering
@@ -364,73 +455,36 @@ To empower our claims we have decided to conduct pairwise one-sided Mann-Whitney
 
 The tests mainly confirms our claims that we have concluded from the box plots and the mean and standard deviation. If we assume the significance level $\alpha=0.05$ then we decline the hypotheses that simple (tanh) performs better than arbitrary other model variant. While looking at the other variants it mostly seems that the more complex models perform better with two exceptions. The dnn separate model that behaved strangely mainly in terms of the large variance that we already mentioned and the syn adapt lgn (5 steps) that interestingly seems to perform worse than the rnn model variants without the synaptic depression modules. This fact may be caused by the several constraints already mentioned before connected to constrained computational resources and thus not that profound analysis of the hyperparameters. Additionally, we have not tested the synaptic depression variant that applies the synaptic depression module to all connections since its computational complexity.
 
-Overall, based on the high level metrics of person CC and normalized CC we assume that majority of our additional modules improved our model performance and that additional biological constraints might lead to improved modeling of the neural responses. The only two exceptions that seemingly contradicts this statement are dnn separate model and syn adapt lgn (step 5) model. These facts we mainly assign to our limited ability to test the model performances deeply and thus our results might not cover all model properties comprehensively.
-
-\subsection{Prediction-Target Comparison of Model Variants}
-\label{subsec:prediction_target_comparison_variants}
-
-
-\subsubsection{Simple Model With LeakyTanh Activation}
-\label{{subsubsec:simpl_leakytanh_eval}}
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_simple_evaluation_new.pdf}
-    \caption{This figure depicts mean synchrony curve of simple (leakytanh) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
-    \label{fig:synchrony_curve_simple_leaky_tanh}
-\end{figure}
-
-\subsubsection{DNN Joint Model}
-\label{{subsubsec:dnn_joint_eval}}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_dnn_joint_evaluation.pdf}
-    \caption{This figure depicts mean synchrony curve of dnn joint model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
-    \label{fig:synchrony_curve_dnn_joint}
-\end{figure}
-
-
-\subsubsection{DNN Separate Model}
-\label{{subsubsec:dnn_separate_eval}}
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_dnn_separate_evaluation.pdf}
-    \caption{This figure depicts mean synchrony curve of dnn separate model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
-    \label{fig:synchrony_curve_dnn_separate}
-\end{figure}
-
-\subsubsection{RNN Separate Model With 5 Backpropagation Steps}
-\label{{subsubsec:rnn_5_eval}}
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_rnn_separate_5_evaluation.pdf}
-    \caption{This figure depicts mean synchrony curve of rnn (time 5) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
-    \label{fig:synchrony_curve_rnn_5}
-\end{figure}
-
-
-\subsubsection{RNN Separate Model With 10 Backpropagation Steps}
-\label{{subsubsec:rnn_10_eval}}
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_rnn_separate_10_evaluation.pdf}
-    \caption{This figure depicts mean synchrony curve of rnn (time 10) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
-    \label{fig:synchrony_curve_rnn_10}
-\end{figure}
-
-\subsubsection{Synpatic Depression Model Only On LGN with 5 Backpropagation Steps}
-\label{{subsubsec:syn_adap_lgn_5}}
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_syn_only_lgn_5_evaluation.pdf}
-    \caption{This figure depicts mean synchrony curve of syn adapt lgn (time 5) model predictions and its comparison to mean target synchrony curve both across all trials and all model subset variants including error bars. The dashed line marks the time step where the natural stimuli and blank stimuli changes.}
-    \label{fig:synchrony_curve_syn_adapt_lgn_5}
-\end{figure}
+Overall, based on the high level metrics of person CC and normalized CC we assume that majority of our additional modules improved our model performance and that additional biological constraints might lead to improved modeling of the neural responses. The only two exceptions that seemingly contradicts this statement are dnn separate model and syn adapt lgn (step 5) model. These facts we mainly assign to our limited ability to test the model performances deeply and thus our results might not cover all model properties comprehensively as already stated before.
 
 \section{Performance Gaps and Opportunities for Improvement}
 \label{sec:performace_gaps_and_opportunities_for_improvement}
+Until now, we have compared the different model approaches. With exception of the synaptic depression module we have concluded that increase biological realism improve the model performance. However, we have still seen some flaws in the model predictions especially in the temporal behavior of the spontaneous neuronal responses. In this section we will focus on several aspects of the model and we will try to figure out possible source of the model performance issues.
 \subsection{Free vs Teacher-Forced Prediction Analysis}
 \label{{subsec:free_vs_teacher_forced_predictions}}
+First, we will focus on the comparison of the model performance while applying teacher-forced evaluation, the one that resets hidden states after each time step prediction with the appropriate target values, and the free prediction, the classical RNN prediction of the sequence of neuronal responses. We will focus mainly on the best performing model variants using TBPTT and that seems to be the right approach towards the better model performance as well as towards the biological relevance. 
+
+Although, we first look at the boxplots of the synchrony CC of both teacher-forced and free predictions across all tested models without simple (tanh) per layer that is depicted in the Figure~\ref{fig:boxplot_models_pearson_synchrony_different_layers}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/plots/boxplot_model_comparison_synchrony_pearson_layers.pdf}
+    \caption{This figure shows comparison of distribution of pearson CC between model prediction and target synchrony curves separately for each layer.}
+    \label{fig:boxplot_models_pearson_synchrony_different_layers}
+\end{figure}
+
+As we have seen many times the model dnn separate behaves strangely. Interestingly though the CC performance differ quite a lot across layer types. Overall, the CC of the TBPTT models seems to be the best across all layers. The more problematic layers seems to be the excitatory ones for these models also in comparison to the non TBPTT models. We hypothesize that this fact may be a cause of the relatively sparse activity of the excitatory layers as we have seen in the synchrony curves. The neurons in these layers generally do not spike that much and the fact the non TBPTT models capture the mean dynamics pretty well may also lead to better performance of these variants in the excitatory layers. On the other hand, we can see that in the more active inhibitory layers the TBPTT model variants performs the best. 
+
+Interestingly, the teacher-forced predictions seems to be comparable and sometimes better in the TBPTT models. This is not that surprising since we expect that our models should capture the temporal dynamics reasonably well and thus reset of the hidden states should not cause significant difference in the model predictions since we expect our models would predict those reasonably well, so, the reset of state may just a bit tweak our model towards better predictions since the input hidden state is more appropriate for the next sequence step. 
+
+As we can see the model performance improved the most while using teacher-forced variant in the synaptic depression model. This might be a sign that this model does not really learn the dynamics correctly and maybe additionally time steps in TBPTT or longer training might improve our model performance. 
+
+Lastly, interesting fact is that non TBPTT performed worse while using teacher-forced variant. One might expect that since the models does not really seen the temporal sequence during the training that hidden state reset might improve the model temporal performance since this approach mimics the training stages. Our claim on this is that since the models capture mainly the mean responses the reset of states mainly in the initial stages of the experiment sequence where there is a hight spiking activity distracts the model predictions from the correct mean predictions and as a result worsen the overall model score.
+
+\subsubsection{Teacher-Forced Synchrony Curves on TBPTT Model Variants}
+\label{subsubsec:teacher_forced_synchrony_curves_tbptt}
+From now on, let us focus only on TBPTT model variants. First we plot the synchrony curves for all the models for both free and teacher-forced predictions in comparison to targets. This is depicted in the Figure~\ref{fig:free_vs_teacher_forced_synchrony}.
+
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/tbptt_models_forced_included_model_synchrony_curve.pdf}
@@ -438,20 +492,27 @@ Overall, based on the high level metrics of person CC and normalized CC we assum
     \label{fig:free_vs_teacher_forced_synchrony}
 \end{figure}
 
+From the plot of the synchronies we can see that the prediction dynamics slightly improve in the initial natural stimuli stages and in the change of the stimuli from natural to blank. Interestingly thought, it seems that it is neither successful in capturing of the higher spontaneous neuronal responses in the blank stages. However, we see increase dynamic in these stages that might be a promising sign. Interestingly, the teacher-forced predictions seems to deviate in the later natural stimuli activity from the target sequence in the layer IV responses of the rnn model variants. 
+
+Finally, there is an interesting behavior of the teacher-forced stimuli in the synaptic depression model that seems to have the best overall temporal behavior of the predictions across all the models that is also confirmed by the boxplot of the synchrony CC in the Figure~\ref{fig:boxplot_models_pearson_synchrony_different_layers}. This might be sign of not ideal training procedure in the synaptic depression model and that the model failed to properly predict the following stages of the sequence. It is also the sign though that while the predictions improve the model might outperform all of the tested models. The fact that we would expect since we enhance the biological plausibility of the model.
+
+\subsubsection{Drift Between Synchrony Curves of Teacher-Forced and Free Predictions}
+\label{subsubsec:drift_teacher_free_synchrony}
+
+In the last part of this section we focus on the difference between the teacher-forced and free prediction synchrony curves also called as \emph{drift}. This is depicted for each layer separately in the Figure~\ref{fig:teacher_forced_free_drift}. This metric can unveil influence of the state reset in the different time steps and potentially show the distraction of our model throught time.
+
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_drift_forced_free.pdf}
     \caption{This figure depicts plot of temporal dependency of the difference between teacher-forced and normal prediction (free) synchrony curves across the experiment duration per all experiments each layer separately. We call this metric as "drift". In the figure we compare models using TBPTT training algorithm.}
-    \label{fig:drift}
+    \label{fig:teacher_forced_free_drift}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{img/plots/train_size_performance_dependency.pdf}
-    \caption{This figure depicts dependency of normalized CC on training set size while training dnn joint model with hyperparameters used in model evaluation (Table~\ref{tab:evaluation_setup}). The figure depicts the variants of subset sizes only until subset size 0.54 of the original training dataset due the not enough computational resources for comprehensive analysis on all subset size variants. However, it seems that the performance already stabilized and we do not expect massive changes in behavior for the larger subsets of original training dataset.}
-    \label{fig:train_size_cc_norm_dependency}
-\end{figure}
+As we can see the highest drift is across all tested model variants during the initial natural stimulus stage, the most active stage in terms of neuronal activity. As we can see there is a clearly highest drift throughout the time in the synaptic depression model. That supports our hypothesis about the non-ideal training of this model variant. The positive aspect that we can read from these results is that the model predictions does not really worsen in the later stages of the sequence indicating that the model can predict the temporal sequence pretty well. Its predictions mainly differ in the highly dynamical neuronal stages of the experiment that we might also consider as the most challenging one.
 
+Overall, it seems to us that mainly the synaptic depression model seems to have higher potential in prediction of the temporal activity while looking at the teacher-forced predictions and that it might be worth it focus on the fideling out of the training procedure of this model type.
+
+\subsection{Hyperparameter Grid Search}
 
 \begin{table}
     \centering\footnotesize\sf
@@ -554,8 +615,6 @@ Overall, based on the high level metrics of person CC and normalized CC we assum
     \label{tab:grid_rnn_separate}
 \end{table}
 
-"n-ls" - layer size of the module of neuron, "n-nl" - number of layers of the neuron module, "n-res" - flag whether the neuron module use residual connection, "s-ls" - layer size of the synaptic depression module, "s-nl" - number of layers of synaptic depression module, "n-tbptt" - number of TBPTT time steps.
-
 \begin{table}
     \centering\footnotesize\sf
     \begin{tabular}{cccc}
@@ -575,3 +634,11 @@ Overall, based on the high level metrics of person CC and normalized CC we assum
 \end{table}
 
 
+\subsection{Dependency of Train Dataset Size on Model Performance}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/plots/train_size_performance_dependency.pdf}
+    \caption{This figure depicts dependency of normalized CC on training set size while training dnn joint model with hyperparameters used in model evaluation (Table~\ref{tab:evaluation_setup}). The figure depicts the variants of subset sizes only until subset size 0.54 of the original training dataset due the not enough computational resources for comprehensive analysis on all subset size variants. However, it seems that the performance already stabilized and we do not expect massive changes in behavior for the larger subsets of original training dataset.}
+    \label{fig:train_size_cc_norm_dependency}
+\end{figure}
