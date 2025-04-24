@@ -513,6 +513,13 @@ As we can see the highest drift is across all tested model variants during the i
 Overall, it seems to us that mainly the synaptic depression model seems to have higher potential in prediction of the temporal activity while looking at the teacher-forced predictions and that it might be worth it focus on the fideling out of the training procedure of this model type.
 
 \subsection{Hyperparameter Grid Search}
+\label{subsec:hyperparameter_grid_search}
+
+In this section we briefly go through the hyperparameter grid search procedure that we have conduced for proper selection of these during our evaluation of the models. For the grid search we have randomly generated the one extra model subset variant. All grid search analyses have been conducted only on one model subset variant due to our computational constraints. The validation dataset selection has been described in the Section~\ref{subsubsec:test_dataset}.
+
+\subsubsection{Simple Model Grid Search}
+\label{subsubsec:simple_model_grid_search}
+As the simple model is fairly lightweight in the model hyperparameters but also easy to train in terms of memory consumption and time necessary for training we have conducted comprehensive training on different learning rate range that we exploited further in our later analyses. We have trained our model in 10 epochs for both the tanh activation variant with grid search results depicted in the Table~\ref{tab:grid_simple_tanh} and with leakytanh activation function with results depicted in the Table~\ref{tab:grid_simple_leakytanh}.
 
 \begin{table}
     \centering\footnotesize\sf
@@ -554,6 +561,12 @@ Overall, it seems to us that mainly the synaptic depression model seems to have 
     \label{tab:grid_simple_leakytanh}
 \end{table}
 
+Nothing really interesting happened during the grid search except from the best learning rate value for the leakytanh variant that is significantly higher than the learning rate used in other model variants and that the tanh variant grid search results seems to be completely opposite to leakytanh variant that seems to prefer smaller learning rate values. In the end, we have selected the values of learning rate in our evaluation experiments as $0.0000075$ in tanh variant and as $0.000075$ in leakytanh variant. As one of the best performing parameters that we tweaked based on our empirical experience during the model development (as the selected values differ only slightly from the overall best performing models in the grid search).
+
+\subsubsection{DNN Joint Model Grid Search}
+\label{subsubsec:dnn_joint_grid_search}
+Furthermore, we performed the grid search on the dnn joint model. Where we have selected the wider range of parameters depicted in the Table~\ref{tab:grid_dnn_joint}. We have conducted the grid search also for 10 epochs.
+
 \begin{table}
     \centering\footnotesize\sf
     \begin{tabular}{cccccc}
@@ -590,6 +603,13 @@ Overall, it seems to us that mainly the synaptic depression model seems to have 
     \label{tab:grid_dnn_joint}
 \end{table}
 
+From the grid search there is a clear conclusion that usage of residual connections in the neuronal modules is unquestionably better in terms of overall CC performance as well as training stability that we have empirically observed during the grid search as well as model development. It seems that the residual connection significantly makes the model more stable during the training period and ensures that the models does not overfit easily. Using these facts we will apply residual connection to all our modules. In terms of the number of layers we have decided to continue with number of layers 5 as it was proven to work well during our model development and as we can see from the grid search there is not really high difference in model performance using either higher of lower number of layers. In fact, the number of layers 5 seems to be most stable in terms of the CC across all tested variants. As a layer size we have selected size 10 as it clearly performs better across all grid search variants. There might be a question whether larger model size would not improve model performance. From our empirical testing and throughout the model development we do not think so though as it seems to perform relatively same as the variant with size 10. It would be worth testing this more profoundly though. It is also worth mentioning that large module size makes memory demands significantly grow especially in terms of TBPTT usage, in terms of the dnn model variants this should not be that problematic though. Lastly, we have chosen learning rate for the evaluation experiments as $0.00001$ as it was the best performing one throughout the grid search and that proves also our empirical claim about the ideal model learning rate.
+
+Lastly, it is worth noting that we have not performed our grid search analysis on the dnn separate model due the computational resources constraints. This fact might well be a cause of the strangely behavior of the dnn separate model during the evaluation.
+
+\subsubsection{RNN Separate Model Grid Search}
+\label{subsubsec:rnn_grid_search}
+Followingly, we have focus on grid search of RNN neuron module hyperparameters. From those mainly on the number of TBPTT time steps. We have selected layer size as 10 and number of layers as 3 based on the grid search on the dnn joint. These values performed reasonably well in the dnn joint model. We have selected the lightweight variant using only 3 layers as the computational and mainly memory complexity of the rnn neuron modules grows significantly especially with the higher number of TBPTT time steps. The computational complexity also constrained us from the wider hyperparameter search and thus it may be possible that we have not selected the best possible combination and that might be a focus of the future model improvement. Since the training of these models takes higher amount of time we have selected 40 epochs for each model variant. The results of the grid search are depicted in the Table~\ref{tab:grid_rnn_separate}. Note that we have skipped the rnn joint model variant since it does not really make sense in course of our study that should focus mainly on the improvement of the biological relevance of the model and selection of the rnn joint would go against our motivation.
 
 \begin{table}
     \centering\footnotesize\sf
@@ -615,6 +635,12 @@ Overall, it seems to us that mainly the synaptic depression model seems to have 
     \label{tab:grid_rnn_separate}
 \end{table}
 
+Based on the grid search results we have seen a surprising results that usage of higher number of TBPTT time steps perform worse than the lighter variants with 5 and 10 time steps. We assign this fact to the necessity of more epochs for training these models using higher number of time steps. This is partially supported by the fact that model using 40 TBPTT time steps, in other words used one full BPTT through the whole sequence as the total number of time steps is less than 40 in our experiment sequences while using time step 20. While using 40 time steps with the highest learning rate that we tested we obtained reasonable CC values too. However, since the training of the rnn model variants is computationally demanding and its complexity grows significantly with the number of TBPTT time steps we have chooses the 5 and 10 time steps for the evaluation since higher number would not be suitable  for us in terms of limited computational capacity. As a learning rate we have selected $0.00003$ as the best performing one.
+
+\subsubsection{Synaptic Depression Grid Search}
+\label{subsubsec:synaptic_depression_grid_search}
+In the last section focused on grid search we look at the hyperparameters used for the synaptic depression modules. There we can see several drawbacks of our analysis caused by the lack of computational resources. We have not been able to perform a comprehensive grid search as the training of one model using full synaptic depression on all connected pairs of neuronal population is demanding in terms of computational time and memory consumption that is even worse while using more TBPTT time steps. Initially the aim was to perform the grid search for 40 epochs that we have already found out might not be sufficient for the rnn variants model training. unfortunately, due to the computational resources we have been able to perform the grid search only on 20 epoch using the small number of TBPTT 5 and 10. As rnn neuron module size we have selected 3 layers of size 10 as in the rnn grid search part. For the synaptic depression module size we have selected even smaller model using only 2 layers of size 10 due the computational constraints. The results of the grid search can be seen in the Table~\ref{tab:grid_synaptic_adaptation}.
+
 \begin{table}
     \centering\footnotesize\sf
     \begin{tabular}{cccc}
@@ -633,8 +659,13 @@ Overall, it seems to us that mainly the synaptic depression model seems to have 
     \label{tab:grid_synaptic_adaptation}
 \end{table}
 
+As we can see the full synaptic depression module reached the normalized CC value of 0.9 even in 20 epochs and 5 TBPTT time steps. This is a promising sign that while having more resources and hyperparameters tuned it might be a step forward in our model performance.
+
+This unideal grid search clearly outlines the possible cause of bad performance of the syn adapt lgn (5 steps) model. First, it is the usage of synaptic depression only on the LGN connections that may cause the loss of the performance that we have been forced to use due to the limited computational resources. The only LGN variant also showed during the evaluation worsen tendency to learn. In comparison to full synaptic depression model it took more epochs to reach competetive CC values. Additionally, the training was performed only on 5 TBPTT time steps and the model seems to have capacity to improve in terms of CC even in the last epochs. This might be a clear sign of the underfitting and more training epochs might improve the model performance. This is also supported by the result comparison to teacher-forced evaluation that seem to be significantly better only in synaptic depression model and not in the rnn model variants without it. 
 
 \subsection{Dependency of Train Dataset Size on Model Performance}
+\label{subsec:train_size_dataset_depencdency}
+In the last part of our experimental analysis we briefly look at the dependency of dataset size and model performance in terms of the normalized CC. For this analysis we have used dnn joint model. We have chosen this one as the one that is simple to train especially in terms of computational resources and have already neuronal module included. We have trained the model for 10 epochs using the same setup as in the evaluation run of the dnn join model stated in the Table~\ref{tab:evaluation_setup}. We have trained the model on the same model subset selection as in the grid search. Initially we wanted to train the model on all ratios of the whole train dataset size in steps of 2\% size. Unfortunately, we did not have enough computational resources to perform this analysis for all of those and we managed to cover only the interval of training dataset rations $[0.02; 0.54]$ with $0.02$ differences. The Figure~\ref{fig:train_size_cc_norm_dependency} depicts the dependency of the train dataset ratio size on the model performance in normalized CC.  
 
 \begin{figure}
     \centering
@@ -642,3 +673,7 @@ Overall, it seems to us that mainly the synaptic depression model seems to have 
     \caption{This figure depicts dependency of normalized CC on training set size while training dnn joint model with hyperparameters used in model evaluation (Table~\ref{tab:evaluation_setup}). The figure depicts the variants of subset sizes only until subset size 0.54 of the original training dataset due the not enough computational resources for comprehensive analysis on all subset size variants. However, it seems that the performance already stabilized and we do not expect massive changes in behavior for the larger subsets of original training dataset.}
     \label{fig:train_size_cc_norm_dependency}
 \end{figure}
+
+As we can see the normalized CC value stabilized around ratio 0.36 of the dataset size, so, we may assume that the higher ratios would not add very much of the information to our analysis. As we can see since dataset size 0.36 of our dataset the resulting normalized CC does not seem to improve and stagnates around the same value as the results from the actual evaluation. Based on that we assume that increasing our training dataset size by generating more training neuronal responses would not have effect on our model performance. At least not in case of feed-forward neuronal module variants. 
+
+However, we have not tested this on other model types and we need to also take into the consideration that there is also an opportunity to improve the model performance using different stimuli than just the experiments that we described in the Section~\ref{subsec:dataset_description} such as movies of natural stimuli and other methods described in the Section~\ref{subsec:stimulus}.
