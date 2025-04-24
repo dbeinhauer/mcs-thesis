@@ -441,6 +441,137 @@ Overall, based on the high level metrics of person CC and normalized CC we assum
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_drift_forced_free.pdf}
-    \caption{}
+    \caption{This figure depicts plot of temporal dependency of the difference between teacher-forced and normal prediction (free) synchrony curves across the experiment duration per all experiments each layer separately. We call this metric as "drift". In the figure we compare models using TBPTT training algorithm.}
     \label{fig:drift}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/plots/train_size_performance_dependency.pdf}
+    \caption{This figure depicts dependency of normalized CC on training set size while training dnn joint model with hyperparameters used in model evaluation (Table~\ref{tab:evaluation_setup}). The figure depicts the variants of subset sizes only until subset size 0.54 of the original training dataset due the not enough computational resources for comprehensive analysis on all subset size variants. However, it seems that the performance already stabilized and we do not expect massive changes in behavior for the larger subsets of original training dataset.}
+    \label{fig:train_size_cc_norm_dependency}
+\end{figure}
+
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{ccc}
+    \toprule
+    lr & N-CC & P-CC \\
+    \midrule
+    0.000008 & 0.350904 & 0.285114 \\
+    0.000005 & 0.350027 & 0.284416 \\
+    0.000010 & 0.270970 & 0.220144 \\
+    0.000025 & 0.187077 & 0.151972 \\
+    0.000050 & 0.114566 & 0.093056 \\
+    0.000500 & 0.097858 & 0.079533 \\
+    0.000075 & 0.077174 & 0.062676 \\
+    0.000100 & 0.037527 & 0.030460 \\
+    \bottomrule
+    \end{tabular}
+    \caption{\textbf{Grid Search Summary for simple (tanh) Model.} This table depicts grid search results summary conducted on the simple (tanh) model. It has been done using only one model subset variant across all grid search in this thesis. The labels of each table symbolize: "lr" - learning rate, "N-CC" - normalized cross correlation, "P-CC" - pearson correlation coefficient.}
+    \label{tab:grid_simple_tanh}
+\end{table}
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{ccc}
+    \toprule
+    lr & N-CC & P-CC \\
+    \midrule
+    0.000100 & 0.878693 & 0.714005 \\
+    0.000075 & 0.877059 & 0.712670 \\
+    0.000050 & 0.872625 & 0.709055 \\
+    0.000500 & 0.794590 & 0.645656 \\
+    0.000025 & 0.294032 & 0.238913 \\
+    0.000010 & 0.010441 & 0.008462 \\
+    0.000005 & 0.001354 & 0.001069 \\
+    0.000008 & 0.000050 & 0.000018 \\
+    \bottomrule
+    \end{tabular}
+    \caption{\textbf{Grid Search Summary for simple (leakytanh) Model.} This table depicts grid search results summary conducted on the simple (leakytanh) model. It has been done using only one model subset variant across all grid search in this thesis. The labels of each table symbolize: "lr" - learning rate, "N-CC" - normalized cross correlation, "P-CC" - pearson correlation coefficient.}
+    \label{tab:grid_simple_leakytanh}
+\end{table}
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{cccccc}
+    \toprule
+    lr & n-ls & n-nl & n-res & N-CC & P-CC \\
+    \midrule
+    0.000010 & 10 & 3 & True & 0.880114 & 0.715163 \\
+    0.000010 & 10 & 7 & True & 0.879289 & 0.714492 \\
+    0.000008 & 10 & 3 & True & 0.878549 & 0.713885 \\
+    0.000008 & 10 & 7 & True & 0.878224 & 0.713618 \\
+    0.000008 & 10 & 5 & True & 0.877150 & 0.712746 \\
+    0.000010 & 5 & 5 & True & 0.876449 & 0.712174 \\
+    0.000010 & 5 & 7 & True & 0.871925 & 0.708491 \\
+    0.000010 & 10 & 5 & True & 0.871830 & 0.708410 \\
+    0.000008 & 5 & 5 & True & 0.866316 & 0.703933 \\
+    0.000010 & 5 & 3 & True & 0.860474 & 0.699177 \\
+    0.000008 & 5 & 7 & True & 0.857937 & 0.697110 \\
+    0.000010 & 5 & 5 & False & 0.854195 & 0.694092 \\
+    0.000010 & 10 & 3 & False & 0.825813 & 0.670711 \\
+    0.000008 & 10 & 3 & False & 0.813353 & 0.660599 \\
+    0.000010 & 10 & 5 & False & 0.798817 & 0.648800 \\
+    0.000010 & 5 & 3 & False & 0.766755 & 0.623028 \\
+    0.000008 & 5 & 7 & False & 0.759580 & 0.617220 \\
+    0.000008 & 10 & 7 & False & 0.751363 & 0.610289 \\
+    0.000008 & 5 & 5 & False & 0.723905 & 0.587979 \\
+    0.000010 & 10 & 7 & False & 0.722965 & 0.587225 \\
+    0.000008 & 10 & 5 & False & 0.626814 & 0.509143 \\
+    0.000008 & 5 & 3 & True & 0.295512 & 0.240123 \\
+    0.000008 & 5 & 3 & False & 0.008394 & 0.006809 \\
+    0.000010 & 5 & 7 & False & -0.259292 & -0.210666 \\
+    \bottomrule
+    \end{tabular}
+    \caption{\textbf{Grid Search Summary for dnn joint Model.} This table depicts grid search results summary conducted on the dnn joint model. It has been done using only one model subset variant across all grid search in this thesis. The labels of each table symbolize: "lr" - learning rate, "n-ls" - layer size of the module of neuron, "n-nl" - number of layers of the neuron module, "n-res" - flag whether the neuron module use residual connection, "N-CC" - normalized cross correlation, "P-CC" - pearson correlation coefficient.}
+    \label{tab:grid_dnn_joint}
+\end{table}
+
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{cccc}
+    \toprule
+    lr & n-tbptt & N-CC & P-CC \\
+    \midrule
+    0.000030 & 10 & 0.933978 & 0.758967 \\
+    0.000030 & 5 & 0.932902 & 0.758091 \\
+    0.000050 & 10 & 0.932787 & 0.757994 \\
+    0.000010 & 5 & 0.914351 & 0.743027 \\
+    0.000030 & 20 & 0.913769 & 0.742504 \\
+    0.000010 & 10 & 0.911943 & 0.741078 \\
+    0.000050 & 40 & 0.911054 & 0.740291 \\
+    0.000050 & 5 & 0.885195 & 0.719318 \\
+    0.000010 & 20 & 0.873075 & 0.709455 \\
+    0.000050 & 20 & 0.829914 & 0.674317 \\
+    0.000030 & 40 & 0.689550 & 0.560315 \\
+    0.000010 & 40 & 0.281750 & 0.228879 \\
+    \bottomrule
+    \end{tabular}
+    \caption{\textbf{Grid Search Summary for rnn separate Model.} This table depicts grid search results summary conducted on the rnn separate model. It has been done using only one model subset variant across all grid search in this thesis. The labels of each table symbolize: "lr" - learning rate, "n-tbptt" - number of TBPTT time steps, "N-CC" - normalized cross correlation, "P-CC" - pearson correlation coefficient.}
+    \label{tab:grid_rnn_separate}
+\end{table}
+
+"n-ls" - layer size of the module of neuron, "n-nl" - number of layers of the neuron module, "n-res" - flag whether the neuron module use residual connection, "s-ls" - layer size of the synaptic depression module, "s-nl" - number of layers of synaptic depression module, "n-tbptt" - number of TBPTT time steps.
+
+\begin{table}
+    \centering\footnotesize\sf
+    \begin{tabular}{cccc}
+    \toprule
+    lr & n-tbptt & N-CC & P-CC \\
+    \midrule
+    0.000030 & 5 & 0.904516 & 0.734752 \\
+    0.000050 & 10 & 0.858861 & 0.697665 \\
+    0.000010 & 5 & 0.826371 & 0.671237 \\
+    0.000010 & 10 & 0.728944 & 0.592099 \\
+    0.000050 & 5 & 0.678222 & 0.550937 \\
+    0.000030 & 10 & -0.016808 & -0.013631 \\
+    \bottomrule
+    \end{tabular}
+    \caption{\textbf{Grid Search Summary for synaptic adaptation Model.} This table depicts grid search results summary conducted on the synaptic adaptation model. It has been done using only one model subset variant across all grid search in this thesis. The labels of each table symbolize: "lr" - learning rate, "n-tbptt" - number of TBPTT time steps, "N-CC" - normalized cross correlation, "P-CC" - pearson correlation coefficient.}
+    \label{tab:grid_synaptic_adaptation}
+\end{table}
+
+
