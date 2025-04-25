@@ -3,7 +3,7 @@
 
 This chapter begins with a description of the experimental setup and key assumptions. We then give a brief overview of the dataset. The main section evaluates and compares different versions of our model, focusing on how each added component affects performance. Finally, we explore how the model's performance depends on the number of training experiments.
 
-To simplify notation throughout this chapter, we use the following abbreviations for the model layers: X\_ON and X\_OFF represent the LGN ON and OFF cell populations. V1\_Exc\_L4 and V1\_Inh\_L4 refer to the excitatory and inhibitory cell populations in V1 layer 4, and V1\_Exc\_L23 and V1\_Inh\_L23 refer to those in V1 layer 2/3. These match the layer names used in our model code and will be used consistently throughout.
+To simplify notation throughout this chapter, we use the following abbreviations for the model layers: X\_ON and X\_OFF represent the LGN ON and OFF cell populations. V1\_Exc\_L4 and V1\_Inh\_L4 refer to the excitatory and inhibitory cell populations in V1 layer IV, and V1\_Exc\_L23 and V1\_Inh\_L23 refer to those in V1 layer II/III. These match the layer names used in our model code and will be used consistently throughout.
 
 \section{Experimental Setup and Technicalities}
 \label{sec:experimental_setup}
@@ -36,7 +36,7 @@ As described in Section~\ref{subsubsec:time_bins_merging}, we merged the origina
 We begin by comparing the distribution of spike counts across all time bins for each binning size. We hypothesize the following:
 
 \begin{claim}[Distribution of Spike Counts Across All Time Bins]
-    The distribution of spike counts across time bins remains similar for bin sizes \{1, 5, 10, 15, 20\}~ms. This suggests that the temporal behavior of neuronal responses is largely preserved.
+    The distribution of spike counts across time bins remains similar for bin sizes $\{1, 5, 10, 15, 20\}$~ms. This suggests that the temporal behavior of neuronal responses is largely preserved.
 \end{claim}
 \label{claim:tim_bin_counts}
 

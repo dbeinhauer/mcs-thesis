@@ -1,3 +1,27 @@
 
 \chapwithtoc{Conclusion}
 
+This thesis focused on developing a recurrent neural network (RNN) that mimics the spiking activity of a spiking neural network (SNN) modeling the cat's primary visual cortex (V1), as proposed by \citet{antolik2024comprehensive}, while incorporating known biological constraints of the system. The overarching goal was to construct an explainable model of V1 using deep neural network techniques. Throughout the thesis, we arrived at several key findings.
+
+We first implemented a base RNN model whose architecture directly maps each neuron in the SNN to a corresponding neuron in the RNN, reflecting a simplified version of the biological V1's layered structure. Due to computational constraints, we limited the model to randomly selected subsets of neurons from each population and reduced the temporal resolution from 1~ms to 20~ms. We further introduced several biologically inspired modules to improve both model interpretability and performance. These included shared neural network modules per neuron, acting as trainable, complex replacements for standard activation functions, and synaptic depression modules that modify neuronal inputs in a manner analogous to biological synaptic depression.
+
+Our results demonstrate that the addition of biologically motivated modules improves model performance both in terms of general predictive metrics (such as normalized cross-correlation) and in capturing the temporal dynamics of neuronal responses, as reflected by temporal behavior curves across neuronal populations. The best-performing model variants showed promising fidelity in reproducing the temporal behavior of the SNN, supporting the notion that integrating anatomical constraints into deep neural network architectures holds significant promise for modeling neural activity.
+
+This hybrid modeling approach, which draws from the strengths of both deep learning and biologically grounded methods, may provide a scalable and interpretable framework for neural system modeling. Deep neural networks offer strong performance across various tasks and benefit from continuous improvements in scalability and training efficiency. By embedding biological constraints into their structure, we gain insights into neural function and mitigate the common criticism of DNNs as "black box" models.
+
+Importantly, this research contributes to the growing field of biologically inspired artificial intelligence. It demonstrates a practical method for combining the computational power of deep learning with the structural interpretability of biological modeling, laying the groundwork for future interdisciplinary applications in computational neuroscience, machine learning, and brain-computer interface development.
+
+However, several limitations emerged. Most notably, the models struggled to accurately predict spontaneous neuronal activity during blank stimulus phases, pointing to incomplete modeling of temporal behavior. In particular, the most biologically complex variant, the model incorporating synaptic depression, performed worse than expected. We attribute this to limited computational resources and the high complexity of the model. Furthermore, although this study benefited from full knowledge of the target model (the SNN), real-world scenarios often lack such ground truth data. Despite this advantage, reproducing the SNN's responses remains a challenging task, underscoring the inherent complexity of modeling the primary visual cortex.
+
+\subsection*{Future Work}
+In the end, we would like to outline the possible future research directions. 
+
+First, there is substantial room for improvement in hyperparameter tuning, particularly for the synaptic depression model. More fine-grained hyperparameter selection, extended training durations, and access to enhanced computational resources may resolve the shortcomings observed in our current implementation.
+
+Once these optimizations are in place, the model should be tested on real biological datasets. This would involve withholding some neuronal responses during training and evaluating the model's ability to predict these unseen targets—closely mimicking conditions typical in neuroscience, where only limited neuronal recordings are available.
+
+Upon successful performance under these conditions, the model should be fine-tuned using biological recordings, especially from macaque V1 tracking experiments, which were initially intended to be part of this thesis. Due to the complexity of the task, this component was deferred. However, strong performance on real biological data could mark a significant advancement in our capacity to model neural systems and improve our understanding of the visual cortex.
+
+Ultimately, we envision integrating this framework with the comprehensive SNN model of V1 by \citet{antolik2024comprehensive}, thus enabling deeper and more interpretable analyses of the visual system.
+
+Conclusively, this work represents a foundational step toward merging computational power with biological fidelity, bringing us closer to truly interpretable models of brain function.
