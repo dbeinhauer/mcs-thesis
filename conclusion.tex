@@ -14,13 +14,12 @@ Importantly, this research contributes to the growing field of biologically insp
 However, several limitations emerged. Most notably, the models struggled to accurately predict spontaneous neuronal activity during blank stimulus phases, pointing to incomplete modeling of temporal behavior. In particular, the most biologically complex variant, the model incorporating synaptic depression, performed worse than expected. We attribute this to limited computational resources and the high complexity of the model. Furthermore, although this study benefited from full knowledge of the target model (the SNN), real-world scenarios often lack such ground truth data. Despite this advantage, reproducing the SNN's responses remains a challenging task, underscoring the inherent complexity of modeling the primary visual cortex.
 
 \subsection*{Future Work}
-In the end, we would like to outline the possible future research directions. 
 
-First, there is substantial room for improvement in hyperparameter tuning, particularly for the synaptic depression model. More fine-grained hyperparameter selection, extended training durations, and access to enhanced computational resources may resolve the shortcomings observed in our current implementation.
+There is substantial room for improvement in hyperparameter tuning, particularly for the synaptic depression model. More fine-grained hyperparameter selection, extended training durations, and access to enhanced computational resources may resolve the shortcomings observed in our current implementation.
 
 Once these optimizations are in place, the model should be tested on real biological datasets. This would involve withholding some neuronal responses during training and evaluating the model's ability to predict these unseen targets—closely mimicking conditions typical in neuroscience, where only limited neuronal recordings are available.
 
-Upon successful performance under these conditions, the model should be fine-tuned using biological recordings, especially from macaque V1 tracking experiments, which were initially intended to be part of this thesis. Due to the complexity of the task, this component was deferred. However, strong performance on real biological data could mark a significant advancement in our capacity to model neural systems and improve our understanding of the visual cortex.
+Upon successful performance under these conditions, the model should be fine-tuned using biological recordings A strong performance on real biological data could mark a significant advancement in our capacity to model neural systems and improve our understanding of the visual cortex.
 
 Ultimately, we envision integrating this framework with the comprehensive SNN model of V1 by \citet{antolik2024comprehensive}, thus enabling deeper and more interpretable analyses of the visual system.
 

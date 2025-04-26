@@ -418,7 +418,7 @@ These results suggest that while feed-forward neuron modules may offer a slight 
 \subsubsection{RNN Neuronal Modules Variants}
 \label{{subsubsec:rnn_eval}}
 
-The results from previous model variants naturally lead us to explore the RNN neuronal module variants with the TBPTT (Truncated Backpropagation Through Time) algorithm. TBPTT enables the model to better account for temporal dependencies by allowing gradients to propagate through a defined number of time steps, thereby supporting more accurate modeling of dynamic behaviors in neuronal activity.
+ TBPTT enables the RNN model to better account for temporal dependencies by allowing gradients to propagate through a defined number of time steps, thereby supporting more accurate modeling of dynamic behaviors in neuronal activity.
 
 Although earlier models incorporate recurrent connections that introduce biological plausibility and support temporal self-modulation, they were trained using a \emph{teacher-forcing} strategy (\citet{NIPS2016_16026d60}). This approach resets the hidden states at each time step using the target neuronal responses, effectively preventing the model from learning temporal patterns across time. In contrast, the RNN variants evaluated in this section maintain hidden states across multiple time steps, enabling the model to learn from the temporal structure during training.
 
