@@ -50,7 +50,7 @@
 
 % Study programme and specialization
 \def\StudyProgramme{Bioinformatics}
-\def\StudyBranch{N-BINF}
+\def\StudyBranch{Bioinformatics}
 
 \def\Dedication{%
 I express my sincere gratitude to my supervisor, 
@@ -62,37 +62,23 @@ my studies.
 }
 
 \def\AbstractEN{
-    In this project, we develop a biologically inspired recurrent deep neural
-    network (DNN) model of the primary visual cortex (V1) to study the 
-    spatio-temporal dynamics of neuronal responses. The model incorporates key 
-    biological constraints, including cortical layering, excitatory-inhibitory
-    differentiation, and synaptic adaptation.
-    Additionally, we introduce shared DNN modules trained to capture
-    the complex non-linear activation functions of real-life neurons. Our
-    dataset consists of artificially generated data from a spiking model of 
-    the cat's V1. We train our model to replicate neuronal responses in
-    layer IV (LIV) and layers II and III (LII/III) of V1 based on input from the lateral geniculate nucleus (LGN). 
-    Our study demonstrates strong agreement between our model and the spiking 
-    model in terms of correlation and spatio-temporal dynamics. Furthermore, 
-    incorporating more complex activation functions through the DNN module improves the model performance.
-% ABSTRACT IS NOT A COPY OF YOUR THESIS ASSIGNMENT!
+    Recent advances in computational neuroscience and machine learning have enabled increasingly sophisticated models of neuronal systems. However, standard deep neural networks (DNNs) often prioritize task performance over biological plausibility, limiting their ability to capture complex neural dynamics.
+
+    In this thesis, we propose a novel approach that integrates biologically inspired constraints into recurrent neural network (RNN) architectures to model the primary visual cortex (V1). Using synthetic data generated from a biologically detailed spiking neural network (SNN) model of cat V1, we develop RNN architectures incorporating anatomical structure alignment, excitatory-inhibitory neuron differentiation, biologically motivated neuronal modules, and synaptic depression mechanisms.
+
+    Our results show that RNN architectures without complex internal modules can predict mean neuronal responses but struggle to capture full system dynamics. Introducing shared DNN neuron modules improves dynamics slightly, while RNN-based neuron modules substantially enhance the temporal fidelity of predictions. Conversely, synaptic depression modules did not improve performance, likely due to computational constraints and suboptimal hyperparameter tuning.
+
+    This work demonstrates the promise of combining deep learning with biological realism to bridge the gap between predictive accuracy and interpretability, laying the groundwork for future applications to real neural recordings.
 }
 
-\def\AbstractCS{%
-    Tato práce je zaměřena na vývoj biologicky inspirovaného modelu primární
-    zrakové kůry (V1) s využitím hlubokých rekurentních neuronových
-    sítí (DNN) pro analýzu časoprostorové dynamiky neuronálních odpovědí. 
-    Model zahrnuje klíčová biologická omezení, jako jsou dělení do vrstev,
-    diferenciace na excitační a inhibiční neurony a synaptická adaptace.
-    Dále představujeme sdílené DNN moduly trénované pro zachycení komplexních
-    nelineárních aktivačních funkcí skutečných neuronů. Naše data pocházejí z
-    uměle generovaných dat z tzv. "spiking" modelu kočičí V1. Při trénování 
-    našeho modelu cílíme na replikaci neuronálních odpovědí ve vrstvě IV (LIV) 
-    a vrstvách  II a III (LII/III) V1 na základě vstupů z laterálního genikulárního jádra
-    (LGN). Výsledky naší studie ukazují mají silnou shodu mezi oběma modely 
-    vzhledem ke korelaci neuronových odpovědí a časoprostorové dynamice. 
-    Dále ukazujeme, že použití složitějších aktivačních funkcí neuronů s pomocí
-    sdílených DNN modulů zlepšuje výsledky modelu.
+\def\AbstractCS{
+    Nedávné pokroky v oboru výpočetních neurověd a strojového učení umožnily vývoj čím dál komplexnějších modelů neurálních systémů. Nicméně, standardní hluboké neurální sítě (DNN) často prioritizují celkovou úspěšnost v řešení zadaného problému nad biologickou interpretací, což limituje schopnost modelu zachytit komplexní neurální dynamiku.
+
+    V rámci této práce navrhujeme nový způsob modelování kombinující biologické znalosti systému pro návrh modelů rekurentních neurálních sítí (RNN) primární zrakové kůry (V1). Za použití syntetických dat vygenerovaných z biologicky detailního impulzivního modelu neuronové sítě (SNN) kočičího V1, jsme vyvinuli RNN s anatomicky odpovídající architekturou rozlišující excitační a inhibiční neurony, používající biologicky motivované moduly neuronů a zapojující mechanismy synaptické deprese.
+
+    Naše výsledky ukazují, že RNN síť bez použití komplexních modulů neuronů může predikovat průměrné neurální odpovědi, ale zaostává v zachycení komplexní dynamiky systému. Zapojení DNN modulů neuronů mírně zlepšuje dynamiku, nicméně výrazné zlepšení v predikci dynamiky systému přináší až zapojení RNN modulů neuronů. Naproti tomu moduly synaptické deprese nezlepšují dynamiku sítě, pravděpodobně kvůli výpočetním omezením a neoptimální volbě hyperparametrů.
+
+    Tato práce vykazuje potenciál kombinace hlubokých neurálních sítí s biologickými znalostmi umožňující kombinaci přesnosti predikcí s interpretovatelností a vytváří základy pro budoucí aplikace na reálných experimentálních datech.
 }
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces.
