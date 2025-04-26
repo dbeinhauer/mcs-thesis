@@ -95,7 +95,7 @@ The validation and test datasets comprise 18 stimulus sequences, each with 50 st
 \subsubsection{Neuron Subset Selection}
 \label{subsubsec:subset_selection}
 
-To build a biologically plausible RNN model that mirrors the structure in \citet{antolik2024comprehensive}, one would ideally create a one-to-one mapping between model neurons and biological neurons. However, given the lack of structural constraints (e.g., known spatial synaptic constraints) and the impracticality of modeling over 100,000 neurons, we adopt an all-to-all connectivity scheme with neuron subsampling.
+To build a biologically plausible RNN model that mirrors the structure in \citet{antolik2024comprehensive}, one would ideally create a one-to-one mapping between model neurons and SNN neurons. However, given the lack of structural constraints (e.g., known spatial synaptic constraints) and the impracticality of modeling over 100,000 neurons, we adopt an all-to-all connectivity scheme with neuron subsampling.
 
 We randomly select 10\% of neurons from each population to reduce model complexity and memory consumption, making the model more tractable during training and fine-tuning. To mitigate sampling bias, we run experiments using 20 different random neuron subsets. Empirical testing has shown that using this 10\% subset produces performance metrics similar to those obtained with larger neuron subsets. Further evaluation of this design choice is presented in the next chapter.
 
@@ -161,6 +161,8 @@ We define the operation of each RNN layer as follows:
     Let $L$ be a layer with $m_h \in \mathbb{N}$ neurons. Let $x \in \mathbb{R}^{m_{in}}$ be the input vector, where $m_{in} \in \mathbb{N}$ is the number of input neurons. Let $W_{ih} \in \mathbb{R}^{m_h \times m_{in}}$ and $b_{ih} \in \mathbb{R}^{m_h}$ be the input weight matrix and bias vector. Let $h \in \mathbb{R}^{m_h}$ be the previous hidden state of the layer, with recurrent weights $W_{hh} \in \mathbb{R}^{m_h \times m_h}$ and bias $b_{hh} \in \mathbb{R}^{m_h}$. Let $f: \mathbb{R}^{m_h} \to \mathbb{R}^{m_h}$ be an activation function. Then the updated hidden state $h'$ is calculated as:
     
     $$h' = f\left(W_{ih}x + b_{ih} + W_{hh}h + b_{hh}\right)$$
+
+    \textbf{Note:} The input vector $x$ aggregates neuronal responses from all input layers connected to the target layer. These inputs may include both the responses from LGN neurons (designated as input layer neurons) and from other layers that project to the target layer. 
 \end{defn}
 \label{def:base_neuron}
 
@@ -177,8 +179,6 @@ In contrast, the original SNN uses a connection probability that decreases with 
 At each time step $t$, the model's output consists of the concatenated outputs from all four RNN layers:
 
 $$\hat{R}(t) = (E_4(t); I_4(t); E_{2/3}(t); I_{2/3}(t))$$
-
-While the output could potentially be interpreted as categorical, we frame our task as a regression problem. This choice reflects current practice in the field and acknowledges the lack of standardized loss and evaluation metrics for neural response prediction tasks.
 
 \subsubsection{Time Bins Merging}
 \label{subsubsec:time_bins_merging}

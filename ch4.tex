@@ -3,7 +3,7 @@
 
 This chapter begins with a description of the experimental setup and key assumptions. We then give a brief overview of the dataset. The main section evaluates and compares different versions of our model, focusing on how each added component affects performance. Finally, we explore how the model's performance depends on the number of training experiments.
 
-To simplify notation throughout this chapter, we use the following abbreviations for the model layers: X\_ON and X\_OFF represent the LGN ON and OFF cell populations. V1\_Exc\_L4 and V1\_Inh\_L4 refer to the excitatory and inhibitory cell populations in V1 layer IV, and V1\_Exc\_L23 and V1\_Inh\_L23 refer to those in V1 layer II/III. These match the layer names used in our model code and will be used consistently throughout.
+To simplify notation throughout this chapter, we use the following abbreviations for the model layers: X\_ON and X\_OFF represent the LGN ON and OFF cell populations. V1\_Exc\_L4 and V1\_Inh\_L4 refer to the excitatory and inhibitory cell populations in V1 layer IV, and V1\_Exc\_L23 and V1\_Inh\_L23 refer to those in V1 layer II/III. These match the layer names used in the SNN model code and will be used consistently throughout.
 
 \section{Experimental Setup and Technicalities}
 \label{sec:experimental_setup}
@@ -278,9 +278,9 @@ We follow a consistent naming convention for the models, primarily based on defi
 \begin{itemize}
     \item \textbf{simple (tanh)}: A simple model with a tanh activation function (Section~\ref{subsec:base_model_architecture}).
     \item \textbf{simple (leakytanh)}: A simple model using a leakytanh activation function (Section~\ref{subsubsec:leakytanh}).
-    \item \textbf{dnn joint}: A model using feed-forward joint neuron modules (Section~\ref{subsubsec:dnn_neuron}).
-    \item \textbf{dnn separate}: A model using feed-forward separate neuron modules  (Section~\ref{subsubsec:dnn_separate}).
-    \item \textbf{rnn (5 steps)}: A model using RNN neuron modules with 5 TBPTT (Truncated Backpropagation Through Time) steps (Section~\ref{subsubsec:rnn_neuron_module}).
+    \item \textbf{dnn joint}: A model using feed-forward joint neuron modules (Section~\ref{subsubsec:dnn_neuron}), where the input processing does not differentiate between excitatory and inhibitory neuronal populations.
+    \item \textbf{dnn separate}: A model using feed-forward separate neuron modules  (Section~\ref{subsubsec:dnn_separate}), where the input processing differentiates between excitatory and inhibitory neuronal populations.
+    \item \textbf{rnn (5 steps)}: A model using RNN neuron modules with 5 TBPTT steps (Section~\ref{subsubsec:rnn_neuron_module}).
     \item \textbf{rnn (10 steps)}: A model using RNN neuron modules with 10 TBPTT steps.
     \item \textbf{syn adapt lgn (5 steps)}: A model using RNN neuron modules also with synaptic depression modules applied only to LGN connections, using 5 TBPTT steps (Section~\ref{subsubsec:synaptic_depression}). The term \textit{adapt} refers to the naming in our implementation of the module.
 \end{itemize}
@@ -347,7 +347,7 @@ The RNN-based models (rnn (5 steps), rnn (10 steps) and syn adapt lgn (5 steps))
 
 Another potential reason why the simple and feed-forward models perform reasonably well could be their ability to capture the mean spiking pattern of the neuronal populations. As previously discussed in Section~\ref{subsec:deep_learning_approach}. The predicted responses are relatively sparse, and high correlation values may partly reflect this sparsity rather than true predictive accuracy. In contrast, the improved performance observed in TBPTT-based models may reflect their enhanced ability to model temporal dynamics in neuronal activity.
 
-Interestingly, the dnn separate model exhibits a high degree of variability across subsets, which is unexpected. Although designed to separate excitatory and inhibitory processing and initially showed results similar to dnn joint during development, its inconsistency may be due to the limited number of subsets (20), or it could reflect limitations in the model architecture when dealing with separate pathways. Additional experiments with a larger number of subsets would be needed to draw firmer conclusions.
+Interestingly, the dnn separate model exhibits a high degree of variability of correlation coefficients across subsets, which is unexpected. Although designed to separate excitatory and inhibitory processing and initially showed results similar to dnn joint during development, its inconsistency may be due to the limited number of subsets (20), or it could reflect limitations in the model architecture when dealing with separate pathways. Additional experiments with a larger number of subsets would be needed to draw firmer conclusions.
 
 The top-performing model overall is rnn (10 steps), which achieves the highest mean normalized correlation and maintains consistent performance across subsets. Increasing the number of TBPTT steps appears beneficial, though further increases were limited by computational constraints.
 
@@ -420,7 +420,7 @@ These results suggest that while feed-forward neuron modules may offer a slight 
 
  TBPTT enables the RNN model to better account for temporal dependencies by allowing gradients to propagate through a defined number of time steps, thereby supporting more accurate modeling of dynamic behaviors in neuronal activity.
 
-Although earlier models incorporate recurrent connections that introduce biological plausibility and support temporal self-modulation, they were trained using a \emph{teacher-forcing} strategy (\citet{NIPS2016_16026d60}). This approach resets the hidden states at each time step using the target neuronal responses, effectively preventing the model from learning temporal patterns across time. In contrast, the RNN variants evaluated in this section maintain hidden states across multiple time steps, enabling the model to learn from the temporal structure during training.
+Although earlier models incorporated recurrent connections to enhance biological plausibility and support temporal self-modulation, they were trained exclusively using a \emph{teacher-forcing} strategy (\citet{NIPS2016_16026d60}). In contrast, the RNN variants evaluated in this section preserve hidden states across multiple time steps by utilizing both the teacher-forcing strategy and TBPTT, allowing the model to learn directly from the temporal structure during training.
 
 Figures~\ref{fig:synchrony_curve_rnn_5} and~\ref{fig:synchrony_curve_rnn_10} display the temporal spiking dynamics curves for models using RNN neuron modules trained with TBPTT over 5 and 10 time steps, respectively. Both models demonstrate an improvement in capturing temporal dynamics, particularly in the early phase of natural stimulus presentation. This phase is characterized by heightened spiking activity, which the TBPTT models successfully reproduce.
 
@@ -449,9 +449,9 @@ These findings indicate that models based on RNN neuronal modules trained with T
 \subsubsection{Synaptic Depression Model}
 \label{{subsubsec:syn_adap_lgn_5}}
 
-In the final part of our temporal spiking dynamics curve analysis, we turn to the evaluation of a model incorporating a synaptic depression module. As discussed previously, the temporal dynamics of spontaneous neuronal responses during the blank stimulus phase remain inadequately captured by earlier models. This motivates the integration of synaptic depression mechanisms, which aim to more accurately model the adaptive response of different neuronal populations and improve temporal fidelity.
+In the final part of our temporal spiking dynamics curve analysis, we turn to the evaluation of a model incorporating a synaptic depression module. As discussed previously, the temporal dynamics of spontaneous neuronal responses during the blank stimulus phase remain inadequately captured by earlier models. This motivates the integration of synaptic depression mechanisms, which aim to more accurately model the adaptive response of an individual synapses and improve temporal fidelity.
 
-Experiments with synaptic depression were conducted on a model variant utilizing 5 TBPTT time steps, with the depression mechanism applied specifically to LGN connections. This choice reflects biological evidence indicating that LGN synapses are particularly influenced by synaptic depression. The resulting temporal spiking dynamics curve is shown in Figure~\ref{fig:synchrony_curve_syn_adapt_lgn_5}.
+Synaptic depression experiments were performed on a variant model utilizing five TBPTT time steps, with the depression mechanism applied specifically to LGN connections. This choice reflects biological evidence indicating that LGN synapses are particularly influenced by synaptic depression. The resulting temporal spiking dynamics curve is shown in Figure~\ref{fig:synchrony_curve_syn_adapt_lgn_5}.
 
 \begin{figure}
     \centering
@@ -460,7 +460,7 @@ Experiments with synaptic depression were conducted on a model variant utilizing
     \label{fig:synchrony_curve_syn_adapt_lgn_5}
 \end{figure}
 
-This experimental configuration was chosen due to technical constraints. The inclusion of synaptic depression in RNNs dramatically increases memory requirements, especially with longer TBPTT sequences, necessitating high-memory GPU resources. Additionally, training times were significantly extended. As a result, a comprehensive grid search to optimize hyperparameters was not feasible. The hyperparameters used for this model were selected empirically, without the level of tuning applied to other model variants. These limitations likely contributed to the model's suboptimal performance and the inconsistencies observed in its predictions.
+This experimental configuration was chosen due to technical constraints. The inclusion of synaptic depression in RNNs dramatically increases memory requirements, especially with longer TBPTT sequences, necessitating high-memory GPU resources. Additionally, training times were significantly extended. As a result, a comprehensive grid search to optimize hyperparameters was not feasible. The hyperparameters used for this model were selected empirically, without the level of tuning applied to other model variants.
 
 The temporal spiking dynamics curve shows that, while the model performs better than non-TBPTT variants, it underperforms relative to RNN models without synaptic depression. Notably, performance appears degraded across the entire stimulus timeline. There is reduced accuracy in modeling the transition from natural to blank stimuli and diminished representation of average neuronal responses in later stages. Furthermore, the model fails to improve prediction of spontaneous responses during the blank phase.
 
@@ -494,7 +494,7 @@ Up to this point, we have compared various model architectures and concluded tha
 \subsection{Free vs Teacher-Forced Prediction Analysis}
 \label{{subsec:free_vs_teacher_forced_predictions}}
 
-We begin by comparing two evaluation strategies: teacher-forced prediction, in which the model's hidden states are reset at each time step using ground truth responses, and free prediction, where the model autonomously generates sequences without external correction. This comparison focuses mainly on the top-performing TBPTT-trained models, which not only yield superior performance but also exhibit a higher degree of biological plausibility.
+We begin by comparing two evaluation strategies: free prediction, where the model generates sequences autonomously starting from initial conditions without external corrections, and teacher-forced prediction, where the model’s hidden state is reset at each time step using the ground truth neuronal responses. In previous evaluations, we relied solely on free prediction, allowing errors in the model’s internal state to accumulate over time. By introducing teacher-forced prediction, we aim to assess whether these accumulated internal state errors significantly impact performance. This comparison focuses primarily on the top-performing TBPTT-trained models, which not only achieve superior predictive accuracy but also maintain a higher degree of biological plausibility.
 
 Figure~\ref{fig:boxplot_models_pearson_synchrony_different_layers} presents the distribution of Pearson correlation coefficients between model predictions and target temporal spiking dynamics curves, separated by layer and prediction mode, excluding the simple (tanh) model.
 
@@ -507,7 +507,8 @@ Figure~\ref{fig:boxplot_models_pearson_synchrony_different_layers} presents the 
 
 As observed previously, the dnn separate model exhibits inconsistent behavior. Interestingly, performance varies across layer types. TBPTT-trained models consistently outperform others across majority of layers, although their advantage is less significant in excitatory layers. This discrepancy may be attributed to the relatively sparse activity of excitatory neurons. Since non-TBPTT models tend to approximate mean responses well, they may outperform TBPTT models in these layers. In contrast, TBPTT models achieve superior performance in inhibitory layers, which exhibit higher spiking activity.
 
-Another notable observation is that teacher-forced predictions often match or exceed the performance of free predictions in TBPTT models. This result is expected: well-trained TBPTT models should already predict subsequent hidden states with high accuracy, making the teacher-forced reset only a minor adjustment. In some cases, this reset may even improve predictions by initializing the model with more accurate hidden states.
+
+Another notable observation is that teacher-forced predictions often match or slightly exceed the performance of free predictions in TBPTT-trained models. This result is both surprising and encouraging: one would expect teacher-forcing to consistently improve predictions by minimizing errors accumulated through imperfect hidden state updates over time. The fact that free and teacher-forced predictions perform similarly suggests that the model has successfully learned to capture the temporal dynamics of the system, maintaining accurate internal representations even without external correction.
 
 Interestingly, the largest improvement under teacher-forced prediction is seen in the synaptic depression model. This suggests that the model may not be effectively learning temporal dependencies, and that extending the TBPTT horizon or increasing training duration could enhance performance.
 
@@ -722,7 +723,7 @@ Moreover, the limited training duration and use of only 5 TBPTT steps likely con
 \label{subsec:train_size_dataset_depencdency}
 In the final part of our experimental analysis, we briefly examine how the size of the training dataset influences model performance, as measured by normalized cross-correlation (CC). For this investigation, we utilized the dnn joint model due to its relatively low computational cost and its inclusion of a neuron module in the architecture. Each model was trained for 10 epochs using the same setup as described in Table~\ref{tab:evaluation_setup}, and trained on the same model subset as used in the grid search.
 
-Our initial goal was to evaluate the model's performance across the full range of training dataset sizes, increasing in 2\% increments. However, due to computational limitations, we were only able to evaluate model performance for training dataset ratios in the range $[0.02, 0.54]$ with step increments of 0.02. The results are visualized in Figure~\ref{fig:train_size_cc_norm_dependency}.
+Our initial goal was to evaluate the model's performance across the full range of training dataset sizes, defined comprehensively in Section~\ref{subsubsec:train_dataset}, increasing in 2\% increments. However, due to computational limitations, we were only able to evaluate model performance for training dataset ratios in the range $[0.02, 0.54]$ with step increments of 0.02. The results are visualized in Figure~\ref{fig:train_size_cc_norm_dependency}.
 
 \begin{figure}
     \centering
