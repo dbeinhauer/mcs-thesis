@@ -40,24 +40,26 @@ Each stimulus sequence begins with a blank interval of duration $t_{\text{blank}
 
 \subsection{Experiment Definition}
 \label{subsec:experiment}
-To facilitate processing and reduce memory demands, stimulus sequences are divided into smaller units called \emph{experiments}. Each experiment consists of the second half of a blank interval, the corresponding stimulus interval, and the first half of the following blank interval. This ensures that the neural activity at the boundaries of the stimulus reflects spontaneous states.
+To facilitate processing and reduce memory demands, stimulus sequences are divided into smaller units referred to as \emph{experiments}. Each experiment consists of a natural stimulus sequence immediately followed by a blank stimulus interval. This design ensures that the neural activity at the boundaries of each stimulus reflects a spontaneous, baseline state.
 
 \begin{defn}[Experiment]
-    Let $S$ be a stimulus sequence consisting of $N \in \mathbb{N}$ pairs of blank and stimulus intervals $(b_i, s_i)$. Let $l_b \in \N$ and $l_s \in \N$ be the lengths of the blank and stimulus intervals, respectively. Then, for $j \in [1, 2, \dots, N-1]$, an experiment is defined as:
+    Let $S$ be a stimulus sequence consisting of $N \in \mathbb{N}$ pairs of blank and stimulus intervals $(b_i, s_i)$. An experiment for each pair index $j \in {1, 2, \dots, N-1}$ is defined as:
 
     $$
-    \left(b_j\left[\frac{l_b}{2}:l_b\right]; s_j; b_{j+1}\left[0:\frac{l_b}{2}\right]\right)
+    \left(s_j; b_{j+1}\right)
     $$
 
     The final experiment omits the trailing blank interval:
 
     $$
-    \left(b_N\left[\frac{l_b}{2}:l_b\right]; s_N\right)
+    \left(s_N\right)
     $$
 \end{defn}
 \label{def:experiment}
 
-To maintain consistency, the first half of the initial blank interval is omitted. While this results in minimal data loss, it facilitates uniform formatting. Experiments lacking a post-stimulus blank interval are padded with zeros.
+To maintain consistency, the initial blank interval preceding the first stimulus is omitted. While this results in minimal data loss, it simplifies the formatting and processing of experimental sequences. For cases where a post-stimulus blank interval is missing, zero-padding is applied to ensure uniformity.
+
+This splitting strategy is motivated by the original design of the stimulus sequence. The inclusion of blank intervals aims to capture spontaneous neuronal activity and reset neural responses to a baseline state uninfluenced by preceding stimuli. Based on this rationale, we empirically assert that starting each experiment with a natural stimulus should consistently provide neuronal responses representative of spontaneous activity. Consequently, partitioning the sequence into smaller experiments should not result in significant information loss compared to passing the entire stimulus sequence at once.
 
 \subsection{Dataset Preprocessing}
 \label{subsec:dataset_preprocess}

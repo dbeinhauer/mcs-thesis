@@ -135,24 +135,24 @@ Importantly, the overall distribution shape is preserved across bin sizes. This 
     \label{fig:correlation_time_bin_size}
 \end{figure}
 
-\subsubsection{Synchrony of Neuronal Populations in Different Time Bins}
+\subsubsection{Population Spike Count per Time Bin}
 \label{subsubsec:neuron_synchrony_binning}
 
-Lastly, we evaluate how time binning affects synchrony, the proportion of neurons firing simultaneously within the same time bin. Synchrony provides insight into the collective temporal dynamics of neuronal populations and is widely studied in neuroscience (\citet{Singer1999}).
+Lastly, we assess how time binning influences the number of neurons spiking simultaneously within a single time bin. Throughout the analysis, we refer to this measure, the proportion of neurons active at each time step, as the \emph{population spike count}. Population spike count provides insight into the collective temporal dynamics of neuronal populations and is widely studied in neuroscience (\citet{Singer1999}).
 
-Our analysis focuses on the mean synchrony across all time steps. We state the following:
+Our analysis focuses on the mean population spike count across all time steps. We state the following:
 
-\begin{claim}[Synchrony of Neuronal Populations Across Time Bins]
-    The mean synchrony of neuronal populations remains consistent across different time bin sizes. This implies that temporal structure of the dataset is largely preserved.
+\begin{claim}[Population Spike Count of Neuronal Populations Across Time Bins]
+    The mean population spike count of neuronal populations remains consistent across different time bin sizes. This implies that temporal structure of the dataset is largely preserved.
 \end{claim}
 \label{claim:synchrony_time_bins_size}
 
-Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_time_test} show synchrony distributions for each layer in the training and test datasets. Tables~\ref{tab:synchrony_time_bins_summary_train} and~\ref{tab:synchrony_time_bins_summary_test} summarize the mean and variance of synchrony values.
+Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_time_test} show population spike count distributions for each layer in the training and test datasets. Tables~\ref{tab:synchrony_time_bins_summary_train} and~\ref{tab:synchrony_time_bins_summary_test} summarize the mean and variance of population spike count values.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.92\linewidth]{img/plots/synchrony_boxplot_time_bins_train.pdf}
-    \caption{Distribution of mean population synchrony across different time bin sizes for all neuronal populations in the train dataset. The boxplot represents the distribution of mean synchrony values calculated across all experiments}
+    \caption{Distribution of mean population spike count across different time bin sizes for all neuronal populations in the train dataset. The boxplot represents the distribution of mean population spike count values calculated across all experiments}
     \label{fig:boxplot_synchrony_time_train}
 \end{figure}
 
@@ -160,7 +160,7 @@ Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_ti
 \begin{figure}
     \centering
     \includegraphics[width=0.92\linewidth]{img/plots/synchrony_boxplot_time_bins_test.pdf}
-    \caption{Distribution of mean population synchrony across different time bin sizes for all neuronal populations in the test dataset. The boxplot represents the distribution of mean synchrony values calculated across all experiments}
+    \caption{Distribution of mean population spike count across different time bin sizes for all neuronal populations in the test dataset. The boxplot represents the distribution of mean population spike count values calculated across all experiments}
     \label{fig:boxplot_synchrony_time_test}
 \end{figure}
 
@@ -178,7 +178,7 @@ Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_ti
     \addlinespace % a nice non-intrusive separator of data groups (or final table sums)
     \bottomrule
     \end{tabular}
-    \caption{\textbf{Summary of synchrony statistics across time bin sizes in the train dataset:} This table reports the mean and variance of population synchrony across all layers for each time bin size.}
+    \caption{\textbf{Summary of population spike count statistics across time bin sizes in the train dataset:} This table reports the mean and variance of population spike count across all layers for each time bin size.}
     \label{tab:synchrony_time_bins_summary_train}
 \end{table}
 
@@ -196,14 +196,13 @@ Figures~\ref{fig:boxplot_synchrony_time_train} and~\ref{fig:boxplot_synchrony_ti
     \addlinespace % a nice non-intrusive separator of data groups (or final table sums)
     \bottomrule
     \end{tabular}
-    \caption{\textbf{Summary of synchrony statistics across time bin sizes in the test dataset:} This table reports the mean and variance of population synchrony across all layers for each time bin size.}
+    \caption{\textbf{Summary of population spike count statistics across time bin sizes in the test dataset:} This table reports the mean and variance of population spike count across all layers for each time bin size.}
     \label{tab:synchrony_time_bins_summary_test}
 \end{table}
 
-Synchrony increases with larger time bins, reflecting a higher likelihood of coincident spiking. This effect is most pronounced in LGN layers, especially X\_ON, while V1 excitatory layers show a milder change. These findings suggest that while synchrony is affected by bin size, the overall temporal dynamics are preserved.
+Population spike count increases with larger time bins, reflecting a higher likelihood of coincident spiking. This effect is most pronounced in LGN layers, especially X\_ON, while V1 excitatory layers show a milder change.
 
-We conclude that a bin size of 20~ms strikes a practical balance between maintaining temporal fidelity, minimizing data noise, and ensuring computational efficiency.
-
+Based on these findings, we conclude that a binning size of 20~ms influences the temporal dynamics of neuronal responses and may consequently affect the resulting neuronal predictions. However, due to the computational complexity of our task, it was not feasible to develop and train models using a smaller time bin size. Therefore, this limitation must be carefully considered during both model development and the interpretation of results.
 
 \subsection{Model Subset Selection Analysis}
 \label{subsec:subset_selection_analysis}
@@ -250,22 +249,22 @@ Next, we compare the temporal spike count distributions of the subset datasets w
 The plot demonstrates that the mean temporal patterns of the subsets closely match those of the full dataset. The small standard deviation further confirms that the temporal properties are preserved despite the neuron subset selection.
 
 
-\subsubsection{Synchrony of Neuronal Populations in Subsets}
+\subsubsection{Population spike count of Neuronal Populations in Subsets}
 \label{subsubsec:neuron_synchrony_subset}
-Finally, we assess the effect of subset selection on neuronal synchrony. Since we are using only a portion of the neurons from the full model, it is possible that groups of neurons that typically spike together may be disrupted, potentially affecting synchrony.
+Finally, we assess the effect of subset selection on neuronal population spike count. Since we are using only a portion of the neurons from the full model, it is possible that groups of neurons that typically spike together may be disrupted, potentially affecting population spike count.
 
-Figure~\ref{fig:boxplot_synchrony_subset} displays a boxplot and jitter plot comparing the synchrony values of the full dataset and all subsets.
+Figure~\ref{fig:boxplot_synchrony_subset} displays a boxplot and jitter plot comparing the population spike count values of the full dataset and all subsets.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/synchrony_comparison_subset_full_train.pdf}
-    \caption{Boxplot and jitter plot comparing population synchrony values between the full dataset and all subsets. Each data point represents the mean synchrony of one experiment.}
+    \caption{Boxplot and jitter plot comparing population population spike count values between the full dataset and all subsets. Each data point represents the mean population spike count of one experiment.}
     \label{fig:boxplot_synchrony_subset}
 \end{figure}
 
-As shown, the synchrony distributions are largely similar, particularly in the excitatory layers. This aligns with earlier findings that synchrony variance was low across time bins. Although the jitter plot suggests a slightly narrower spread in the LGN layers for the subsets, the boxplots do not indicate a significant difference.
+As shown, the population spike count distributions are largely similar, particularly in the excitatory layers. This aligns with earlier findings that population spike count variance was low across time bins. Although the jitter plot suggests a slightly narrower spread in the LGN layers for the subsets, the boxplots do not indicate a significant difference.
 
-Based on these observations, we conclude that random selection of 10\% of neurons from the full SNN model does not substantially affect the dataset's statistical or temporal properties. Nevertheless, slight changes in synchrony, particularly in LGN layers, should be taken into account when interpreting model performance results.
+Based on these observations, we conclude that random selection of 10\% of neurons from the full SNN model does not substantially affect the dataset's statistical or temporal properties. Nevertheless, slight changes in population spike count, particularly in LGN layers, should be taken into account when interpreting model performance results.
 
 \section{Model Evaluation}
 \label{sec:model_evaluation}
@@ -354,63 +353,63 @@ The top-performing model overall is rnn (10 steps), which achieves the highest m
 
 An unexpected observation is that the syn adapt lgn (5 steps) model underperforms compared to rnn neuron module variants without synaptic depression. This may be due to suboptimal hyperparameter tuning and insufficient number of TBPTT steps, which were not fully explored due to resource limitations.
 
-Finally, we analyze the synchrony patterns of model predictions by comparing their \emph{synchrony curves}, which represent the fraction of simultaneously spiking neurons at each time step (see Section~\ref{subsubsec:neuron_synchrony_binning}). Figure~\ref{fig:boxplot_models_overall_synchrony_pearson_comparison} shows the distribution of Pearson correlation coefficients for both overall predictions and synchrony curves. Note that simple (tanh) is excluded due to technical issues during evaluation.
+Finally, we analyze the population spike count patterns of model predictions by comparing their \emph{temporal spiking dynamics curves}, which represent the fraction of simultaneously spiking neurons at each time step (see Section~\ref{subsubsec:neuron_synchrony_binning}). Figure~\ref{fig:boxplot_models_overall_synchrony_pearson_comparison} shows the distribution of Pearson correlation coefficients for both overall predictions and temporal spiking dynamics curves. Note that simple (tanh) is excluded due to technical issues during evaluation.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/boxplot_model_comparison_synchrony_overall_pearson.pdf}
-    \caption{Boxplot comparing Pearson correlation coefficients for model predictions and synchrony curves across all layers and model subsets.}
+    \caption{Boxplot comparing Pearson correlation coefficients for model predictions and temporal spiking dynamics curves across all layers and model subsets.}
     \label{fig:boxplot_models_overall_synchrony_pearson_comparison}
 \end{figure}
 
-The variance in synchrony correlations is higher than in overall predictions for all models, particularly those trained with TBPTT. We hypothesize it is because these models better capture temporal dynamics. Notably, rnn (5 steps) slightly outperforms rnn (10 steps) in this metric, although this may be an artifact of limited subset size.
+The variance in population spike count correlations is higher than in overall predictions for all models, particularly those trained with TBPTT. We hypothesize it is because these models better capture temporal dynamics. Notably, rnn (5 steps) slightly outperforms rnn (10 steps) in this metric, although this may be an artifact of limited subset size.
 
-The dnn separate model again displays irregular behavior with wide variability in synchrony correlation. This could be due to its architecture, which might struggle with modeling complex input dynamics without memory, or due to technical issues that were not detected. Additional investigation with a more comprehensive dataset is necessary to confirm these findings.
+The dnn separate model again displays irregular behavior with wide variability in population spike count correlation. This could be due to its architecture, which might struggle with modeling complex input dynamics without memory, or due to technical issues that were not detected. Additional investigation with a more comprehensive dataset is necessary to confirm these findings.
 
 \subsection{Temporal Dynamics of Predicted vs. Actual Neural Activity}
 \label{subsec:prediction_target_comparison_variants}
 
-This section focuses on evaluating the temporal behavior of the model predictions. Specifically, we examine the synchrony curves of individual model variants and compare them with the corresponding target synchrony curves. Due to unresolved technical issues during evaluation, the simple (tanh) model is excluded from this analysis, as its predictions could not be retrieved. However, given that the simple (tanh) model has already been shown to perform significantly worse than other models, its exclusion is not expected to compromise the validity of our conclusions.
+This section focuses on evaluating the temporal behavior of the model predictions. Specifically, we examine the temporal spiking dynamics curves of individual model variants and compare them with the corresponding target temporal spiking dynamics curves. Due to unresolved technical issues during evaluation, the simple (tanh) model is excluded from this analysis, as its predictions could not be retrieved. However, given that the simple (tanh) model has already been shown to perform significantly worse than other models, its exclusion is not expected to compromise the validity of our conclusions.
 
-The primary motivation behind analyzing synchrony curves is to assess whether the models can capture temporal patterns in neuronal activity, an essential aspect of biological realism. Accurate modeling of such dynamics would represent a meaningful advancement over traditional neural network approaches to system identification, as previously discussed in Section~\ref{subsec:deep_learning_approach}.
+The primary motivation behind analyzing temporal spiking dynamics curves is to assess whether the models can capture temporal patterns in neuronal activity, an essential aspect of biological realism. Accurate modeling of such dynamics would represent a meaningful advancement over traditional neural network approaches to system identification, as previously discussed in Section~\ref{subsec:deep_learning_approach}.
 
 \subsubsection{Simple Model}
 \label{{subsubsec:simpl_leakytanh_eval}}
 
-Figure~\ref{fig:synchrony_curve_simple_leaky_tanh} shows the mean synchrony curve for the simple (leakytanh) model, alongside the target synchrony curve, aggregated across all trials and model subset variants.
+Figure~\ref{fig:synchrony_curve_simple_leaky_tanh} shows the mean temporal spiking dynamics curve for the simple (leakytanh) model, alongside the target temporal spiking dynamics curve, aggregated across all trials and model subset variants.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_simple_evaluation_new.pdf}
-    \caption{Mean synchrony curve of the simple (leakytanh) model predictions compared to the target synchrony curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
+    \caption{Mean temporal spiking dynamics curve of the simple (leakytanh) model predictions compared to the target temporal spiking dynamics curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
     \label{fig:synchrony_curve_simple_leaky_tanh}
 \end{figure}
 
-The synchrony curve for the simple (leakytanh) model exhibits relatively flat behavior across time, suggesting that the model is primarily capturing the mean spiking rate rather than dynamic temporal fluctuations. This behavior results in reasonably accurate predictions during the later phase of stimulus presentation but fails to account for the initial spike in activity during the onset of natural stimuli.
+The temporal spiking dynamics curve for the simple (leakytanh) model exhibits relatively flat behavior across time, suggesting that the model is primarily capturing the mean spiking rate rather than dynamic temporal fluctuations. This behavior results in reasonably accurate predictions during the later phase of stimulus presentation but fails to account for the initial spike in activity during the onset of natural stimuli.
 
-Interestingly, the model successfully captures the decline in synchrony following the switch to blank stimuli, performing reasonably well in comparison to more complex models in this regard.
+Interestingly, the model successfully captures the decline in population spike count following the switch to blank stimuli, performing reasonably well in comparison to more complex models in this regard.
 
-We hypothesize that the relatively strong performance in capturing average activity levels is due to the use of the specially designed leakytanh activation function. This function constrains predictions within a biologically plausible range, encouraging outputs that align with the mean neuronal response. This interpretation is further supported by the poor performance of the simple (tanh) model, which lacks this task-specific regularization. Although synchrony curve data for the tanh variant are unavailable, its previously reported low correlation values suggest inferior temporal modeling compared to the leakytanh version.
+We hypothesize that the relatively strong performance in capturing average activity levels is due to the use of the specially designed leakytanh activation function. This function constrains predictions within a biologically plausible range, encouraging outputs that align with the mean neuronal response. This interpretation is further supported by the poor performance of the simple (tanh) model, which lacks this task-specific regularization. Although temporal spiking dynamics curve data for the tanh variant are unavailable, its previously reported low correlation values suggest inferior temporal modeling compared to the leakytanh version.
 
 
 \subsubsection{Feed-Forward Neuronal Module Variants}
 \label{{subsubsec:dnn_eval}}
-In this section, we examine the synchrony curves of the dnn joint and dnn separate models. Figure~\ref{fig:synchrony_curve_dnn_joint} presents the results for the dnn joint model, while Figure~\ref{fig:synchrony_curve_dnn_separate} displays those for the dnn separate model.
+In this section, we examine the temporal spiking dynamics curves of the dnn joint and dnn separate models. Figure~\ref{fig:synchrony_curve_dnn_joint} presents the results for the dnn joint model, while Figure~\ref{fig:synchrony_curve_dnn_separate} displays those for the dnn separate model.
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_dnn_joint_evaluation.pdf}
-    \caption{Mean synchrony curve of the dnn joint model predictions compared to the target synchrony curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
+    \caption{Mean temporal spiking dynamics curve of the dnn joint model predictions compared to the target temporal spiking dynamics curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
     \label{fig:synchrony_curve_dnn_joint}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_dnn_separate_evaluation.pdf}
-    \caption{Mean synchrony curve of the dnn separate model predictions compared to the target synchrony curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
+    \caption{Mean temporal spiking dynamics curve of the dnn separate model predictions compared to the target temporal spiking dynamics curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
     \label{fig:synchrony_curve_dnn_separate}
 \end{figure}
 
-As previously noted, the dnn separate model exhibits unusually high variability, which is also reflected in the large error margins of its synchrony curve. Since potential explanations for this behavior have already been discussed, we will not revisit this model in detail here.
+As previously noted, the dnn separate model exhibits unusually high variability, which is also reflected in the large error margins of its temporal spiking dynamics curve. Since potential explanations for this behavior have already been discussed, we will not revisit this model in detail here.
 
 In contrast, the dnn joint model shows modest improvement in capturing early-stage spiking activity in response to natural stimuli compared to the simple (leakytanh) model. However, the overall pattern remains relatively flat, suggesting that the model continues to prioritize mean spiking activity over dynamic temporal features.
 
@@ -423,47 +422,47 @@ The results from previous model variants naturally lead us to explore the RNN ne
 
 Although earlier models incorporate recurrent connections that introduce biological plausibility and support temporal self-modulation, they were trained using a \emph{teacher-forcing} strategy (\citet{NIPS2016_16026d60}). This approach resets the hidden states at each time step using the target neuronal responses, effectively preventing the model from learning temporal patterns across time. In contrast, the RNN variants evaluated in this section maintain hidden states across multiple time steps, enabling the model to learn from the temporal structure during training.
 
-Figures~\ref{fig:synchrony_curve_rnn_5} and~\ref{fig:synchrony_curve_rnn_10} display the synchrony curves for models using RNN neuron modules trained with TBPTT over 5 and 10 time steps, respectively. Both models demonstrate an improvement in capturing temporal dynamics, particularly in the early phase of natural stimulus presentation. This phase is characterized by heightened spiking activity, which the TBPTT models successfully reproduce.
+Figures~\ref{fig:synchrony_curve_rnn_5} and~\ref{fig:synchrony_curve_rnn_10} display the temporal spiking dynamics curves for models using RNN neuron modules trained with TBPTT over 5 and 10 time steps, respectively. Both models demonstrate an improvement in capturing temporal dynamics, particularly in the early phase of natural stimulus presentation. This phase is characterized by heightened spiking activity, which the TBPTT models successfully reproduce.
 
-Despite these improvements, a notable limitation remains. The models struggle to accurately capture neuronal responses to blank stimuli. In the model predictions, the synchrony following the transition to the blank phase is comparable to that observed during later stages of the natural stimulus. However, in the target responses, the spiking activity during the blank phase, often referred to as spontaneous neuronal activity (see Section~\ref{subsec:stimulus_sequence}), is notably higher than during prolonged natural stimulus exposure. This discrepancy suggests that the models do not fully account for the suppression of neuronal responses associated with long-term stimulus presentation.
+Despite these improvements, a notable limitation remains. The models struggle to accurately capture neuronal responses to blank stimuli. In the model predictions, the population spike count following the transition to the blank phase is comparable to that observed during later stages of the natural stimulus. However, in the target responses, the spiking activity during the blank phase, often referred to as spontaneous neuronal activity (see Section~\ref{subsec:stimulus_sequence}), is notably higher than during prolonged natural stimulus exposure. This discrepancy suggests that the models do not fully account for the suppression of neuronal responses associated with long-term stimulus presentation.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_rnn_separate_5_evaluation.pdf}
-    \caption{Mean synchrony curve of the rnn (5 steps) model predictions compared to the target synchrony curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
+    \caption{Mean temporal spiking dynamics curve of the rnn (5 steps) model predictions compared to the target temporal spiking dynamics curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
     \label{fig:synchrony_curve_rnn_5}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_rnn_separate_10_evaluation.pdf}
-    \caption{Mean synchrony curve of the rnn (10 steps) model predictions compared to the target synchrony curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
+    \caption{Mean temporal spiking dynamics curve of the rnn (10 steps) model predictions compared to the target temporal spiking dynamics curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
     \label{fig:synchrony_curve_rnn_10}
 \end{figure}
 
 A comparison of the two model variants suggests that increasing the number of TBPTT time steps leads to enhanced model performance. The rnn (10 steps) model not only exhibits more consistent predictions across subset variants but also achieves the highest correlation scores among all tested models, both in normalized and Pearson correlation coefficients.
 
-When reviewing the synchrony-based Pearson correlation coefficients (Figure~\ref{fig:boxplot_models_overall_synchrony_pearson_comparison}), we observe increased variability in TBPTT-trained models relative to their non-TBPTT counterparts. This may be attributed to the greater dynamic range captured by these models. While non-TBPTT models tend to emphasize the stable mean activity, TBPTT models more effectively capture transient dynamics, albeit with slightly less accuracy in static phases.
+When reviewing the population spike count-based Pearson correlation coefficients (Figure~\ref{fig:boxplot_models_overall_synchrony_pearson_comparison}), we observe increased variability in TBPTT-trained models relative to their non-TBPTT counterparts. This may be attributed to the greater dynamic range captured by these models. While non-TBPTT models tend to emphasize the stable mean activity, TBPTT models more effectively capture transient dynamics, albeit with slightly less accuracy in static phases.
 
 These findings indicate that models based on RNN neuronal modules trained with TBPTT represent a significant step toward biologically plausible neural network models that can robustly capture temporal patterns. As discussed in Sections~\ref{subsec:deep_learning_approach} and~\ref{subsec:spiking_neural_nets}, the ability to model dynamic neuronal activity is a key criterion for developing interpretable and biologically grounded deep learning systems.
 
 \subsubsection{Synaptic Depression Model}
 \label{{subsubsec:syn_adap_lgn_5}}
 
-In the final part of our synchrony curve analysis, we turn to the evaluation of a model incorporating a synaptic depression module. As discussed previously, the temporal dynamics of spontaneous neuronal responses during the blank stimulus phase remain inadequately captured by earlier models. This motivates the integration of synaptic depression mechanisms, which aim to more accurately model the adaptive response of different neuronal populations and improve temporal fidelity.
+In the final part of our temporal spiking dynamics curve analysis, we turn to the evaluation of a model incorporating a synaptic depression module. As discussed previously, the temporal dynamics of spontaneous neuronal responses during the blank stimulus phase remain inadequately captured by earlier models. This motivates the integration of synaptic depression mechanisms, which aim to more accurately model the adaptive response of different neuronal populations and improve temporal fidelity.
 
-Experiments with synaptic depression were conducted on a model variant utilizing 5 TBPTT time steps, with the depression mechanism applied specifically to LGN connections. This choice reflects biological evidence indicating that LGN synapses are particularly influenced by synaptic depression. The resulting synchrony curve is shown in Figure~\ref{fig:synchrony_curve_syn_adapt_lgn_5}.
+Experiments with synaptic depression were conducted on a model variant utilizing 5 TBPTT time steps, with the depression mechanism applied specifically to LGN connections. This choice reflects biological evidence indicating that LGN synapses are particularly influenced by synaptic depression. The resulting temporal spiking dynamics curve is shown in Figure~\ref{fig:synchrony_curve_syn_adapt_lgn_5}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/separate_model_synchrony_curve_syn_only_lgn_5_evaluation.pdf}
-    \caption{Mean synchrony curve of the syn adapt lgn (5 steps) model predictions compared to the target synchrony curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
+    \caption{Mean temporal spiking dynamics curve of the syn adapt lgn (5 steps) model predictions compared to the target temporal spiking dynamics curve. Results are averaged over all trials and model subsets. Error bars represent standard deviation. The dashed vertical line marks the transition from natural to blank stimuli.}
     \label{fig:synchrony_curve_syn_adapt_lgn_5}
 \end{figure}
 
 This experimental configuration was chosen due to technical constraints. The inclusion of synaptic depression in RNNs dramatically increases memory requirements, especially with longer TBPTT sequences, necessitating high-memory GPU resources. Additionally, training times were significantly extended. As a result, a comprehensive grid search to optimize hyperparameters was not feasible. The hyperparameters used for this model were selected empirically, without the level of tuning applied to other model variants. These limitations likely contributed to the model's suboptimal performance and the inconsistencies observed in its predictions.
 
-The synchrony curve shows that, while the model performs better than non-TBPTT variants, it underperforms relative to RNN models without synaptic depression. Notably, performance appears degraded across the entire stimulus timeline. There is reduced accuracy in modeling the transition from natural to blank stimuli and diminished representation of average neuronal responses in later stages. Furthermore, the model fails to improve prediction of spontaneous responses during the blank phase.
+The temporal spiking dynamics curve shows that, while the model performs better than non-TBPTT variants, it underperforms relative to RNN models without synaptic depression. Notably, performance appears degraded across the entire stimulus timeline. There is reduced accuracy in modeling the transition from natural to blank stimuli and diminished representation of average neuronal responses in later stages. Furthermore, the model fails to improve prediction of spontaneous responses during the blank phase.
 
 These findings are unexpected, as the incorporation of biologically inspired mechanisms was anticipated to enhance performance. We hypothesize that the underwhelming results are due to the suboptimal hyperparameter configuration and the limited temporal depth (5 TBPTT steps). Additionally, the training dataset may lack sufficient variability to enable the model to generalize dynamic patterns effectively. Further experimentation with improved computational resources and a more diverse dataset may be necessary to fully evaluate the potential of synaptic depression mechanisms in temporal modeling.
 
@@ -481,7 +480,7 @@ We applied this test to all pairwise combinations of model variants, comparing t
     \label{fig:model_types_p_values_heatmap}
 \end{figure}
 
-The statistical results largely corroborate the insights obtained from previous visual analyses of mean, variance and synchrony. At the $\alpha = 0.05$ level, we reject the hypothesis that the simple (tanh) model performs better than any other variant, reinforcing its role as the weakest model. Among the more complex models, the results generally support the idea that additional architectural components and biologically inspired features enhance model performance.
+The statistical results largely corroborate the insights obtained from previous visual analyses of mean, variance and population spike count. At the $\alpha = 0.05$ level, we reject the hypothesis that the simple (tanh) model performs better than any other variant, reinforcing its role as the weakest model. Among the more complex models, the results generally support the idea that additional architectural components and biologically inspired features enhance model performance.
 
 However, two models deviate from this trend. The dnn separate model, which has already been noted for its high performance variability, shows inconsistent statistical superiority. Similarly, the syn adapt lgn (5 steps) model underperforms in comparison to RNN neuronal modules models that lack synaptic depression. As previously discussed, this may be attributed to limitations in hyperparameter tuning, dataset diversity, and computational resources.
 
@@ -497,12 +496,12 @@ Up to this point, we have compared various model architectures and concluded tha
 
 We begin by comparing two evaluation strategies: teacher-forced prediction, in which the model's hidden states are reset at each time step using ground truth responses, and free prediction, where the model autonomously generates sequences without external correction. This comparison focuses mainly on the top-performing TBPTT-trained models, which not only yield superior performance but also exhibit a higher degree of biological plausibility.
 
-Figure~\ref{fig:boxplot_models_pearson_synchrony_different_layers} presents the distribution of Pearson correlation coefficients between model predictions and target synchrony curves, separated by layer and prediction mode, excluding the simple (tanh) model.
+Figure~\ref{fig:boxplot_models_pearson_synchrony_different_layers} presents the distribution of Pearson correlation coefficients between model predictions and target temporal spiking dynamics curves, separated by layer and prediction mode, excluding the simple (tanh) model.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/boxplot_model_comparison_synchrony_pearson_layers.pdf}
-    \caption{Distribution of Pearson correlation coefficients between predicted and target synchrony curves, shown separately for each layer across all model variants.}
+    \caption{Distribution of Pearson correlation coefficients between predicted and target temporal spiking dynamics curves, shown separately for each layer across all model variants.}
     \label{fig:boxplot_models_pearson_synchrony_different_layers}
 \end{figure}
 
@@ -512,35 +511,35 @@ Another notable observation is that teacher-forced predictions often match or ex
 
 Interestingly, the largest improvement under teacher-forced prediction is seen in the synaptic depression model. This suggests that the model may not be effectively learning temporal dependencies, and that extending the TBPTT horizon or increasing training duration could enhance performance.
 
-Conversely, non-TBPTT models perform worse under teacher-forced evaluation. While one might expect hidden state resets to improve performance, given their similarity to the training procedure, we hypothesize that these resets may disrupt the model's predictions during the high-activity early stimulus phase. Because these models primarily learn mean responses, abrupt resets may distort predictions away from expected averages, resulting in decreased the synchrony CC.
+Conversely, non-TBPTT models perform worse under teacher-forced evaluation. While one might expect hidden state resets to improve performance, given their similarity to the training procedure, we hypothesize that these resets may disrupt the model's predictions during the high-activity early stimulus phase. Because these models primarily learn mean responses, abrupt resets may distort predictions away from expected averages, resulting in decreased the population spike count CC.
 
 
-\subsubsection{Teacher-Forced Synchrony Curves on TBPTT Model Variants}
+\subsubsection{Teacher-Forced Temporal Spiking Dynamics Curves on TBPTT Model Variants}
 \label{subsubsec:teacher_forced_synchrony_curves_tbptt}
-In this section, we narrow our focus to the TBPTT-trained model variants. We compare their synchrony curves under both free prediction and teacher-forced prediction modes, alongside the target synchrony curves. This comparison is illustrated in Figure~\ref{fig:free_vs_teacher_forced_synchrony}.
+In this section, we narrow our focus to the TBPTT-trained model variants. We compare their temporal spiking dynamics curves under both free prediction and teacher-forced prediction modes, alongside the target temporal spiking dynamics curves. This comparison is illustrated in Figure~\ref{fig:free_vs_teacher_forced_synchrony}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/tbptt_models_forced_included_model_synchrony_curve.pdf}
-    \caption{Mean synchrony curves of all TBPTT-trained model variants under both free and teacher-forced prediction conditions, compared to the target synchrony curve. Curves are averaged across all trials and model subsets. Error bars represent standard deviation. The dashed vertical line indicates the transition from natural to blank stimuli.}
+    \caption{Mean temporal spiking dynamics curves of all TBPTT-trained model variants under both free and teacher-forced prediction conditions, compared to the target temporal spiking dynamics curve. Curves are averaged across all trials and model subsets. Error bars represent standard deviation. The dashed vertical line indicates the transition from natural to blank stimuli.}
     \label{fig:free_vs_teacher_forced_synchrony}
 \end{figure}
 
-From the synchrony curves, we observe a modest improvement in temporal prediction accuracy during the early stages of natural stimulus presentation and at the transition to the blank stimulus phase. However, the models still struggle to replicate the elevated spontaneous activity observed in the blank phase of the target data. There is, however, a subtle increase in dynamic range during these stages, which may indicate potential for further improvement.
+From the temporal spiking dynamics curves, we observe a modest improvement in temporal prediction accuracy during the early stages of natural stimulus presentation and at the transition to the blank stimulus phase. However, the models still struggle to replicate the elevated spontaneous activity observed in the blank phase of the target data. There is, however, a subtle increase in dynamic range during these stages, which may indicate potential for further improvement.
 
 One notable discrepancy is observed in the teacher-forced predictions of RNN variants without synaptic depression, particularly in layer IV, where predictions deviate from the target during the later stages of natural stimulus presentation. 
 
-An especially interesting case is the teacher-forced output of the synaptic depression model. This variant demonstrates the strongest overall alignment with the target synchrony curve across all TBPTT-trained models—a result also reflected in the synchrony correlation coefficients shown in Figure~\ref{fig:boxplot_models_pearson_synchrony_different_layers}. This performance may indicate that, despite the training challenges discussed previously, the model is capable of superior temporal modeling when appropriately guided.
+An especially interesting case is the teacher-forced output of the synaptic depression model. This variant demonstrates the strongest overall alignment with the target temporal spiking dynamics curve across all TBPTT-trained models—a result also reflected in the population spike count correlation coefficients shown in Figure~\ref{fig:boxplot_models_pearson_synchrony_different_layers}. This performance may indicate that, despite the training challenges discussed previously, the model is capable of superior temporal modeling when appropriately guided.
 
-\subsubsection{Drift Between Synchrony Curves of Teacher-Forced and Free Predictions}
+\subsubsection{Drift Between Temporal Spiking Dynamics Curves of Teacher-Forced and Free Predictions}
 \label{subsubsec:drift_teacher_free_synchrony}
 
-In the final part of this section, we examine the difference between teacher-forced and free prediction synchrony curves, referred to here as \emph{drift}. This metric quantifies how model behavior diverges over time when guided by ground truth states versus when operating autonomously. The drift curves for each layer are shown in Figure~\ref{fig:teacher_forced_free_drift}.
+In the final part of this section, we examine the difference between teacher-forced and free prediction temporal spiking dynamics curves, referred to here as \emph{drift}. This metric quantifies how model behavior diverges over time when guided by ground truth states versus when operating autonomously. The drift curves for each layer are shown in Figure~\ref{fig:teacher_forced_free_drift}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/plots/temporal_drift_forced_free.pdf}
-    \caption{Temporal evolution of the difference ("drift") between teacher-forced and free prediction synchrony curves across the experimental timeline, shown separately for each model layer. Results are averaged across all trials for TBPTT-trained models.}
+    \caption{Temporal evolution of the difference ("drift") between teacher-forced and free prediction temporal spiking dynamics curves across the experimental timeline, shown separately for each model layer. Results are averaged across all trials for TBPTT-trained models.}
     \label{fig:teacher_forced_free_drift}
 \end{figure}
 
