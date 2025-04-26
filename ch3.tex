@@ -24,9 +24,21 @@ Despite its strengths, the model remains a simplification of the biological syst
 
 \subsubsection{Model Architecture}
 \label{subsubsec:spiking_cat_architecture}
-The model is substantially downsampled relative to the biological system. It comprises 108,150 neurons and approximately 155 million synapses, representing roughly 10\% of the neuronal density in cat V1 (\citet{beaulie1989number}). Neurons are distributed across layers according to biological data, with excitatory and inhibitory neurons present in a 4:1 ratio (\citet{bealuliee1992quantitative, markram_interneurons_2004}). The model includes both feed-forward and recurrent connections within and between layers.
+The model architecture is profoundly inspired by the biological organization of the primary visual cortex (V1), as described in detail in Section~\ref{sec:v1}. It is organized into three main neuronal populations, corresponding to the LGN neurons, layer IV neurons, and layer II/III neurons of V1. Within Layers IV and II/III, neurons are further subdivided into two functional groups: inhibitory neurons, which form connections exclusively within their own layer, and excitatory neurons, which project both within their layer and across layers.
 
-It also incorporates a simplified lateral geniculate nucleus (LGN) model (Section \ref{sec:lgn}), with distinct ON and OFF pathways (Figure~\ref{fig:early_vis_processing} and Figure~\ref{fig:on_off_cells}). These 7,200 LGN neurons are spatially aligned with the receptive fields of their V1 counterparts. For further details, see \citet{antolik2024comprehensive}.
+Specifically, excitatory neurons in Layer IV project to both excitatory and inhibitory neurons in Layer II/III, while excitatory neurons in Layer II/III project back to both excitatory and inhibitory neurons in Layer IV. This feedback connection serves as a proxy for biological feedback originating from deeper cortical layers (V and VI), as previously discussed. Additionally, Layer IV receives input from LGN neurons, with ON and OFF pathways differentiated to reflect the functional organization of early visual processing. The overall architecture of the SNN model is illustrated in Figure~\ref{fig:snn_model_architecture}, taken from \citet{antolik2024comprehensive}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/snn_model_architecture.pdf}
+    \caption{\textbf{Architecture of the SNN Model of Cat's V1:} This figure illustrates the architecture of the spiking neural network (SNN) model of the cat's primary visual cortex (V1) developed by \citet{antolik2024comprehensive}. (A-B) Lateral connectivity within Layers II/III and IV. (C) Extent of the modeled visual field and examples of receptive fields (RFs) for one ON and one OFF LGN neuron. (D-E) Local connectivity schemes within layer II/III and layer IV. (F) Input connections from the LGN to Layer IV. This figure is taken from \emph{“A comprehensive data-driven model of cat primary visual cortex”} by \citet{antolik2024comprehensive}.}
+    \label{fig:snn_model_architecture}
+\end{figure}
+
+The model represents a substantial downsampling relative to the biological system. It comprises 108,150 neurons and approximately 155 million synapses, capturing around 10\% of the neuronal density found in the cat V1 (\citet{beaulie1989number}). Neurons are distributed across layers according to biological proportions, maintaining a 4:1 ratio of excitatory to inhibitory neurons (\citet{bealuliee1992quantitative, markram_interneurons_2004}).
+
+Furthermore, a simplified lateral geniculate nucleus (LGN) model is incorporated (Section~\ref{sec:lgn}), featuring distinct ON and OFF pathways, as shown in Figure~\ref{fig:early_vis_processing} and Figure~\ref{fig:on_off_cells}. These 7,200 LGN neurons are spatially aligned with the receptive fields of their corresponding V1 neurons. For additional details, refer to \citet{antolik2024comprehensive}.
+
 
 \section{Artificial Dataset}
 \label{sec:artificial_dataset}
@@ -43,7 +55,7 @@ Each stimulus sequence begins with a blank interval of duration $t_{\text{blank}
 To facilitate processing and reduce memory demands, stimulus sequences are divided into smaller units referred to as \emph{experiments}. Each experiment consists of a natural stimulus sequence immediately followed by a blank stimulus interval. This design ensures that the neural activity at the boundaries of each stimulus reflects a spontaneous, baseline state.
 
 \begin{defn}[Experiment]
-    Let $S$ be a stimulus sequence consisting of $N \in \mathbb{N}$ pairs of blank and stimulus intervals $(b_i, s_i)$. An experiment for each pair index $j \in {1, 2, \dots, N-1}$ is defined as:
+    Let $S$ be a stimulus sequence consisting of $N \in \mathbb{N}$ pairs of blank and stimulus intervals $(b_i, s_i)$. An experiment for each pair index $j \in \{1, 2, \dots, N-1\}$ is defined as:
 
     $$
     \left(s_j; b_{j+1}\right)
