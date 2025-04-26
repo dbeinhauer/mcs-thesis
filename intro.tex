@@ -56,7 +56,7 @@ that specific neuronal types function as expected.
 
 \item[Biologically inspired activation functions:] Instead of standard
 activation functions such as ReLU or tanh, we introduce small 
-DNN or RNN module in place of each reference SNN neurons, that approximate the biological transfer function of the given neuron. The parameters of these transfer modules are shared across each given anatomically defined layer. These modules aim to approximate the complexity of biological neuronal transfer function that 
+DNN or RNN modules in place of each reference SNN neurons, that approximate the biological transfer function of the given neuron. The parameters of these transfer modules are shared across each given anatomically defined layer. These modules aim to approximate the complexity of biological neuronal transfer function that 
 involves number of processes that cannot be accounted for by simple monotonic point non-linearities, such as adaptation. They allow us to capture these non-linearities and allow neurons to retain a form of memory that adapts to previous stimuli.
 
 \item[Synaptic adaptation modules:] To model the plasticity of neuronal
@@ -71,21 +71,12 @@ enhance both the predictive power and the interpretability of neural simulations
 ultimately contributing to a better understanding of the selected brain region.
 
 In this thesis, we have obtained the following results. 
-\begin{description}
-    \item The novel biologically constrained RNN architectures without the DNN modules can be trained to capture well the mean neuronal responses. However, the reconstruction of the SNN dynamics is limited.
-    \item The use of shared DNN modules of neurons significantly improved the performance of the model, especially in terms of capturing the dynamics of the SNN reference model.
-    \item Differentiation in inputs from excitatory and inhibitory neurons to the neuronal DNN module slightly improves the predictions compared to propagating the input signal without differentiation of the neuronal types.
-    \item The use of the RNN model with RNN cells of the shared neuronal module slightly improved the performance of the model.
-    \item The use of the synaptic adaptation module does not improve the spatio-temporal dynamics of our model.
-\end{description}
+\begin{enumerate}
+    \item Novel biologically constrained RNN architectures without DNN neuron modules can be trained to accurately capture the mean neuronal responses; however, their ability to reconstruct the full SNN dynamics remains limited. 
+    \item Incorporating shared DNN modules for neurons slightly improved the model's ability to capture dynamic behavior. Nevertheless, predictions largely remained dominated by the mean neuronal responses rather than the full system dynamics. 
+    \item Differentiating inputs from excitatory and inhibitory neurons to the neuronal module does not appear to significantly influence model performance.
+    \item The use of RNN-based neuron modules substantially improved model performance in terms of capturing the temporal dynamics of neuronal responses and consistently outperformed all other tested model variants.
+    \item The inclusion of the synaptic depression module did not improve model performance and, surprisingly, appeared to worsen the model dynamics. We primarily attribute this outcome to limited computational resources and suboptimal model parameter settings, leading to underfitting and reduced overall performance compared to its potential capabilities. 
+\end{enumerate}
 
-The thesis is structured into several sections. In the first sections,
-we introduce the reader to the theoretical background of the field of neurobiology and computational
-neuroscience with the main focus on visual processing and especially
-the primary visual cortex (V1). Alongside this, we introduce the
-reader to the modeling approaches and machine learning aspects
-closely related to our study. In the following section, we
-describe in depth our approach in modeling the system. We
-describe the architecture of our model, dataset and evaluation
-metrics there. In the end, we provide the experimental
-results of our study and analysis of the results.
+The thesis is structured into several sections. In the initial chapters, we introduce the theoretical background of neurobiology and computational neuroscience, with a focus on visual processing and, in particular, the primary visual cortex (V1). Alongside this, we review modeling approaches and machine learning methods relevant to our study. In the subsequent chapters, we describe in detail the architecture of our model, the dataset used, and the evaluation metrics employed. Finally, we present the experimental results of our study and provide an in-depth analysis of the findings.
