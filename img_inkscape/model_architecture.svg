@@ -28,9 +28,9 @@
      inkscape:document-units="mm"
      showguides="true"
      showgrid="false"
-     inkscape:zoom="0.79840325"
-     inkscape:cx="284.94373"
-     inkscape:cy="684.4912"
+     inkscape:zoom="1.1291127"
+     inkscape:cx="391.015"
+     inkscape:cy="620.39865"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -2129,7 +2129,7 @@
        style="white-space:pre;shape-inside:url(#rect41);display:inline;fill:none;fill-opacity:0.309279;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;paint-order:markers fill stroke"><tspan
          x="34.025391"
          y="32.563033"
-         id="tspan1">Layer 2/3</tspan></text>
+         id="tspan33">Layer 2/3</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.01053001,0,0,0.01053001,196.8995,284.12332)"
@@ -2137,7 +2137,7 @@
        style="white-space:pre;shape-inside:url(#rect42);display:inline;fill:none;fill-opacity:0.309279;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;paint-order:markers fill stroke"><tspan
          x="43.208984"
          y="331.99272"
-         id="tspan2">Layer 4</tspan></text>
+         id="tspan34">Layer 4</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.01053001,0,0,0.01053001,196.8995,284.12332)"
@@ -2145,7 +2145,7 @@
        style="white-space:pre;shape-inside:url(#rect43);display:inline;fill:none;fill-opacity:0.309279;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;paint-order:markers fill stroke"><tspan
          x="39.537109"
          y="593.87944"
-         id="tspan3">LGN</tspan></text>
+         id="tspan35">LGN</tspan></text>
     <rect
        style="fill:none;fill-opacity:0.309279;stroke:#000000;stroke-width:0.0105466;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.0316398, 0.0316398;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect46"
@@ -2812,7 +2812,7 @@
      id="layer2"
      inkscape:label="lgn_layer"
      style="display:inline"
-     transform="matrix(0.63013068,0,0,0.63013068,33.018009,28.915937)"
+     transform="matrix(0.63013068,0,0,0.63013068,38.079161,7.3462296)"
      sodipodi:insensitive="true">
     <path
        style="fill:#ececec;fill-opacity:1;fill-rule:nonzero;stroke:#7b8284;stroke-width:1.05259;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:4.21034, 4.21034;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
@@ -2940,7 +2940,7 @@
        inkscape:label="OFF_label"><tspan
          x="502.54202"
          y="860.58755"
-         id="tspan4">OFF</tspan></text>
+         id="tspan36">OFF</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.16414px;font-family:Sans;-inkscape-font-specification:Sans;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.586665;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
@@ -2961,7 +2961,7 @@
        inkscape:label="LGN_label"><tspan
          x="156.64624"
          y="834.92187"
-         id="tspan5">LGN</tspan></text>
+         id="tspan37">LGN</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -2993,7 +2993,7 @@
          inkscape:label="Layer_4_label"><tspan
            x="90.005091"
            y="134.80859"
-           id="tspan6">Layer IV</tspan></text>
+           id="tspan38">Layer IV</tspan></text>
       <g
          inkscape:groupmode="layer"
          id="layer7"
@@ -3196,7 +3196,7 @@
                inkscape:label="function_text"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan7">f</tspan></text>
+                 id="tspan39">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
                d="m 37.499905,137.2595 v -4.39758"
@@ -3368,7 +3368,7 @@
              sodipodi:insensitive="true"><tspan
                x="173.70223"
                y="709.96679"
-               id="tspan8">Linear Layer</tspan></text>
+               id="tspan40">Linear Layer</tspan></text>
           <path
              style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000a0c;stroke-width:0.298312;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 60,180.70066 c 0,-9.4459 0,-9.4459 0,-9.4459"
@@ -3817,7 +3817,7 @@
                sodipodi:insensitive="true"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan9">f</tspan></text>
+                 id="tspan41">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3);paint-order:markers fill stroke"
                d="m 93.799995,140.03083 v -4.39758"
@@ -3919,7 +3919,7 @@
              sodipodi:insensitive="true"><tspan
                x="173.70223"
                y="709.96679"
-               id="tspan10">Linear Layer</tspan></text>
+               id="tspan42">Linear Layer</tspan></text>
           <path
              style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000a0c;stroke-width:0.298312;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-6);paint-order:markers fill stroke"
              d="m 60,180.70066 c 0,-9.4459 0,-9.4459 0,-9.4459"
@@ -4315,7 +4315,7 @@
                inkscape:label="function_text"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan11">f</tspan></text>
+                 id="tspan43">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3);paint-order:markers fill stroke"
                d="m 93.799995,141.88985 v -4.39758"
@@ -4434,7 +4434,7 @@
                inkscape:label="function_text"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan12">f</tspan></text>
+                 id="tspan44">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3);paint-order:markers fill stroke"
                d="m 93.799995,143.01817 v -4.39758"
@@ -4640,7 +4640,7 @@
              inkscape:label="function_text"><tspan
                x="25.767578"
                y="519.3228"
-               id="tspan13">f</tspan></text>
+               id="tspan45">f</tspan></text>
           <path
              style="display:inline;fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 20.345719,137.2595 v -4.39758"
@@ -4937,7 +4937,7 @@
              inkscape:label="function_text"><tspan
                x="25.767578"
                y="519.3228"
-               id="tspan14">f</tspan></text>
+               id="tspan46">f</tspan></text>
           <path
              style="display:inline;fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 37.499905,137.2595 v -4.39758"
@@ -5166,7 +5166,7 @@
                sodipodi:insensitive="true"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan15">f</tspan></text>
+                 id="tspan47">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3-1);paint-order:markers fill stroke"
                d="m 93.799995,140.03083 v -4.39758"
@@ -5394,7 +5394,7 @@
              inkscape:label="function_text"><tspan
                x="25.767578"
                y="519.3228"
-               id="tspan16">f</tspan></text>
+               id="tspan48">f</tspan></text>
           <path
              style="display:inline;fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 20.345719,137.2595 v -4.39758"
@@ -5603,7 +5603,7 @@
                inkscape:label="function_text"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan17">f</tspan></text>
+                 id="tspan49">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3);paint-order:markers fill stroke"
                d="m 93.799995,143.01817 v -4.39758"
@@ -5722,7 +5722,7 @@
                inkscape:label="function_text"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan18">f</tspan></text>
+                 id="tspan50">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3);paint-order:markers fill stroke"
                d="m 93.799995,141.88985 v -4.39758"
@@ -5861,7 +5861,7 @@
                sodipodi:insensitive="true"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan19">f</tspan></text>
+                 id="tspan51">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3);paint-order:markers fill stroke"
                d="m 93.799995,140.03083 v -4.39758"
@@ -6086,7 +6086,7 @@
              inkscape:label="function_text"><tspan
                x="25.767578"
                y="519.3228"
-               id="tspan20">f</tspan></text>
+               id="tspan52">f</tspan></text>
           <path
              style="display:inline;fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 37.499905,137.2595 v -4.39758"
@@ -6253,7 +6253,7 @@
          inkscape:label="Layer_23_label"><tspan
            x="94.893068"
            y="134.80859"
-           id="tspan21">Layer II/III</tspan></text>
+           id="tspan53">Layer II/III</tspan></text>
       <g
          inkscape:groupmode="layer"
          id="g554"
@@ -6457,7 +6457,7 @@
                inkscape:label="function_text"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan22">f</tspan></text>
+                 id="tspan54">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
                d="m 37.499905,137.2595 v -4.39758"
@@ -6630,7 +6630,7 @@
              sodipodi:insensitive="true"><tspan
                x="173.70223"
                y="709.96679"
-               id="tspan23">Linear Layer</tspan></text>
+               id="tspan55">Linear Layer</tspan></text>
           <path
              style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000a0c;stroke-width:0.298312;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 60,180.70066 c 0,-9.4459 0,-9.4459 0,-9.4459"
@@ -7018,7 +7018,7 @@
                sodipodi:insensitive="true"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan24">f</tspan></text>
+                 id="tspan56">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3);paint-order:markers fill stroke"
                d="m 93.799995,140.03083 v -4.39758"
@@ -7131,7 +7131,7 @@
              sodipodi:insensitive="true"><tspan
                x="173.70223"
                y="709.96679"
-               id="tspan25">Linear Layer</tspan></text>
+               id="tspan57">Linear Layer</tspan></text>
           <path
              style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000a0c;stroke-width:0.298312;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-9);paint-order:markers fill stroke"
              d="m 60,180.70066 c 0,-9.4459 0,-9.4459 0,-9.4459"
@@ -7547,7 +7547,7 @@
              inkscape:label="function_text"><tspan
                x="25.767578"
                y="519.3228"
-               id="tspan26">f</tspan></text>
+               id="tspan58">f</tspan></text>
           <path
              style="display:inline;fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 37.499905,137.2595 v -4.39758"
@@ -7776,7 +7776,7 @@
                sodipodi:insensitive="true"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan27">f</tspan></text>
+                 id="tspan59">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3-1);paint-order:markers fill stroke"
                d="m 93.799995,140.03083 v -4.39758"
@@ -8001,7 +8001,7 @@
              inkscape:label="function_text"><tspan
                x="25.767578"
                y="519.3228"
-               id="tspan28">f</tspan></text>
+               id="tspan60">f</tspan></text>
           <path
              style="display:inline;fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 37.499905,137.2595 v -4.39758"
@@ -8234,7 +8234,7 @@
                sodipodi:insensitive="true"><tspan
                  x="25.767578"
                  y="519.3228"
-                 id="tspan29">f</tspan></text>
+                 id="tspan61">f</tspan></text>
             <path
                style="fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3-3);paint-order:markers fill stroke"
                d="m 93.799995,140.03083 v -4.39758"
@@ -8459,7 +8459,7 @@
              inkscape:label="function_text"><tspan
                x="25.767578"
                y="519.3228"
-               id="tspan30">f</tspan></text>
+               id="tspan62">f</tspan></text>
           <path
              style="display:inline;fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 37.499905,137.2595 v -4.39758"
@@ -8756,7 +8756,7 @@
              inkscape:label="function_text"><tspan
                x="25.767578"
                y="519.3228"
-               id="tspan31">f</tspan></text>
+               id="tspan63">f</tspan></text>
           <path
              style="display:inline;fill:#cdde87;fill-opacity:0.920594;stroke:#000000;stroke-width:0.184198;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers fill stroke"
              d="m 37.499905,137.2595 v -4.39758"
@@ -8900,7 +8900,7 @@
      transform="matrix(0.8956234,0,0,0.8956234,0.45093452,4.6892023)">
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0606;stroke-width:0.594;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#ConcaveTriangle);paint-order:markers fill stroke"
-       d="m 111.31521,231.21946 c -8.44933,12.31324 -39.004114,16.6032 -37.365031,-8.30345"
+       d="m 111.11882,221.48932 c -1.29063,2.25126 -35.751673,22.43488 -37.168641,1.42669"
        id="path265"
        sodipodi:nodetypes="cc" />
     <path
@@ -8915,7 +8915,7 @@
        sodipodi:nodetypes="csc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0606;stroke-width:0.594;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#ConcaveTriangle-7-9-2);paint-order:markers fill stroke"
-       d="M 80.050616,57.495121 C 76.742396,51.876866 74.868396,45.60451 70.726608,44.291586 63.241634,41.918889 57.196887,43.123305 52.027063,46.587242 47.284311,49.765028 42.54892,54.702043 40.60426,61.876372 31.211769,96.527585 35.428164,158.51396 35.428164,206.87893 c 0,9.55503 5.439616,21.54887 8.484111,26.3015 3.574476,5.57996 11.078917,5.26067 15.520758,5.27921 9.601796,0.0401 19.381437,-3.25923 26.48792,-7.02498 2.137734,-1.1328 4.39602,-4.31721 4.39602,-8.47526"
+       d="M 80.050616,57.495121 C 76.742396,51.876866 74.868396,45.60451 70.726608,44.291586 63.241634,41.918889 57.196887,43.123305 52.027063,46.587242 47.284311,49.765028 42.54892,54.702043 40.60426,61.876372 31.211769,96.527585 35.428164,158.51396 35.428164,206.87893 c 0,9.55503 2.602486,13.95525 5.646981,18.70788 3.574476,5.57996 14.222142,7.54387 18.663983,7.56241 9.601796,0.0401 19.075342,0.325 26.181825,-3.44075 2.137734,-1.1328 4.39602,-2.59102 4.39602,-6.74907"
        id="path265-6-7-7"
        sodipodi:nodetypes="csssssssc" />
     <path
@@ -8940,24 +8940,24 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0606;stroke-width:0.594;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#ConcaveTriangle-7-9-2-10-5-9-4-8-4-2-4-2-5-7-7-3);paint-order:markers fill stroke"
-       d="M 77.009077,269.86043 C 79.292503,245.0359 46.115514,254.35304 46.106004,223.02659"
+       d="M 82.786164,245.66373 C 83.056274,235.48124 78.058417,235.5942 66.8584,235.5942 c -6.675904,0 -20.617108,10.9869 -20.752396,-12.56761"
        id="path265-6-7-7-0-6-5-3-4-6-9-7-0-0-5-6-1"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="csc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0606;stroke-width:0.594;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#ConcaveTriangle-7-9-2-10-5-9-4-8-4-2-4-2-5-7-7-3-6);paint-order:markers fill stroke"
-       d="m 71.154336,254.36141 c 35.029344,-7.88552 47.935824,-13.2514 47.935824,-31.37459"
+       d="m 81.608077,238.97489 c 37.337073,-0.0303 37.482083,2.13512 37.482083,-15.98807"
        id="path265-6-7-7-0-6-5-3-4-6-9-7-0-0-5-6-1-7"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0606;stroke-width:0.594;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#ConcaveTriangle-7-9-2-10-5-9-4-8-4-2-4-2-5-7-7-3-6-4);paint-order:markers fill stroke"
-       d="m 129.88934,269.59865 c -0.0843,-0.0337 -1.25716,-19.89015 -0.7844,-46.52745"
+       d="m 127.91275,235.19231 c 0,0 1.19219,2.54381 1.19219,-12.12111"
        id="path265-6-7-7-0-6-5-3-4-6-9-7-0-0-5-6-1-7-8"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0606;stroke-width:0.594;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#ConcaveTriangle-7-9-2-10-5-9-4-8-4-2-4-2-5-7-7-3-3);paint-order:markers fill stroke"
-       d="M 129.87752,269.85152 C 132.09524,251.40407 62.33064,257.90956 61.726754,222.90377"
+       d="m 135.33562,245.68915 c 0.65526,-14.37236 -16.08726,-11.18119 -34.47216,-10.31619 -14.666706,0.69007 -39.136706,-2.15083 -39.136706,-12.46919"
        id="path265-6-7-7-0-6-5-3-4-6-9-7-0-0-5-6-1-8"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="csc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0606;stroke-width:0.594;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#ConcaveTriangle-7-9-2-1);paint-order:markers fill stroke"
        d="m 73.16762,45.998054 c 20.996221,-11.176621 49.03943,0.663463 42.56607,21.974141 -26.486636,87.195515 34.42976,65.838925 34.42976,61.017045"
@@ -8970,7 +8970,7 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0606;stroke-width:0.594;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#ConcaveTriangle-7-1);paint-order:markers fill stroke"
-       d="m 97.101228,133.39341 c 25.040802,-1.21826 10.507332,68.02158 13.625382,95.71341 1.11033,9.86099 32.52492,9.14437 32.52492,-6.21111"
+       d="m 97.101228,133.39341 c 25.040802,-1.21826 10.508052,58.78937 13.626102,86.4812 1.11033,9.86099 32.5242,18.37658 32.5242,3.0211"
        id="path265-6-9"
        sodipodi:nodetypes="csc" />
     <path
@@ -9102,6 +9102,6 @@
        inkscape:label="output_text"><tspan
          x="767.55922"
          y="372.39863"
-         id="tspan32">Model Output</tspan></text>
+         id="tspan64">Model Output</tspan></text>
   </g>
 </svg>

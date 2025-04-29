@@ -182,12 +182,12 @@ The activation function $f$ can be any non-linear function that operates element
 
 Additionally, for each pair of input and output layer has its own synaptic depression function that modifies the input before it is passed for processing for the layer. This function is identity in the base model but will be extended and closely described in the following sections on additional modules. These modules are applied before each input is passed (not for the outputs of the model).
 
-The overall general architecture of the model without explicitly described the specific definition of each modules is depicted in the Figure~\ref{fig:model_architecture_overview}.
+The high-level architecture of the model is illustrated in Figure~\ref{fig:model_architecture_overview}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.85\linewidth]{img/model_architecture.pdf}
-    \caption{\textbf{Whole model architecture overview.} This figure depicts the overall architecture of the RNN model of V1. The grey modules depicts the model layers. The red colored parts of the figure depicts parts that belongs to excitatory (red) or inhibitory (blue) layers. Arrows depicts trajectory of inputs, bars depicts specific input/output values and large colored area within layers depicts module of the layers belonging to either excitatory or inhibitory neuronal population. Each part either excitatory or inhibitory concatenates the input from all input layers passes it to linear layer and followingly the linear output is passed to the element-wise activation function (labeled as neuron module in the following sections). Additionally, each input trajectory is connected to specific synaptic depression function that modifies the input before its is passed to each neuronal population module.}
+    \includegraphics[width=0.75\linewidth]{img/model_architecture.pdf}
+    \caption{\textbf{Overview of the model architecture.} This figure presents the overall structure of the RNN model for V1. Grey modules represent different layers of the model. Red and blue highlights denote components belonging to excitatory and inhibitory layers, respectively. Arrows indicate the flow of inputs, bars represent specific input or output values, and the large colored regions within layers illustrate modules corresponding to either excitatory or inhibitory neuronal populations. Each excitatory or inhibitory module first concatenates inputs from all incoming layers, passes them through a linear layer, and then applies an element-wise activation function (referred to as the "neuron module" in subsequent sections). Additionally, each input pathway is associated with a synaptic depression modules, which modifies the input before it reaches the corresponding neuronal population module.}
     \label{fig:model_architecture_overview}
 \end{figure}
 
@@ -309,19 +309,19 @@ We implemented four distinct DNN modules one for each output neuronal population
 \label{def:dnn_joint}
 
 We refer to the version of the model incorporating this module as the \emph{DNN joint model}. The term "joint" reflects the naming convention used in our source code and indicates that the model jointly processes both excitatory and inhibitory outputs from the base RNN (defined in Section~\ref{subsec:base_model_architecture}) through a shared DNN architecture. This contrasts with the "separate" model variant (described in the following section), which handles excitatory and inhibitory outputs using distinct pathways.
-The joint variant is closely depicted in the Figure~\ref{fig:joint_sep_modules} and the DNN neuron module is depicted in the Figure~\ref{fig:neuron_modules}.
+The structure of the joint variant is shown in Figure~\ref{fig:joint_sep_modules}, and the architecture of the DNN neuron module is illustrated in Figure~\ref{fig:neuron_modules}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/joint_separate_schema.pdf}
-    \caption{\textbf{Schema of the joint and separate model types.} This figure depicts the schema of the information processing steps through the joint and separate model variants. The green colored bars depicts the results combined from both excitatory and inhibitory layer data whereas red bars depicts only excitatory respectively blue bars depicts only inhibitory data.}
+    \caption{\textbf{Schema of the joint and separate model types.} This figure illustrates the information processing steps for both the joint and separate model variants. Green bars represent results combined from both excitatory and inhibitory layer data, while red and blue bars represent outputs from exclusively excitatory and inhibitory data, respectively.}
     \label{fig:joint_sep_modules}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/neuron_module.pdf}
-    \caption{\textbf{Whole model architecture overview.} This figure depicts the differences in the processing of the different types of neuron modules. The simple just passes information through leakytanh function, dnn modules passed it through the feed-forward NN and RNN modules passes the information through layered recurrent network (in our figure using GRU variant). The input depicts that there is basically no difference between joint and separate model variants (just input size differs).}
+    \caption{\textbf{Neuron module processing types.} This figure highlights the differences between the various neuron module types. The "simple" module passes information through a leakytanh activation function, the "DNN" module processes it through a feed-forward neural network, and the "RNN" module passes it through a layered recurrent network (using a GRU variant in this case). The input structure is essentially the same for both the joint and separate model variants, with differences primarily in input size.}
     \label{fig:neuron_modules}
 \end{figure}
 
@@ -346,7 +346,7 @@ Let $L$ be a neuronal layer with $m_h \in \mathbb{N}$ neurons. Let $x_E \in \mat
 \end{defn}
 \label{def:separate_base_rnn}
 
-The separate variant is closely depicted in the Figure~\ref{fig:joint_sep_modules}.
+The structure of the separate variant is shown in Figure~\ref{fig:joint_sep_modules}.
 
 As with the DNN joint model, we use the same shared DNN module for the activation function, except now it takes two inputs and handles them accordingly. Since this is a minor structural modification, we omit the formal redefinition.
 
@@ -371,7 +371,7 @@ Instead of feed-forward layers, this version replaces the neuron modules with sm
 \end{defn}
 \label{def:rnn_neuron_module}
 
-The RNN neuron module is closely depicted in the Figure~\ref{fig:neuron_modules}.
+The RNN neuron module is shown in detail in Figure~\ref{fig:neuron_modules}.
 
 This extension is motivated by the biological reality that neurons adapt based on short-term input history. Thus, temporal memory might help improve prediction of network dynamics.
 
@@ -411,6 +411,6 @@ Since these modules are recurrent, we again use TBPTT. This approach increases m
     \item Prefer the LGN-only variant to limit parameter growth.
 \end{itemize}
 
-The model including all additional modules listed in this section including synaptic depression are depicted in the Figure~\ref{fig:model_architecture_overview}.
+Figure~\ref{fig:model_architecture_overview} depicts the complete model, including all additional modules discussed in this section.
 
 In its current form, this extension is computationally demanding due to the all-to-all connectivity. However, we believe it holds significant potential for improving the model's ability to capture temporally dynamic behavior, especially when combined with future spatial connectivity constraints. In particular, we expect that this form of adaptability could help differentiate between response types, such as spontaneous activity and stimulus-driven responses. For instance, spontaneous responses should be less suppressed, while late responses to sustained stimuli may be attenuated due to short-term synaptic fatigue. Capturing this nuance may improve the biological realism and predictive accuracy of the model.
