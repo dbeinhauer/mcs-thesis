@@ -186,7 +186,7 @@ The high-level architecture of the model is illustrated in Figure~\ref{fig:model
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\linewidth]{img/model_architecture.pdf}
+    \includegraphics[width=0.77\linewidth]{img/model_architecture.pdf}
     \caption{\textbf{Overview of the model architecture.} This figure presents the overall structure of the RNN model for V1. Grey modules represent different layers of the model. Red and blue highlights denote components belonging to excitatory and inhibitory layers, respectively. Arrows indicate the flow of inputs, bars represent specific input or output values, and the large colored regions within layers illustrate modules corresponding to either excitatory or inhibitory neuronal populations. Each excitatory or inhibitory module first concatenates inputs from all incoming layers, passes them through a linear layer, and then applies an element-wise activation function (referred to as the "neuron module" in subsequent sections). Additionally, each input pathway is associated with a synaptic depression modules, which modifies the input before it reaches the corresponding neuronal population module.}
     \label{fig:model_architecture_overview}
 \end{figure}
