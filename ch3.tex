@@ -180,6 +180,17 @@ We define the operation of each RNN layer as follows:
 
 The activation function $f$ can be any non-linear function that operates element-wise. In this thesis, we often use vector notation for clarity. Unless otherwise stated, $f$ is applied independently to each element of the vector.
 
+Additionally, for each pair of input and output layer has its own synaptic depression function that modifies the input before it is passed for processing for the layer. This function is identity in the base model but will be extended and closely described in the following sections on additional modules. These modules are applied before each input is passed (not for the outputs of the model).
+
+The overall general architecture of the model without explicitly described the specific definition of each modules is depicted in the Figure~\ref{fig:model_architecture_overview}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/model_architecture.pdf}
+    \caption{\textbf{Whole model architecture overview.} This figure depicts the overall architecture of the RNN model of V1. The grey modules depicts the model layers. The red colored parts of the figure depicts parts that belongs to excitatory (red) or inhibitory (blue) layers. Arrows depicts trajectory of inputs, bars depicts specific input/output values and large colored area within layers depicts module of the layers belonging to either excitatory or inhibitory neuronal population. Each part either excitatory or inhibitory concatenates the input from all input layers passes it to linear layer and followingly the linear output is passed to the element-wise activation function (labeled as neuron module in the following sections). Additionally, each input trajectory is connected to specific synaptic depression function that modifies the input before its is passed to each neuronal population module.}
+    \label{fig:model_architecture_overview}
+\end{figure}
+
 This model architecture is loosely based on the biological structure of V1 (Section~\ref{sec:v1}) and incorporates similar simplifications found in the original SNN (\citet{antolik2024comprehensive}). Key simplifications made relative to the SNN model include:
 \begin{itemize}
     \item Modeling only a randomly chosen subset of neurons, not the full population.
@@ -269,7 +280,7 @@ The model evaluation procedure is straightforward. We initialize the recurrent i
 \subsection{Additional Modules}
 \label{subsec:additional_modules}
 
-Beyond the simple model described in Section~\ref{subsec:base_model_architecture}, we introduced several additional modules aimed at enhancing model performance and incorporating further biological constraints. These modules were added sequentially, each one motivated by the limitations of the previous version. This section presents the modules in the order they were added, allowing readers to follow the development process and understand the reasoning behind each addition. While each module is theoretically optional, they were designed to build upon one another, and omitting earlier components typically undermines their intended effect.
+Beyond the simple model described in Section~\ref{subsec:base_model_architecture}, we introduced several additional modules aimed at enhancing model performance and incorporating further biological constraints. These modules were added sequentially, each one motivated by the limitations of the previous version. This section presents the modules in the order they were added, allowing readers to follow the development process and understand the reasoning behind each addition. While each module is theoretically optional, they were designed to build upon one another, and omitting earlier components typically undermines their intended effect. All these variants are depicted in the Figure~\ref{fig:model_architecture_overview}, Figure~\ref{fig:joint_sep_modules}and Figure~\ref{fig:neuron_modules}.
 
 \subsubsection{Feed-forward Neuron Module}
 \label{subsubsec:dnn_neuron}
@@ -298,6 +309,21 @@ We implemented four distinct DNN modules one for each output neuronal population
 \label{def:dnn_joint}
 
 We refer to the version of the model incorporating this module as the \emph{DNN joint model}. The term "joint" reflects the naming convention used in our source code and indicates that the model jointly processes both excitatory and inhibitory outputs from the base RNN (defined in Section~\ref{subsec:base_model_architecture}) through a shared DNN architecture. This contrasts with the "separate" model variant (described in the following section), which handles excitatory and inhibitory outputs using distinct pathways.
+The joint variant is closely depicted in the Figure~\ref{fig:joint_sep_modules} and the DNN neuron module is depicted in the Figure~\ref{fig:neuron_modules}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/joint_separate_schema.pdf}
+    \caption{\textbf{Schema of the joint and separate model types.} This figure depicts the schema of the information processing steps through the joint and separate model variants. The green colored bars depicts the results combined from both excitatory and inhibitory layer data whereas red bars depicts only excitatory respectively blue bars depicts only inhibitory data.}
+    \label{fig:joint_sep_modules}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/neuron_module.pdf}
+    \caption{\textbf{Whole model architecture overview.} This figure depicts the differences in the processing of the different types of neuron modules. The simple just passes information through leakytanh function, dnn modules passed it through the feed-forward NN and RNN modules passes the information through layered recurrent network (in our figure using GRU variant). The input depicts that there is basically no difference between joint and separate model variants (just input size differs).}
+    \label{fig:neuron_modules}
+\end{figure}
 
 The main motivation behind this extension is to capture the complex and diverse behavior of different neuronal subtypes and cortical layers more effectively. Additionally, it enables the network to learn more expressive, trainable activation functions in place of static ones typically used in deep learning, potentially improving model capacity and flexibility.
 
@@ -319,6 +345,8 @@ Let $L$ be a neuronal layer with $m_h \in \mathbb{N}$ neurons. Let $x_E \in \mat
 \end{equation*}
 \end{defn}
 \label{def:separate_base_rnn}
+
+The separate variant is closely depicted in the Figure~\ref{fig:joint_sep_modules}.
 
 As with the DNN joint model, we use the same shared DNN module for the activation function, except now it takes two inputs and handles them accordingly. Since this is a minor structural modification, we omit the formal redefinition.
 
@@ -342,6 +370,8 @@ Instead of feed-forward layers, this version replaces the neuron modules with sm
     A residual connection may be added before the final activation.
 \end{defn}
 \label{def:rnn_neuron_module}
+
+The RNN neuron module is closely depicted in the Figure~\ref{fig:neuron_modules}.
 
 This extension is motivated by the biological reality that neurons adapt based on short-term input history. Thus, temporal memory might help improve prediction of network dynamics.
 
@@ -380,5 +410,7 @@ Since these modules are recurrent, we again use TBPTT. This approach increases m
     \item Use minimal GRU-based modules.
     \item Prefer the LGN-only variant to limit parameter growth.
 \end{itemize}
+
+The model including all additional modules listed in this section including synaptic depression are depicted in the Figure~\ref{fig:model_architecture_overview}.
 
 In its current form, this extension is computationally demanding due to the all-to-all connectivity. However, we believe it holds significant potential for improving the model's ability to capture temporally dynamic behavior, especially when combined with future spatial connectivity constraints. In particular, we expect that this form of adaptability could help differentiate between response types, such as spontaneous activity and stimulus-driven responses. For instance, spontaneous responses should be less suppressed, while late responses to sustained stimuli may be attenuated due to short-term synaptic fatigue. Capturing this nuance may improve the biological realism and predictive accuracy of the model.
